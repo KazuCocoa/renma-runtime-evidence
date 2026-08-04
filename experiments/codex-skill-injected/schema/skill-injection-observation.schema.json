@@ -19,10 +19,7 @@
     "provider": { "const": "codex" },
     "observationType": { "const": "skill-injected" },
     "skill": { "const": "renma-runtime-evidence-canary-20260804" },
-    "status": {
-      "type": "string",
-      "pattern": "^[A-Za-z0-9._-]{1,64}$"
-    },
+    "status": { "const": "ok" },
     "codexVersion": {
       "type": "string",
       "pattern": "^codex-cli [0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?$"

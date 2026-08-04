@@ -37,3 +37,15 @@ This verifies that the metric catalog is not limited to the built-in anonymous S
 The exported Skill string exactly matched the synthetic `SKILL.md` frontmatter name. Because that name is unique in this experiment, it is sufficient to correlate this observation with a future Renma asset identity. Codex allows multiple discovered Skills to share a name, however, so the observed field is not a globally unique asset identity by itself. A future integration must preserve the provider-specific string and bind it explicitly to a declared Renma identity; this experiment does not add that mapping.
 
 This behavior is version-specific and the exportability of `skill.injected` is not stated explicitly in the public metric catalog. The experiment makes no claim about other Codex versions or surfaces.
+
+## Metric-counter boundary
+
+`codex.skill.injected` is an OTLP counter, not a Skill lifecycle event. This experiment establishes the counter's presence in an isolated Codex process with one explicit Skill invocation. It does not establish lifecycle-event semantics:
+
+- Repeated cumulative exports must not be interpreted as repeated Skill injection events.
+- `experimentRunId` is a locally generated correlation value assigned by the experiment wrapper, not an identifier emitted by Codex.
+- `observedAt` is the collector receipt time, not the Skill injection time.
+- The counter alone cannot reconstruct ordered or nested Skill chains.
+- Production counter interpretation and correlation remain future work.
+
+This PR intentionally does not add production aggregation, per-session or per-turn correlation, chain reconstruction, or routing analysis.

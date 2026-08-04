@@ -67,6 +67,18 @@ The privacy-safe normalized observations are recorded in [`evidence/codex-cli-0.
 
 The exported Skill string exactly matched the unique synthetic Skill's frontmatter name, so it can correlate this canary with a future Renma asset identity. The result does not prove that arbitrary Skill names are globally unique; Codex can discover duplicate names, and a future mapping must account for that ambiguity without collecting absolute paths.
 
+### Metric-counter boundary
+
+`codex.skill.injected` is an OTLP counter, not a Skill lifecycle event. The one-process-per-run design establishes counter presence for one explicit Skill invocation, but does not establish event ordering or per-session/per-turn correlation in a long-lived process.
+
+- Repeated cumulative exports must not be interpreted as repeated Skill injection events.
+- `experimentRunId` is assigned by this experiment wrapper, not Codex.
+- `observedAt` is collector receipt time, not the Skill injection time.
+- This metric alone cannot reconstruct ordered or nested Skill chains.
+- Production counter interpretation and correlation remain future work.
+
+The experiment does not add production aggregation or routing analysis.
+
 ### Version-specific behavior
 
 - `otel.metrics_exporter` can redirect the metric from Codex's default Statsig exporter to user-controlled OTLP/HTTP in version 0.146.0.

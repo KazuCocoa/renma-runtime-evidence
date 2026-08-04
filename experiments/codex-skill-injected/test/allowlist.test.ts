@@ -53,7 +53,7 @@ function metricPayload(
 test("retains only the allowlisted synthetic Skill observation", () => {
   const payload = metricPayload("codex.skill.injected", [
     { key: "skill", value: { stringValue: SYNTHETIC_SKILL_NAME } },
-    { key: "status", value: { stringValue: "success" } },
+    { key: "status", value: { stringValue: "ok" } },
     { key: "prompt", value: { stringValue: "PRIVATE_PROMPT" } },
     { key: "tool.arguments", value: { stringValue: "PRIVATE_TOOL_ARGS" } },
     { key: "env", value: { stringValue: "PRIVATE_ENV" } },
@@ -67,7 +67,7 @@ test("retains only the allowlisted synthetic Skill observation", () => {
       provider: "codex",
       observationType: "skill-injected",
       skill: SYNTHETIC_SKILL_NAME,
-      status: "success",
+      status: "ok",
       ...context,
     },
   ]);
@@ -88,23 +88,31 @@ test("retains only the allowlisted synthetic Skill observation", () => {
 test("drops non-target metrics and non-synthetic Skills", () => {
   const wrongMetric = metricPayload("codex.tool.call", [
     { key: "skill", value: { stringValue: SYNTHETIC_SKILL_NAME } },
-    { key: "status", value: { stringValue: "success" } },
+    { key: "status", value: { stringValue: "ok" } },
   ]);
   const wrongSkill = metricPayload("codex.skill.injected", [
     { key: "skill", value: { stringValue: "user-private-skill" } },
-    { key: "status", value: { stringValue: "success" } },
+    { key: "status", value: { stringValue: "ok" } },
   ]);
 
   assert.deepEqual(extractAllowlistedObservations(wrongMetric, context), []);
   assert.deepEqual(extractAllowlistedObservations(wrongSkill, context), []);
 });
 
-test("drops malformed or unsafe status values", () => {
-  const payload = metricPayload("codex.skill.injected", [
-    { key: "skill", value: { stringValue: SYNTHETIC_SKILL_NAME } },
-    { key: "status", value: { stringValue: "contains private content" } },
-  ]);
+test("drops every status except the verified ok value", () => {
+  for (const unknownStatus of [
+    "success",
+    "error",
+    "user-name-like-value",
+    "contains private content",
+  ]) {
+    const payload = metricPayload("codex.skill.injected", [
+      { key: "skill", value: { stringValue: SYNTHETIC_SKILL_NAME } },
+      { key: "status", value: { stringValue: unknownStatus } },
+    ]);
 
-  assert.deepEqual(extractAllowlistedObservations(payload, context), []);
+    assert.deepEqual(extractAllowlistedObservations(payload, context), []);
+  }
+
   assert.deepEqual(extractAllowlistedObservations(null, context), []);
 });

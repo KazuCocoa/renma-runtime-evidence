@@ -12,6 +12,8 @@ The first provider under investigation is Codex. On 2026-08-04, the experiment t
 
 **Current result:** supported in the tested version. In three of three isolated runs, the local collector received the exact metric `codex.skill.injected` with the synthetic Skill name and `status=ok`. This demonstrates user-configured OTLP metrics export for `codex-cli 0.146.0`; it does not establish behavior in other versions or prove Skill execution, instruction compliance, or task success. See [the experiment protocol and evidence](experiments/codex-skill-injected/README.md) and [the observability model](docs/codex-observability.md).
 
+`codex.skill.injected` is an OTLP counter, not a Skill lifecycle event. Repeated cumulative exports must not be interpreted as repeated Skill injection events. The experiment wrapper—not Codex—assigns `experimentRunId`, and `observedAt` records collector receipt time rather than Skill injection time. The counter alone cannot reconstruct ordered or nested Skill chains; production counter interpretation and correlation remain future work.
+
 ## Development
 
 ```sh

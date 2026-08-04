@@ -6,7 +6,7 @@ export interface SkillInjectionObservation {
   provider: "codex";
   observationType: "skill-injected";
   skill: typeof SYNTHETIC_SKILL_NAME;
-  status: string;
+  status: "ok";
   codexVersion: string;
   observedAt: string;
   experimentRunId: string;
@@ -19,8 +19,6 @@ interface ObservationContext {
 }
 
 type UnknownRecord = Record<string, unknown>;
-
-const SAFE_STATUS = /^[A-Za-z0-9._-]{1,64}$/;
 
 function asRecord(value: unknown): UnknownRecord | undefined {
   if (typeof value !== "object" || value === null || Array.isArray(value)) {
@@ -84,11 +82,7 @@ export function extractAllowlistedObservations(
           const skill = readStringAttribute(point?.attributes, "skill");
           const status = readStringAttribute(point?.attributes, "status");
 
-          if (
-            skill !== SYNTHETIC_SKILL_NAME ||
-            status === undefined ||
-            !SAFE_STATUS.test(status)
-          ) {
+          if (skill !== SYNTHETIC_SKILL_NAME || status !== "ok") {
             continue;
           }
 
