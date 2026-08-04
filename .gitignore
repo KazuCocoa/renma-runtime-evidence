@@ -1,0 +1,6 @@
+node_modules/
+.build/
+experiments/codex-skill-injected/.local/
+experiments/codex-skill-injected/tmp/
+*.log
+.DS_Store

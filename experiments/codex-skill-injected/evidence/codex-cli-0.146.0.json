@@ -1,0 +1,45 @@
+{
+  "experimentDate": "2026-08-04",
+  "environment": {
+    "codexVersion": "codex-cli 0.146.0",
+    "operatingSystem": "macOS 26.5.2 (25F84)",
+    "architecture": "arm64",
+    "nodeVersion": "v24.18.0"
+  },
+  "provider": "codex",
+  "exportedMetric": "codex.skill.injected",
+  "runs": 3,
+  "observedRuns": 3,
+  "observations": [
+    {
+      "schemaVersion": 1,
+      "provider": "codex",
+      "observationType": "skill-injected",
+      "skill": "renma-runtime-evidence-canary-20260804",
+      "status": "ok",
+      "codexVersion": "codex-cli 0.146.0",
+      "observedAt": "2026-08-04T15:00:45.321Z",
+      "experimentRunId": "46a916cb-2fe8-4aa9-befd-53ffe56fd1b6"
+    },
+    {
+      "schemaVersion": 1,
+      "provider": "codex",
+      "observationType": "skill-injected",
+      "skill": "renma-runtime-evidence-canary-20260804",
+      "status": "ok",
+      "codexVersion": "codex-cli 0.146.0",
+      "observedAt": "2026-08-04T15:00:51.783Z",
+      "experimentRunId": "31376cde-c534-4af4-975d-ff19fa350c43"
+    },
+    {
+      "schemaVersion": 1,
+      "provider": "codex",
+      "observationType": "skill-injected",
+      "skill": "renma-runtime-evidence-canary-20260804",
+      "status": "ok",
+      "codexVersion": "codex-cli 0.146.0",
+      "observedAt": "2026-08-04T15:00:57.577Z",
+      "experimentRunId": "76e81d87-6753-4a24-92fb-8120375d63f0"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:renma:runtime-evidence:experimental:codex-skill-injection-observation",
+  "title": "Experimental Codex Skill injection observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "provider",
+    "observationType",
+    "skill",
+    "status",
+    "codexVersion",
+    "observedAt",
+    "experimentRunId"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "provider": { "const": "codex" },
+    "observationType": { "const": "skill-injected" },
+    "skill": { "const": "renma-runtime-evidence-canary-20260804" },
+    "status": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._-]{1,64}$"
+    },
+    "codexVersion": {
+      "type": "string",
+      "pattern": "^codex-cli [0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?$"
+    },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "experimentRunId": { "type": "string", "format": "uuid" }
+  }
+}
