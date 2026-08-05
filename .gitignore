@@ -2,5 +2,7 @@ node_modules/
 .build/
 experiments/codex-skill-injected/.local/
 experiments/codex-skill-injected/tmp/
+experiments/codex-skill-activation-paths/.local/
+experiments/codex-skill-activation-paths/tmp/
 *.log
 .DS_Store

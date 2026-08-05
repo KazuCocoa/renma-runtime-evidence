@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:renma:runtime-evidence:experimental:codex-skill-activation-paths-report",
+  "title": "Experimental Codex Skill activation-path observations",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "experimentDate",
+    "environment",
+    "provider",
+    "experiment",
+    "exportedMetric",
+    "runsPerScenario",
+    "scenarios"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "experimentDate": { "type": "string", "format": "date" },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "codexVersion",
+        "operatingSystem",
+        "architecture",
+        "nodeVersion"
+      ],
+      "properties": {
+        "codexVersion": {
+          "type": "string",
+          "pattern": "^codex-cli [0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?$"
+        },
+        "operatingSystem": { "type": "string", "minLength": 1 },
+        "architecture": { "type": "string", "minLength": 1 },
+        "nodeVersion": {
+          "type": "string",
+          "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+"
+        }
+      }
+    },
+    "provider": { "const": "codex" },
+    "experiment": { "const": "codex-skill-activation-paths" },
+    "exportedMetric": { "const": "codex.skill.injected" },
+    "runsPerScenario": { "type": "integer", "minimum": 3, "maximum": 10 },
+    "scenarios": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": { "$ref": "#/$defs/scenarioSummary" }
+    }
+  },
+  "$defs": {
+    "scenarioId": {
+      "enum": [
+        "discovered-only",
+        "explicit-single",
+        "explicit-multiple",
+        "router-to-target",
+        "implicit-match"
+      ]
+    },
+    "skillName": {
+      "enum": [
+        "renma-activation-dormant-20260805",
+        "renma-activation-explicit-alpha-20260805",
+        "renma-activation-explicit-beta-20260805",
+        "renma-activation-explicit-single-20260805",
+        "renma-activation-implicit-20260805",
+        "renma-activation-router-20260805",
+        "renma-activation-router-target-20260805"
+      ]
+    },
+    "scenarioSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scenario", "runs"],
+      "properties": {
+        "scenario": { "$ref": "#/$defs/scenarioId" },
+        "runs": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 10,
+          "items": { "$ref": "#/$defs/runSummary" }
+        }
+      }
+    },
+    "runSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "provider",
+        "experiment",
+        "scenario",
+        "experimentRunId",
+        "codexExitCode",
+        "injectedSkills"
+      ],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "provider": { "const": "codex" },
+        "experiment": { "const": "codex-skill-activation-paths" },
+        "scenario": { "$ref": "#/$defs/scenarioId" },
+        "experimentRunId": { "type": "string", "format": "uuid" },
+        "codexExitCode": {
+          "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }]
+        },
+        "injectedSkills": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/skillName" }
+        },
+        "verifiedStatus": { "const": "ok" },
+        "collectorReceipt": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["firstAcceptedAt"],
+          "properties": {
+            "firstAcceptedAt": { "type": "string", "format": "date-time" }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "injectedSkills": { "minItems": 1 } },
+            "required": ["injectedSkills"]
+          },
+          "then": { "required": ["verifiedStatus", "collectorReceipt"] },
+          "else": {
+            "not": {
+              "anyOf": [
+                { "required": ["verifiedStatus"] },
+                { "required": ["collectorReceipt"] }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}
