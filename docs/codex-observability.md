@@ -55,6 +55,8 @@ This PR intentionally does not add production aggregation, per-session or per-tu
 
 The second experiment held seven installed synthetic Skills constant and varied five activation paths in separate `codex-cli 0.146.0` processes. Three runs per scenario observed:
 
+The committed evidence comes from the corrected harness rerun completed on 2026-08-06 JST. Each run waited for the Codex child to exit, drained accepted and in-flight collector requests, awaited collector shutdown, and created its normalized snapshot afterward. All 15 corrected sets and exit codes were checked; the scenario results were unchanged from the earlier racy run.
+
 | Scenario          | Allowlisted process-level Skill set                                                   | Runs |
 | ----------------- | ------------------------------------------------------------------------------------- | ---- |
 | discovered-only   | `[]`                                                                                  | 3/3  |

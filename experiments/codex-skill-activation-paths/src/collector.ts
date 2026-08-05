@@ -12,8 +12,7 @@ const MAX_REQUEST_BYTES = 2 * 1024 * 1024;
 
 export interface LocalCollector {
   endpoint: string;
-  snapshot(): SkillPresenceSet;
-  close(): Promise<void>;
+  closeAndSnapshot(): Promise<SkillPresenceSet>;
 }
 
 function closeServer(server: Server): Promise<void> {
@@ -26,6 +25,31 @@ export async function startLocalCollector(
   scenario: ScenarioId,
 ): Promise<LocalCollector> {
   const signals: AcceptedSkillSignal[] = [];
+  const inFlightRequests = new Set<Promise<void>>();
+
+  function trackAcceptedRequest(): () => void {
+    let resolveRequest: (() => void) | undefined;
+    const requestCompleted = new Promise<void>((resolve) => {
+      resolveRequest = resolve;
+    });
+    inFlightRequests.add(requestCompleted);
+
+    let completed = false;
+    return () => {
+      if (completed) {
+        return;
+      }
+      completed = true;
+      inFlightRequests.delete(requestCompleted);
+      resolveRequest?.();
+    };
+  }
+
+  async function waitForAcceptedRequests(): Promise<void> {
+    while (inFlightRequests.size > 0) {
+      await Promise.all(inFlightRequests);
+    }
+  }
 
   const server = createServer((request, response) => {
     if (request.method !== "POST" || request.url !== "/v1/metrics") {
@@ -33,14 +57,20 @@ export async function startLocalCollector(
       return;
     }
 
+    const completeRequest = trackAcceptedRequest();
     let receivedBytes = 0;
     const chunks: Buffer[] = [];
+
+    request.once("aborted", completeRequest);
+    request.once("error", completeRequest);
+    response.once("close", completeRequest);
 
     request.on("data", (chunk: Buffer) => {
       receivedBytes += chunk.length;
       if (receivedBytes > MAX_REQUEST_BYTES) {
         chunks.length = 0;
         request.destroy();
+        completeRequest();
         return;
       }
       chunks.push(chunk);
@@ -48,6 +78,7 @@ export async function startLocalCollector(
 
     request.on("end", () => {
       if (receivedBytes > MAX_REQUEST_BYTES) {
+        completeRequest();
         return;
       }
 
@@ -67,6 +98,7 @@ export async function startLocalCollector(
         response.writeHead(400).end();
       } finally {
         chunks.length = 0;
+        completeRequest();
       }
     });
   });
@@ -82,9 +114,21 @@ export async function startLocalCollector(
     throw new Error("Collector did not receive a TCP address");
   }
 
+  let closeAndSnapshotPromise: Promise<SkillPresenceSet> | undefined;
+
+  async function drainAndSnapshot(): Promise<SkillPresenceSet> {
+    const serverClosed = closeServer(server);
+    await waitForAcceptedRequests();
+    await serverClosed;
+    await waitForAcceptedRequests();
+    return normalizeSkillPresence(signals);
+  }
+
   return {
     endpoint: `http://127.0.0.1:${address.port}/v1/metrics`,
-    snapshot: () => normalizeSkillPresence(signals),
-    close: () => closeServer(server),
+    closeAndSnapshot: () => {
+      closeAndSnapshotPromise ??= drainAndSnapshot();
+      return closeAndSnapshotPromise;
+    },
   };
 }

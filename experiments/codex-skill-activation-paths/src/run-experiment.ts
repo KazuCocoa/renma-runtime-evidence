@@ -14,7 +14,7 @@ import {
   type SkillPresenceSet,
   type SyntheticSkillName,
 } from "./allowlist.js";
-import { startLocalCollector } from "./collector.js";
+import { startLocalCollector, type LocalCollector } from "./collector.js";
 
 const EXPLICIT_SINGLE_SKILL =
   "renma-activation-explicit-single-20260805" satisfies SyntheticSkillName;
@@ -240,9 +240,10 @@ async function runOnce(
   const temporaryWorkspace = await mkdtemp(
     join(tmpdir(), "renma-activation-paths-codex-"),
   );
-  const collector = await startLocalCollector(definition.id);
+  let collector: LocalCollector | undefined;
 
   try {
+    collector = await startLocalCollector(definition.id);
     await installFixtures(temporaryWorkspace, fixtures);
 
     const metricsExporter = `{ otlp-http = { endpoint = "${collector.endpoint}", protocol = "json" } }`;
@@ -271,6 +272,7 @@ async function runOnce(
       ],
       { cwd: temporaryWorkspace },
     );
+    const presence = await collector.closeAndSnapshot();
 
     return {
       schemaVersion: 1,
@@ -279,11 +281,11 @@ async function runOnce(
       scenario: definition.id,
       experimentRunId,
       codexExitCode: result.exitCode,
-      ...collector.snapshot(),
+      ...presence,
     };
   } finally {
     try {
-      await collector.close();
+      await collector?.closeAndSnapshot();
     } finally {
       await rm(temporaryWorkspace, { recursive: true, force: true });
     }

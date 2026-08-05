@@ -20,7 +20,7 @@
           "provider": "codex",
           "experiment": "codex-skill-activation-paths",
           "scenario": "discovered-only",
-          "experimentRunId": "e14b8fb0-d1a8-485f-a012-280741735ba3",
+          "experimentRunId": "8074934f-61c5-4eb7-9003-bcda09c8ea0d",
           "codexExitCode": 0,
           "injectedSkills": []
         },
@@ -29,7 +29,7 @@
           "provider": "codex",
           "experiment": "codex-skill-activation-paths",
           "scenario": "discovered-only",
-          "experimentRunId": "898bfa19-f2b1-408c-ab15-ac47a1514a48",
+          "experimentRunId": "e590fbb0-1a92-49ff-ac4e-7247b4cc6411",
           "codexExitCode": 0,
           "injectedSkills": []
         },
@@ -38,7 +38,7 @@
           "provider": "codex",
           "experiment": "codex-skill-activation-paths",
           "scenario": "discovered-only",
-          "experimentRunId": "19d3af6a-ff01-4c3e-bae9-ae1241ee948c",
+          "experimentRunId": "d6b7ca06-3731-40e2-b0cb-78fbe6f23e7c",
           "codexExitCode": 0,
           "injectedSkills": []
         }
@@ -52,12 +52,12 @@
           "provider": "codex",
           "experiment": "codex-skill-activation-paths",
           "scenario": "explicit-single",
-          "experimentRunId": "638c96c1-7ea0-4884-98b8-4dca9ce5860f",
+          "experimentRunId": "908c1df9-30da-42c2-b41c-b5da1e2e692a",
           "codexExitCode": 0,
           "injectedSkills": ["renma-activation-explicit-single-20260805"],
           "verifiedStatus": "ok",
           "collectorReceipt": {
-            "firstAcceptedAt": "2026-08-05T11:11:35.746Z"
+            "firstAcceptedAt": "2026-08-05T23:02:33.829Z"
           }
         },
         {
@@ -65,12 +65,12 @@
           "provider": "codex",
           "experiment": "codex-skill-activation-paths",
           "scenario": "explicit-single",
-          "experimentRunId": "b7c38ed2-64df-4352-a0cd-f25507f0f93e",
+          "experimentRunId": "ebf47ba2-8e7c-45b1-81c0-73ceac8f48d0",
           "codexExitCode": 0,
           "injectedSkills": ["renma-activation-explicit-single-20260805"],
           "verifiedStatus": "ok",
           "collectorReceipt": {
-            "firstAcceptedAt": "2026-08-05T11:11:41.406Z"
+            "firstAcceptedAt": "2026-08-05T23:03:33.921Z"
           }
         },
         {
@@ -78,12 +78,12 @@
           "provider": "codex",
           "experiment": "codex-skill-activation-paths",
           "scenario": "explicit-single",
-          "experimentRunId": "8313d0b6-e614-46d7-b69b-e0d9af814c1f",
+          "experimentRunId": "1d30dfee-a2ee-4cee-bf29-490da5d5c5f0",
           "codexExitCode": 0,
           "injectedSkills": ["renma-activation-explicit-single-20260805"],
           "verifiedStatus": "ok",
           "collectorReceipt": {
-            "firstAcceptedAt": "2026-08-05T11:11:45.966Z"
+            "firstAcceptedAt": "2026-08-05T23:07:44.496Z"
           }
         }
       ]
@@ -96,7 +96,7 @@
           "provider": "codex",
           "experiment": "codex-skill-activation-paths",
           "scenario": "explicit-multiple",
-          "experimentRunId": "99108195-87d8-4a0a-a93b-6a8c0e12b8fc",
+          "experimentRunId": "3603ce7a-e05f-403b-946b-561d191e1108",
           "codexExitCode": 0,
           "injectedSkills": [
             "renma-activation-explicit-alpha-20260805",
@@ -104,7 +104,7 @@
           ],
           "verifiedStatus": "ok",
           "collectorReceipt": {
-            "firstAcceptedAt": "2026-08-05T11:11:51.589Z"
+            "firstAcceptedAt": "2026-08-05T23:07:50.507Z"
           }
         },
         {
@@ -112,7 +112,7 @@
           "provider": "codex",
           "experiment": "codex-skill-activation-paths",
           "scenario": "explicit-multiple",
-          "experimentRunId": "ff97f681-ddce-4496-904b-0dbb28e1bfda",
+          "experimentRunId": "d2bc1046-4a43-44a5-90c1-d51b0c7773fe",
           "codexExitCode": 0,
           "injectedSkills": [
             "renma-activation-explicit-alpha-20260805",
@@ -120,7 +120,7 @@
           ],
           "verifiedStatus": "ok",
           "collectorReceipt": {
-            "firstAcceptedAt": "2026-08-05T11:11:57.561Z"
+            "firstAcceptedAt": "2026-08-05T23:08:00.079Z"
           }
         },
         {
@@ -128,7 +128,7 @@
           "provider": "codex",
           "experiment": "codex-skill-activation-paths",
           "scenario": "explicit-multiple",
-          "experimentRunId": "42246593-d1a2-4a0f-b305-1f844e7109fd",
+          "experimentRunId": "da94e63b-9793-4afd-befc-5329f0cee66a",
           "codexExitCode": 0,
           "injectedSkills": [
             "renma-activation-explicit-alpha-20260805",
@@ -136,7 +136,7 @@
           ],
           "verifiedStatus": "ok",
           "collectorReceipt": {
-            "firstAcceptedAt": "2026-08-05T11:12:02.611Z"
+            "firstAcceptedAt": "2026-08-05T23:08:07.514Z"
           }
         }
       ]
@@ -149,7 +149,7 @@
           "provider": "codex",
           "experiment": "codex-skill-activation-paths",
           "scenario": "router-to-target",
-          "experimentRunId": "a107579c-b495-4cac-9701-44f28d52fe33",
+          "experimentRunId": "2dfc41f2-f0fd-4b80-a633-704c8e78106c",
           "codexExitCode": 0,
           "injectedSkills": [
             "renma-activation-router-20260805",
@@ -157,7 +157,7 @@
           ],
           "verifiedStatus": "ok",
           "collectorReceipt": {
-            "firstAcceptedAt": "2026-08-05T11:12:14.308Z"
+            "firstAcceptedAt": "2026-08-05T23:08:21.051Z"
           }
         },
         {
@@ -165,7 +165,7 @@
           "provider": "codex",
           "experiment": "codex-skill-activation-paths",
           "scenario": "router-to-target",
-          "experimentRunId": "d2f6f900-ef5e-4d90-87fe-35983016da7b",
+          "experimentRunId": "50c7e667-96f2-477e-93ba-ba14cdc6a5ea",
           "codexExitCode": 0,
           "injectedSkills": [
             "renma-activation-router-20260805",
@@ -173,7 +173,7 @@
           ],
           "verifiedStatus": "ok",
           "collectorReceipt": {
-            "firstAcceptedAt": "2026-08-05T11:12:27.499Z"
+            "firstAcceptedAt": "2026-08-05T23:08:34.467Z"
           }
         },
         {
@@ -181,7 +181,7 @@
           "provider": "codex",
           "experiment": "codex-skill-activation-paths",
           "scenario": "router-to-target",
-          "experimentRunId": "34228f1c-ec8d-4157-8d65-82c8e8f12381",
+          "experimentRunId": "fff4a6da-5336-4654-bd9c-951be1b9676e",
           "codexExitCode": 0,
           "injectedSkills": [
             "renma-activation-router-20260805",
@@ -189,7 +189,7 @@
           ],
           "verifiedStatus": "ok",
           "collectorReceipt": {
-            "firstAcceptedAt": "2026-08-05T11:12:36.754Z"
+            "firstAcceptedAt": "2026-08-05T23:08:43.309Z"
           }
         }
       ]
@@ -202,12 +202,12 @@
           "provider": "codex",
           "experiment": "codex-skill-activation-paths",
           "scenario": "implicit-match",
-          "experimentRunId": "88ee2296-3599-4790-a2cb-349806fc6a84",
+          "experimentRunId": "dd952a03-b492-44c6-b843-7742a58e42fb",
           "codexExitCode": 0,
           "injectedSkills": ["renma-activation-implicit-20260805"],
           "verifiedStatus": "ok",
           "collectorReceipt": {
-            "firstAcceptedAt": "2026-08-05T11:12:47.118Z"
+            "firstAcceptedAt": "2026-08-05T23:08:56.740Z"
           }
         },
         {
@@ -215,12 +215,12 @@
           "provider": "codex",
           "experiment": "codex-skill-activation-paths",
           "scenario": "implicit-match",
-          "experimentRunId": "f50eef77-c85e-42f5-9d68-097442373831",
+          "experimentRunId": "5585ce1b-e8f0-4148-9674-370cd65905db",
           "codexExitCode": 0,
           "injectedSkills": ["renma-activation-implicit-20260805"],
           "verifiedStatus": "ok",
           "collectorReceipt": {
-            "firstAcceptedAt": "2026-08-05T11:12:58.802Z"
+            "firstAcceptedAt": "2026-08-05T23:09:08.648Z"
           }
         },
         {
@@ -228,12 +228,12 @@
           "provider": "codex",
           "experiment": "codex-skill-activation-paths",
           "scenario": "implicit-match",
-          "experimentRunId": "99283873-adac-442b-8d5b-4d32ad31c460",
+          "experimentRunId": "c4fe5f90-8ae8-413d-a6c0-03cb14df6206",
           "codexExitCode": 0,
           "injectedSkills": ["renma-activation-implicit-20260805"],
           "verifiedStatus": "ok",
           "collectorReceipt": {
-            "firstAcceptedAt": "2026-08-05T11:13:10.937Z"
+            "firstAcceptedAt": "2026-08-05T23:09:19.241Z"
           }
         }
       ]

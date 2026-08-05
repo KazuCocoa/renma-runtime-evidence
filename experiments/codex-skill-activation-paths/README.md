@@ -4,7 +4,7 @@
 
 Which activation paths produced allowlisted `codex.skill.injected` labels in isolated `codex-cli 0.146.0` processes, and could each process be reduced to a privacy-safe set of synthetic Skill names?
 
-Experiment date: **2026-08-05**
+Experiment date: **2026-08-05 UTC** (corrected harness rerun completed 2026-08-06 JST)
 
 Recorded environment:
 
@@ -15,6 +15,8 @@ Recorded environment:
 ## Result
 
 In this version and environment, the explicit-single, explicit-multiple, router-to-target, and implicit-match scenarios produced allowlisted `codex.skill.injected` labels in all three observed runs. The discovered-only scenario produced an empty allowlisted set in all three runs. Every Codex process exited with status `0`.
+
+The committed evidence was regenerated after correcting the collector lifecycle. For every corrected run, the runner waited for the Codex child to exit, stopped the collector, drained already accepted and in-flight requests, awaited server shutdown, and only then created the normalized presence set. All 15 corrected presence sets and process exit codes were checked. The scenario results did not change from the earlier racy run; the tables below reflect only the corrected evidence.
 
 | Scenario          | Run 1                                                                                 | Run 2                                                                                 | Run 3                                                                                 |
 | ----------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
@@ -70,9 +72,10 @@ For each of the 15 runs, the runner:
 - disabled OTel logs and traces and kept `otel.log_user_prompt=false`;
 - replaced the metrics exporter with OTLP/HTTP JSON on an ephemeral `127.0.0.1` port;
 - discarded Codex stdout and stderr; and
-- removed the temporary workspace after the process and collector stopped.
+- after the Codex child exited, stopped the collector and drained accepted requests before creating the presence-set snapshot; and
+- removed the temporary workspace after collector shutdown and snapshot creation.
 
-The collector holds each request body only long enough to parse it in memory and never writes raw OTLP. Before persistence, it accepts only:
+The collector holds each request body only long enough to parse it in memory and never writes raw OTLP. Its idempotent `closeAndSnapshot()` operation stops new connections, waits for `server.close()`, explicitly waits for accepted requests to finish processing, and normalizes only after both drain conditions complete. Before persistence, it accepts only:
 
 - the exact `codex.skill.injected` instrument;
 - one of five finite scenario identifiers supplied by the wrapper;
