@@ -29,6 +29,7 @@
     "format:check": "prettier --check . --ignore-unknown",
     "prepare": "npm run build",
     "test": "npm run build && node --test .build/test/*.test.js .build/experiments/*/test/*.test.js",
+    "test:integration:codex": "npm run build && node .build/experiments/codex-cli-integration/src/run-integration.js",
     "test:package-consumption": "npm run build && node --test .build/test/package-consumption.test.js",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },

@@ -98,7 +98,13 @@ payloads and disallowed fields from the public result.
 These tests establish only sorted, deduplicated Skill presence across one
 collector lifetime. The result exposes no occurrence counts, execution claim,
 ordering, session or agent attribution, nesting, or dependency edges. An
-actual-Codex CLI smoke test is intentionally deferred to a separate integration
-experiment; CI does not launch Codex or contact external services.
+[opt-in local integration experiment](experiments/codex-cli-integration/README.md)
+now exercises the public collector with a real authenticated Codex CLI. Run it
+explicitly with
+`npm run test:integration:codex -- --allow-codex-analytics`; the mandatory flag
+acknowledges that enabling the configured loopback OTel metrics exporter may
+also cause Codex to send separate analytics events to OpenAI. The loopback
+endpoint does not control that separate path. Ordinary tests, package
+installation, and CI do not launch Codex or contact external model services.
 
 This package has `"private": true` and must not be published to npm.
