@@ -1,6 +1,9 @@
 import { isAbsolute } from "node:path";
 
-import type { CodexSkillPresenceSnapshot } from "../../../src/index.js";
+import type {
+  CodexSkillEvidenceDiagnosticsSnapshot,
+  CodexSkillPresenceSnapshot,
+} from "../../../src/index.js";
 
 export const FIXTURE_SKILL_IDS = {
   direct: "renma-integration-direct-20260806",
@@ -86,6 +89,7 @@ export const SCENARIO_DEFINITIONS: readonly ScenarioDefinition[] =
 
 export interface RunnerArguments {
   readonly codexAnalyticsExplicitlyAllowed: true;
+  readonly directOnly: boolean;
   readonly outputPath?: string;
 }
 
@@ -179,6 +183,7 @@ export interface IntegrationReport {
 
 export interface ScenarioObservation {
   readonly snapshot?: CodexSkillPresenceSnapshot;
+  readonly diagnostics?: CodexSkillEvidenceDiagnosticsSnapshot;
   readonly diagnostic?: ScenarioDiagnostic;
 }
 
@@ -191,6 +196,7 @@ export interface IntegrationObservations {
 
 export interface IndependentObservationCollector {
   readonly endpoint: string;
+  diagnosticsSnapshot(): CodexSkillEvidenceDiagnosticsSnapshot;
   closeAndSnapshot(): Promise<CodexSkillPresenceSnapshot>;
 }
 
@@ -215,10 +221,12 @@ export async function observeIndependentCollectorRuns(options: {
         prompt,
       });
       const snapshot = await collector.closeAndSnapshot();
+      const diagnostics = collector.diagnosticsSnapshot();
       const observation: {
         snapshot: CodexSkillPresenceSnapshot;
+        diagnostics: CodexSkillEvidenceDiagnosticsSnapshot;
         diagnostic?: ScenarioDiagnostic;
-      } = { snapshot };
+      } = { snapshot, diagnostics };
       if (diagnostic) {
         observation.diagnostic = diagnostic;
       }
@@ -232,6 +240,7 @@ export async function observeIndependentCollectorRuns(options: {
 
 export function parseRunnerArguments(args: readonly string[]): RunnerArguments {
   let codexAnalyticsExplicitlyAllowed = false;
+  let directOnly = false;
   let outputPath: string | undefined;
 
   for (let index = 0; index < args.length; index += 1) {
@@ -243,6 +252,11 @@ export function parseRunnerArguments(args: readonly string[]): RunnerArguments {
         );
       }
       codexAnalyticsExplicitlyAllowed = true;
+    } else if (argument === "--direct-only") {
+      if (directOnly) {
+        throw new Error("Integration argument error: duplicate --direct-only");
+      }
+      directOnly = true;
     } else if (argument === "--output") {
       if (outputPath !== undefined) {
         throw new Error("Integration argument error: duplicate --output");
@@ -264,12 +278,42 @@ export function parseRunnerArguments(args: readonly string[]): RunnerArguments {
 
   const result: {
     codexAnalyticsExplicitlyAllowed: true;
+    directOnly: boolean;
     outputPath?: string;
-  } = { codexAnalyticsExplicitlyAllowed: true };
+  } = { codexAnalyticsExplicitlyAllowed: true, directOnly };
   if (outputPath !== undefined) {
     result.outputPath = outputPath;
   }
   return result;
+}
+
+export type PipelineClassification =
+  | "no-otlp-request"
+  | "request-decode-failure"
+  | "decoded-without-metric-datapoints"
+  | "non-target-metric-datapoints-only"
+  | "target-datapoints-rejected"
+  | "accepted-skill-evidence";
+
+export function classifyPipelineDiagnostics(
+  diagnostics: CodexSkillEvidenceDiagnosticsSnapshot,
+): PipelineClassification {
+  if (diagnostics.otlpMetricsRequestsReceived === 0) {
+    return "no-otlp-request";
+  }
+  if (diagnostics.successfullyDecodedRequests === 0) {
+    return "request-decode-failure";
+  }
+  if (diagnostics.acceptedAllowlistedSkillDataPoints > 0) {
+    return "accepted-skill-evidence";
+  }
+  if (diagnostics.targetDataPointsObserved > 0) {
+    return "target-datapoints-rejected";
+  }
+  if (diagnostics.metricDataPointsInspected > 0) {
+    return "non-target-metric-datapoints-only";
+  }
+  return "decoded-without-metric-datapoints";
 }
 
 function requireLoopbackMetricsEndpoint(endpoint: string): URL {
@@ -585,6 +629,54 @@ export function formatConsoleSummary(report: IntegrationReport): string {
     `  observed: ${observedList(report.scenarios.subagent.observedSkillIds)}`,
     `  result: ${subagentResult}`,
     ...diagnosticLine(report.scenarios.subagent),
+  ].join("\n");
+}
+
+function formatObservationDiagnostics(
+  label: string,
+  observation: ScenarioObservation,
+): string[] {
+  if (!observation.diagnostics) {
+    return [`${label}: unavailable`];
+  }
+  return [
+    `${label}: ${JSON.stringify(observation.diagnostics)}`,
+    `${label} classification: ${classifyPipelineDiagnostics(observation.diagnostics)}`,
+  ];
+}
+
+export function formatDiagnosticsSummary(
+  observations: IntegrationObservations,
+): string {
+  return [
+    "OTLP metrics pipeline diagnostics (not public Skill evidence):",
+    ...formatObservationDiagnostics("direct", observations.direct),
+    ...observations.repeated.flatMap((observation, index) =>
+      formatObservationDiagnostics(`repeated run ${index + 1}`, observation),
+    ),
+    ...formatObservationDiagnostics("nested", observations.nested),
+    ...formatObservationDiagnostics("subagent", observations.subagent),
+  ].join("\n");
+}
+
+export function formatDirectBaselineSummary(options: {
+  readonly codexVersion: string;
+  readonly observation: ScenarioObservation;
+}): string {
+  const result = buildScenarioResult("direct", options.observation);
+  return [
+    `Codex version: ${options.codexVersion}`,
+    "Command category: direct single-Skill baseline",
+    "Codex analytics explicitly allowed: true",
+    "Collector semantics: presence",
+    `Observed Skill IDs: ${observedList(result.observedSkillIds)}`,
+    `Result: ${result.status}`,
+    ...diagnosticLine(result),
+    ...formatObservationDiagnostics(
+      "diagnostics snapshot",
+      options.observation,
+    ),
+    "Limitations: no execution, count, ordering, session, nesting-edge, agent-attribution, instruction-compliance, or task-success claim is made.",
   ].join("\n");
 }
 

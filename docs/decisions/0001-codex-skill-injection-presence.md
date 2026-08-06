@@ -42,7 +42,7 @@ OTLP counter exports may be cumulative and repeated. The collector collapses eve
 
 Repeated cumulative points cannot be interpreted as repeated injections, and the metric supplies no supported ordering or dependency edge. Resource, scope, agent, thread, parent-thread, turn, and session data are outside the retention allowlist even if present in a raw payload.
 
-The snapshot consequently contains no count, timestamp, sequence, edge, parent/child relationship, agent role, or model-thread identifier. The boolean unknown classification reveals no unknown label and does not create an exemplar.
+The public evidence snapshot consequently contains no count, timestamp, sequence, edge, parent/child relationship, agent role, or model-thread identifier. The boolean unknown classification reveals no unknown label and does not create an exemplar. Separate bounded receiver diagnostics may count transport and rejection stages, but are not part of this evidence result and do not claim provider event occurrences.
 
 ## Renma responsibility
 
@@ -52,7 +52,7 @@ A future caller integration may choose to compare a snapshot with Renma data, bu
 
 ## Privacy and lifecycle consequences
 
-The caller allowlist is validated before the loopback server opens. Raw requests are bounded, parsed only in memory, atomically reduced to finite state, and cleared. Counter values and datapoint flags are inspected only to enforce recorded, strictly positive presence and are then discarded without retention, exposure, logging, hashing, encoding, or counting. Unknown labels are compared and discarded under the same restrictions. Shutdown stops new connections, drains accepted requests, and force-closes active connections after the documented grace period.
+The caller allowlist is validated before the loopback server opens. Raw requests are bounded, parsed only in memory, atomically reduced to finite state, and cleared. Counter magnitudes and datapoint flags are inspected only to enforce recorded, strictly positive presence and are then discarded without retention, exposure, logging, hashing, or encoding. The separate diagnostics retain only the datapoint's bounded sign category. Unknown labels are compared and discarded under the same restrictions; diagnostics can retain only a saturating count of unknown-or-missing labels. Shutdown stops new connections, drains accepted requests, and force-closes active connections after the documented grace period.
 
 This produces a deliberately small API at the cost of excluding raw event callbacks, debugging payloads, automatic persistence, process management, and generic telemetry access.
 

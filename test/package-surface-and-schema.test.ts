@@ -60,6 +60,7 @@ test("generates declarations for the complete public TypeScript surface", async 
     "createCodexSkillEvidenceCollector",
     "CodexSkillEvidenceCollector",
     "CodexSkillEvidenceCollectorOptions",
+    "CodexSkillEvidenceDiagnosticsSnapshot",
     "CodexSkillPresenceSnapshot",
   ]) {
     assert.equal(declarations.includes(publicName), true);
