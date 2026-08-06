@@ -17,6 +17,15 @@ import {
   type SyntheticSkillName,
 } from "./allowlist.js";
 import { startLocalCollector, type LocalCollector } from "./collector.js";
+import {
+  assertExperimentChildEnvironment,
+  buildCodexExecArguments,
+  buildExperimentChildEnvironment,
+  buildExecutionChildEnvironment,
+  normalizeRequestedModelConfiguration,
+  parseRunnerArguments,
+  type RequestedModelConfiguration,
+} from "./runner-config.js";
 
 const DEPTH_2_ROOT =
   "renma-topology-depth2-root-20260806" satisfies SyntheticSkillName;
@@ -68,6 +77,7 @@ interface ExperimentReport {
   environment: ExperimentEnvironment;
   provider: "codex";
   experiment: typeof EXPERIMENT_ID;
+  modelConfiguration: RequestedModelConfiguration;
   runsPerScenario: number;
   scenarios: ScenarioSummary[];
 }
@@ -157,12 +167,16 @@ const defaultOutputPath = join(
 function runProcess(
   command: string,
   args: string[],
-  options: { cwd?: string; captureStdout?: boolean } = {},
+  options: {
+    environment: NodeJS.ProcessEnv;
+    cwd?: string;
+    captureStdout?: boolean;
+  },
 ): Promise<{ exitCode: number | null; stdout: string }> {
   return new Promise((resolvePromise, reject) => {
     const child = spawn(command, args, {
       cwd: options.cwd,
-      env: process.env,
+      env: options.environment,
       stdio: ["ignore", options.captureStdout ? "pipe" : "ignore", "ignore"],
     });
     let stdout = "";
@@ -179,14 +193,51 @@ function runProcess(
 async function readCommandOutput(
   command: string,
   args: string[],
+  environment: NodeJS.ProcessEnv,
 ): Promise<string | undefined> {
-  const result = await runProcess(command, args, { captureStdout: true });
+  const result = await runProcess(command, args, {
+    captureStdout: true,
+    environment,
+  });
   const output = result.stdout.trim();
   return result.exitCode === 0 && output ? output : undefined;
 }
 
-async function readExperimentEnvironment(): Promise<ExperimentEnvironment> {
-  const codexVersion = await readCommandOutput("codex", ["--version"]);
+async function verifyCodexAuthentication(
+  childEnvironment: NodeJS.ProcessEnv,
+): Promise<"api-key" | "saved-login"> {
+  if (childEnvironment.CODEX_API_KEY) {
+    return "api-key";
+  }
+
+  let result: { exitCode: number | null; stdout: string };
+  try {
+    result = await runProcess("codex", ["login", "status"], {
+      environment: childEnvironment,
+    });
+  } catch (error) {
+    throw new Error(
+      "Unable to check Codex authentication with the minimized child environment; the runner will not broaden the forwarded variables",
+      { cause: error },
+    );
+  }
+  if (result.exitCode !== 0) {
+    throw new Error(
+      "Codex saved authentication is unavailable through the forwarded HOME or CODEX_HOME under the minimized child environment; the runner will not broaden the forwarded variables",
+    );
+  }
+
+  return "saved-login";
+}
+
+async function readExperimentEnvironment(
+  executionEnvironment: NodeJS.ProcessEnv,
+): Promise<ExperimentEnvironment> {
+  const codexVersion = await readCommandOutput(
+    "codex",
+    ["--version"],
+    executionEnvironment,
+  );
   if (!codexVersion || !/^codex-cli \d+\.\d+\.\d+/.test(codexVersion)) {
     throw new Error("Unable to determine the installed Codex version");
   }
@@ -194,8 +245,8 @@ async function readExperimentEnvironment(): Promise<ExperimentEnvironment> {
   let operatingSystem = `${platform()} ${release()}`;
   if (platform() === "darwin") {
     const [productVersion, buildVersion] = await Promise.all([
-      readCommandOutput("sw_vers", ["-productVersion"]),
-      readCommandOutput("sw_vers", ["-buildVersion"]),
+      readCommandOutput("sw_vers", ["-productVersion"], executionEnvironment),
+      readCommandOutput("sw_vers", ["-buildVersion"], executionEnvironment),
     ]);
     if (productVersion && buildVersion) {
       operatingSystem = `macOS ${productVersion} (${buildVersion})`;
@@ -208,34 +259,6 @@ async function readExperimentEnvironment(): Promise<ExperimentEnvironment> {
     architecture: arch(),
     nodeVersion: process.version,
   };
-}
-
-function readArguments(): { outputPath: string; runs: number } {
-  let outputPath = defaultOutputPath;
-  let runs = 3;
-
-  for (let index = 2; index < process.argv.length; index += 1) {
-    const argument = process.argv[index];
-    if (argument === "--runs") {
-      const value = Number(process.argv[index + 1]);
-      if (!Number.isInteger(value) || value < 3 || value > 10) {
-        throw new Error("--runs must be an integer from 3 to 10");
-      }
-      runs = value;
-      index += 1;
-    } else if (argument === "--output") {
-      const value = process.argv[index + 1];
-      if (!value) {
-        throw new Error("--output requires a path");
-      }
-      outputPath = resolve(value);
-      index += 1;
-    } else {
-      throw new Error(`Unknown argument: ${argument}`);
-    }
-  }
-
-  return { outputPath, runs };
 }
 
 async function readFixtures(): Promise<ExperimentFixtures> {
@@ -323,6 +346,9 @@ async function installCustomAgentFixtures(
 async function runOnce(
   definition: ScenarioDefinition,
   fixtures: ExperimentFixtures,
+  modelConfiguration: RequestedModelConfiguration,
+  childEnvironment: NodeJS.ProcessEnv,
+  authenticationRoute: "api-key" | "saved-login",
 ): Promise<RunSummary> {
   const experimentRunId = randomUUID();
   const temporaryWorkspace = await mkdtemp(
@@ -337,37 +363,32 @@ async function runOnce(
       await installCustomAgentFixtures(temporaryWorkspace, fixtures.agents);
     }
 
-    const metricsExporter = `{ otlp-http = { endpoint = "${collector.endpoint}", protocol = "json" } }`;
-    const result = await runProcess(
-      "codex",
-      [
-        "exec",
-        "--ephemeral",
-        "--ignore-user-config",
-        "--ignore-rules",
-        "--skip-git-repo-check",
-        "--enable",
-        "multi_agent",
-        "-C",
-        temporaryWorkspace,
-        "-c",
-        'sandbox_mode="read-only"',
-        "-c",
-        'approval_policy="never"',
-        "-c",
-        "agents.enabled=true",
-        "-c",
-        "otel.log_user_prompt=false",
-        "-c",
-        'otel.exporter="none"',
-        "-c",
-        'otel.trace_exporter="none"',
-        "-c",
-        `otel.metrics_exporter=${metricsExporter}`,
-        definition.prompt,
-      ],
-      { cwd: temporaryWorkspace },
-    );
+    let result: { exitCode: number | null; stdout: string };
+    try {
+      result = await runProcess(
+        "codex",
+        buildCodexExecArguments({
+          collectorEndpoint: collector.endpoint,
+          prompt: definition.prompt,
+          temporaryWorkspace,
+          ...modelConfiguration,
+        }),
+        {
+          cwd: temporaryWorkspace,
+          environment: childEnvironment,
+        },
+      );
+    } catch (error) {
+      throw new Error(
+        `Unable to start Codex for scenario ${definition.id} with the minimized child environment; the runner will not broaden the forwarded variables`,
+        { cause: error },
+      );
+    }
+    if (result.exitCode !== 0) {
+      throw new Error(
+        `Codex for scenario ${definition.id} exited with status ${String(result.exitCode)} under the minimized environment using the explicit ${authenticationRoute} authentication route. The requested model, configuration, network, or authentication may be unavailable; the runner will not broaden the forwarded variables`,
+      );
+    }
     const presence = await collector.closeAndSnapshot();
 
     return {
@@ -389,9 +410,18 @@ async function runOnce(
 }
 
 async function main(): Promise<void> {
-  const { outputPath, runs } = readArguments();
-  const [environment, fixtures] = await Promise.all([
-    readExperimentEnvironment(),
+  const { outputPath, runs, requestedModel, requestedReasoningEffort } =
+    parseRunnerArguments(process.argv.slice(2), defaultOutputPath);
+  const modelConfiguration = normalizeRequestedModelConfiguration(
+    requestedModel,
+    requestedReasoningEffort,
+  );
+  const executionEnvironment = buildExecutionChildEnvironment(process.env);
+  const codexEnvironment = buildExperimentChildEnvironment(process.env);
+  assertExperimentChildEnvironment(codexEnvironment);
+  const [authenticationRoute, environment, fixtures] = await Promise.all([
+    verifyCodexAuthentication(codexEnvironment),
+    readExperimentEnvironment(executionEnvironment),
     readFixtures(),
   ]);
   const scenarios: ScenarioSummary[] = [];
@@ -399,7 +429,15 @@ async function main(): Promise<void> {
   for (const definition of scenarioDefinitions) {
     const runSummaries: RunSummary[] = [];
     for (let index = 0; index < runs; index += 1) {
-      runSummaries.push(await runOnce(definition, fixtures));
+      runSummaries.push(
+        await runOnce(
+          definition,
+          fixtures,
+          modelConfiguration,
+          codexEnvironment,
+          authenticationRoute,
+        ),
+      );
     }
     scenarios.push({ scenario: definition.id, runs: runSummaries });
   }
@@ -410,6 +448,7 @@ async function main(): Promise<void> {
     environment,
     provider: "codex",
     experiment: EXPERIMENT_ID,
+    modelConfiguration,
     runsPerScenario: runs,
     scenarios,
   };
@@ -438,6 +477,7 @@ async function main(): Promise<void> {
       environment: report.environment,
       provider: report.provider,
       experiment: report.experiment,
+      modelConfiguration: report.modelConfiguration,
       runsPerScenario: report.runsPerScenario,
       scenarioPresence,
       failedRuns,

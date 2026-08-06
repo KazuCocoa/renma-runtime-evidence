@@ -10,6 +10,7 @@
     "environment",
     "provider",
     "experiment",
+    "modelConfiguration",
     "runsPerScenario",
     "scenarios"
   ],
@@ -40,6 +41,20 @@
     },
     "provider": { "const": "codex" },
     "experiment": { "const": "codex-skill-topology-boundaries" },
+    "modelConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requestedModel", "requestedReasoningEffort"],
+      "properties": {
+        "requestedModel": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$"
+        },
+        "requestedReasoningEffort": {
+          "enum": ["minimal", "low", "medium", "high", "xhigh"]
+        }
+      }
+    },
     "runsPerScenario": { "type": "integer", "minimum": 3, "maximum": 10 },
     "scenarios": {
       "type": "array",
