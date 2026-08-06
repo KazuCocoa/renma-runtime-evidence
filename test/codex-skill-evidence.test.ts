@@ -629,6 +629,75 @@ test("sorts and deduplicates multiple allowed cumulative exports", async () => {
   ]);
 });
 
+test("normalizes mixed accepted and rejected observations without widening evidence", async () => {
+  const unknownSkill = "PRIVATE_MIXED_UNKNOWN_SKILL";
+  const collector = await createCodexSkillEvidenceCollector({
+    allowedSkills: [allowedAlpha, allowedBeta],
+  });
+  const result = await sendRequest(
+    collector.endpoint,
+    payload([
+      metric("codex.skill.injected", [
+        successfulPoint(allowedAlpha),
+        successfulPoint(allowedBeta, "error"),
+        successfulPoint(unknownSkill),
+        point(
+          [
+            stringAttribute("skill", allowedBeta),
+            stringAttribute("status", "ok"),
+          ],
+          { asInt: "0" },
+        ),
+      ]),
+      metric("codex.skill.executed", [successfulPoint(allowedBeta)]),
+    ]),
+  );
+  const snapshot = await collector.closeAndSnapshot();
+
+  assert.equal(result.statusCode, 200);
+  assert.deepEqual(snapshot.injectedSkills, [allowedAlpha]);
+  assert.equal(snapshot.unrecognizedSkillObserved, true);
+  assert.equal(
+    JSON.stringify({ result, snapshot }).includes(unknownSkill),
+    false,
+  );
+});
+
+test("produces the same presence snapshot for different fixture orderings", async () => {
+  const forwardCollector = await createCodexSkillEvidenceCollector({
+    allowedSkills: [allowedBeta, allowedAlpha],
+  });
+  const reverseCollector = await createCodexSkillEvidenceCollector({
+    allowedSkills: [allowedAlpha, allowedBeta],
+  });
+  const forwardPoints = [
+    successfulPoint(allowedBeta),
+    successfulPoint(allowedAlpha),
+    successfulPoint(allowedBeta),
+  ];
+
+  const [forwardResult, reverseResult] = await Promise.all([
+    sendRequest(
+      forwardCollector.endpoint,
+      payload([metric("codex.skill.injected", forwardPoints)]),
+    ),
+    sendRequest(
+      reverseCollector.endpoint,
+      payload([metric("codex.skill.injected", [...forwardPoints].reverse())]),
+    ),
+  ]);
+  const [forwardSnapshot, reverseSnapshot] = await Promise.all([
+    forwardCollector.closeAndSnapshot(),
+    reverseCollector.closeAndSnapshot(),
+  ]);
+
+  assert.equal(forwardResult.statusCode, 200);
+  assert.equal(reverseResult.statusCode, 200);
+  assert.deepEqual(forwardSnapshot, reverseSnapshot);
+  assert.deepEqual(forwardSnapshot.injectedSkills, [allowedAlpha, allowedBeta]);
+  assert.equal("counts" in forwardSnapshot, false);
+});
+
 test("rejects malformed JSON and malformed OTLP envelopes", async () => {
   const malformedBodies = [
     "not-json",

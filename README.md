@@ -80,4 +80,25 @@ npm ci
 npm run check
 ```
 
+CI runs on pull requests and pushes to `main` with Node.js 22 and 24. Each
+matrix job installs the locked npm dependency graph with `npm ci`, then runs
+the supported build, TypeScript typecheck, Prettier formatting check, and test
+scripts. The repository has no separate lint script, so CI does not invent a
+lint toolchain.
+
+The library collector tests use small OTLP/HTTP fixtures delivered over an
+ephemeral loopback port. They deterministically cover exact successful,
+recorded, strictly positive `codex.skill.injected` datapoints; multiple and
+repeated allowlisted labels; unknown-label classification without disclosure;
+ignored non-success, non-positive, and unrelated observations; fail-closed
+malformed requests; mixed accepted and rejected observations; canonical
+order-independent snapshots; clean shutdown and draining; and exclusion of raw
+payloads and disallowed fields from the public result.
+
+These tests establish only sorted, deduplicated Skill presence across one
+collector lifetime. The result exposes no occurrence counts, execution claim,
+ordering, session or agent attribution, nesting, or dependency edges. An
+actual-Codex CLI smoke test is intentionally deferred to a separate integration
+experiment; CI does not launch Codex or contact external services.
+
 This package has `"private": true` and must not be published to npm.
