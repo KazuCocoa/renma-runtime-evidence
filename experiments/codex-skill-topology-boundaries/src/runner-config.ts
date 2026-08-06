@@ -1,4 +1,6 @@
-import { resolve } from "node:path";
+import { mkdir, mkdtemp, readdir, rm, stat } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { isAbsolute, join, relative, resolve, sep } from "node:path";
 
 export const EXECUTION_ENVIRONMENT_VARIABLES = [
   "PATH",
@@ -10,11 +12,14 @@ export const EXECUTION_ENVIRONMENT_VARIABLES = [
   "LC_CTYPE",
 ] as const;
 
-export const AUTHENTICATION_ENVIRONMENT_VARIABLES = [
+export const AUTHENTICATION_ENVIRONMENT_VARIABLES = ["CODEX_API_KEY"] as const;
+
+export const ISOLATED_LOCATION_ENVIRONMENT_VARIABLES = [
   "HOME",
   "CODEX_HOME",
-  "CODEX_API_KEY",
 ] as const;
+
+export const AUTHENTICATION_ISOLATION_MODE = "api-key" as const;
 
 export const SUPPORTED_REASONING_EFFORTS = [
   "minimal",
@@ -35,6 +40,13 @@ export interface RequestedModelConfiguration {
 export interface RunnerArguments extends RequestedModelConfiguration {
   outputPath: string;
   runs: number;
+}
+
+export interface IsolatedRunDirectories {
+  rootDirectory: string;
+  workspaceDirectory: string;
+  homeDirectory: string;
+  codexHomeDirectory: string;
 }
 
 interface CodexInvocationOptions extends RequestedModelConfiguration {
@@ -65,37 +77,162 @@ export function buildExecutionChildEnvironment(
 
 export function buildExperimentChildEnvironment(
   sourceEnvironment: Readonly<NodeJS.ProcessEnv>,
+  isolatedDirectories: IsolatedRunDirectories,
 ): NodeJS.ProcessEnv {
   const childEnvironment = buildExecutionChildEnvironment(sourceEnvironment);
+  const apiKey = requireCodexApiKey(sourceEnvironment);
 
-  for (const variableName of AUTHENTICATION_ENVIRONMENT_VARIABLES) {
-    const value = sourceEnvironment[variableName];
-    if (value !== undefined) {
-      childEnvironment[variableName] = value;
-    }
-  }
+  childEnvironment.HOME = isolatedDirectories.homeDirectory;
+  childEnvironment.CODEX_HOME = isolatedDirectories.codexHomeDirectory;
+  childEnvironment.CODEX_API_KEY = apiKey;
 
   return childEnvironment;
 }
 
+export function requireCodexApiKey(
+  sourceEnvironment: Readonly<NodeJS.ProcessEnv>,
+): string {
+  const apiKey = sourceEnvironment.CODEX_API_KEY;
+  if (!apiKey) {
+    throw new Error(
+      "The isolated experiment requires CODEX_API_KEY; implicit saved-login authentication and caller HOME/CODEX_HOME reuse are prohibited",
+    );
+  }
+  return apiKey;
+}
+
+function isStrictDescendant(parent: string, candidate: string): boolean {
+  const relativePath = relative(parent, candidate);
+  return (
+    relativePath.length > 0 &&
+    relativePath !== ".." &&
+    !relativePath.startsWith(`..${sep}`) &&
+    !isAbsolute(relativePath)
+  );
+}
+
+function assertIsolatedDirectoryPaths(
+  isolatedDirectories: IsolatedRunDirectories,
+): void {
+  const {
+    rootDirectory,
+    workspaceDirectory,
+    homeDirectory,
+    codexHomeDirectory,
+  } = isolatedDirectories;
+
+  if (
+    !isAbsolute(rootDirectory) ||
+    !isAbsolute(workspaceDirectory) ||
+    !isAbsolute(homeDirectory) ||
+    !isAbsolute(codexHomeDirectory)
+  ) {
+    throw new Error("Isolated experiment directories must use absolute paths");
+  }
+  if (
+    !isStrictDescendant(rootDirectory, workspaceDirectory) ||
+    !isStrictDescendant(rootDirectory, homeDirectory) ||
+    !isStrictDescendant(rootDirectory, codexHomeDirectory)
+  ) {
+    throw new Error(
+      "Workspace, HOME, and CODEX_HOME must be contained by the per-run isolation root",
+    );
+  }
+  if (
+    new Set([workspaceDirectory, homeDirectory, codexHomeDirectory]).size !== 3
+  ) {
+    throw new Error(
+      "Workspace, HOME, and CODEX_HOME must be distinct isolated directories",
+    );
+  }
+}
+
 export function assertExperimentChildEnvironment(
   childEnvironment: Readonly<NodeJS.ProcessEnv>,
+  isolatedDirectories: IsolatedRunDirectories,
 ): void {
   if (!childEnvironment.PATH) {
     throw new Error(
       "The minimized experiment environment requires PATH to locate Codex and system executables",
     );
   }
-
-  if (
-    !childEnvironment.HOME &&
-    !childEnvironment.CODEX_HOME &&
-    !childEnvironment.CODEX_API_KEY
-  ) {
+  if (!childEnvironment.CODEX_API_KEY) {
     throw new Error(
-      "The minimized experiment environment has no explicit Codex authentication source; configure HOME, CODEX_HOME, or CODEX_API_KEY",
+      "The isolated experiment environment requires explicit CODEX_API_KEY authentication",
     );
   }
+
+  assertIsolatedDirectoryPaths(isolatedDirectories);
+  if (
+    childEnvironment.HOME !== isolatedDirectories.homeDirectory ||
+    childEnvironment.CODEX_HOME !== isolatedDirectories.codexHomeDirectory
+  ) {
+    throw new Error(
+      "Experiment HOME and CODEX_HOME must exactly match the per-run isolated directories",
+    );
+  }
+}
+
+export async function createIsolatedRunDirectories(
+  parentDirectory = tmpdir(),
+): Promise<IsolatedRunDirectories> {
+  const rootDirectory = await mkdtemp(
+    join(parentDirectory, "renma-skill-topology-codex-"),
+  );
+  const isolatedDirectories: IsolatedRunDirectories = {
+    rootDirectory,
+    workspaceDirectory: join(rootDirectory, "workspace"),
+    homeDirectory: join(rootDirectory, "home"),
+    codexHomeDirectory: join(rootDirectory, "codex-home"),
+  };
+
+  try {
+    await Promise.all(
+      [
+        isolatedDirectories.workspaceDirectory,
+        isolatedDirectories.homeDirectory,
+        isolatedDirectories.codexHomeDirectory,
+      ].map((directory) => mkdir(directory, { mode: 0o700 })),
+    );
+    return isolatedDirectories;
+  } catch (error) {
+    await rm(rootDirectory, { recursive: true, force: true });
+    throw error;
+  }
+}
+
+export async function preflightIsolatedExperimentEnvironment(
+  childEnvironment: Readonly<NodeJS.ProcessEnv>,
+  isolatedDirectories: IsolatedRunDirectories,
+): Promise<void> {
+  assertExperimentChildEnvironment(childEnvironment, isolatedDirectories);
+
+  const directories = [
+    isolatedDirectories.workspaceDirectory,
+    isolatedDirectories.homeDirectory,
+    isolatedDirectories.codexHomeDirectory,
+  ];
+  const [directoryStats, homeEntries, codexHomeEntries] = await Promise.all([
+    Promise.all(directories.map((directory) => stat(directory))),
+    readdir(isolatedDirectories.homeDirectory),
+    readdir(isolatedDirectories.codexHomeDirectory),
+  ]);
+
+  if (directoryStats.some((directoryStat) => !directoryStat.isDirectory())) {
+    throw new Error("Every isolated run location must be a directory");
+  }
+  if (homeEntries.length > 0 || codexHomeEntries.length > 0) {
+    throw new Error(
+      "Isolated HOME and CODEX_HOME must be empty before the Codex invocation",
+    );
+  }
+}
+
+export async function cleanupIsolatedRunDirectories(
+  isolatedDirectories: IsolatedRunDirectories,
+): Promise<void> {
+  assertIsolatedDirectoryPaths(isolatedDirectories);
+  await rm(isolatedDirectories.rootDirectory, { recursive: true, force: true });
 }
 
 function isModelIdentifier(value: unknown): value is string {

@@ -55,6 +55,7 @@
         }
       }
     },
+    "authenticationIsolationMode": { "const": "api-key" },
     "runsPerScenario": { "type": "integer", "minimum": 3, "maximum": 10 },
     "scenarios": {
       "type": "array",

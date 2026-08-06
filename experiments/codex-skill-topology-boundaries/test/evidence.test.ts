@@ -74,6 +74,7 @@ test("committed evidence conforms to the finite normalized schema boundary", asy
   assert.equal(report.provider, "codex");
   assert.equal(report.experiment, "codex-skill-topology-boundaries");
   assert.equal(report.runsPerScenario, 3);
+  assert.equal("authenticationIsolationMode" in report, false);
 
   const environment = asRecord(report.environment);
   assert.deepEqual(sortedKeys(environment), [
@@ -159,6 +160,10 @@ test("committed evidence conforms to the finite normalized schema boundary", asy
     "requestedModel",
     "requestedReasoningEffort",
   ]);
+  assert.equal(
+    asRecord(schemaProperties.authenticationIsolationMode).const,
+    "api-key",
+  );
 
   const prohibitedKeys = new Set([
     "prompt",
@@ -176,6 +181,9 @@ test("committed evidence conforms to the finite normalized schema boundary", asy
     "taskResult",
     "edges",
     "associations",
+    "HOME",
+    "CODEX_HOME",
+    "CODEX_API_KEY",
   ]);
   function visit(value: unknown): void {
     if (Array.isArray(value)) {
@@ -193,7 +201,7 @@ test("committed evidence conforms to the finite normalized schema boundary", asy
   visit(report);
 });
 
-test("README presence table exactly matches regenerated evidence", async () => {
+test("README presence table exactly matches retained evidence", async () => {
   const [evidenceContents, readme] = await Promise.all([
     readFile(
       join(experimentDirectory, "evidence/codex-cli-0.146.0.json"),
@@ -205,11 +213,19 @@ test("README presence table exactly matches regenerated evidence", async () => {
   const scenarios = asArray(report.scenarios);
   const tableStart = readme.indexOf("### Actual normalized presence sets");
   const tableEnd = readme.indexOf(
-    "The privacy-safe normalized evidence",
+    "The retained output-allowlisted evidence",
     tableStart,
   );
   assert.notEqual(tableStart, -1);
   assert.notEqual(tableEnd, -1);
+  assert.match(
+    readme,
+    /committed artifact predates that control.*artifact was left unchanged/s,
+  );
+  assert.match(
+    readme,
+    /Input isolation and output filtering are separate controls/,
+  );
   const table = readme.slice(tableStart, tableEnd);
   const rowPattern =
     /^\|\s*`([^`]+)`\s*\|\s*(\d+)\s*\|\s*`\[([^\]]*)\]`\s*\|\s*`\[([^\]]*)\]`\s*\|$/gm;

@@ -19,11 +19,13 @@ Recorded environment:
 
 The runner passed that model and reasoning effort explicitly to every parent `codex exec`. The custom-agent fixtures contain no model overrides, so the documented configuration behavior is inheritance from the parent if a child is actually spawned. `gpt-5.6-sol` is a requested model alias, not evidence of an immutable model snapshot; reproduction remains bounded by alias mutability.
 
+Authentication-isolation status: the current runner requires `CODEX_API_KEY` and assigns fresh per-run `HOME` and `CODEX_HOME` directories. The committed artifact predates that control and was generated through the caller's saved-login profile. Because no `CODEX_API_KEY` was available during the isolation fix, the artifact was left unchanged and must not be treated as evidence of controlled user-Skill discovery. A future successful regeneration will record the finite `authenticationIsolationMode` value `api-key`.
+
 This is a bounded provider experiment. It does not add production collection or Renma integration.
 
 ## Result
 
-All 24 Codex parent invocations accepted the supplied configuration and exited with status `0`. Parent exit status records process completion only. It does not prove that delegation occurred, that a requested subagent was spawned, or that instructions were followed.
+In the retained pre-isolation artifact, all 24 Codex parent invocations accepted the supplied configuration and exited with status `0`. Parent exit status records process completion only. It does not prove that delegation occurred, that a requested subagent was spawned, or that instructions were followed.
 
 Phase A showed complete depth-two and depth-three Skill-label presence in all three runs. Branching was not consistently complete: the simple branch observed root plus branch A in all three runs and added branch B in one run. The diamond observed all four labels in one run and only root plus shared target in two runs. A missing expected label remains an observation, not a harness failure and not evidence that a file was unread or an instruction was ignored.
 
@@ -31,7 +33,7 @@ In Phase B, the dormant custom-agent configuration produced only the explicitly 
 
 No exact allowlisted synthetic role was observed from `codex.multi_agent.spawn` in any Phase B run. The experiment therefore found invocation-wide co-presence of parent and child-only Skill labels, but it did not find an accepted signal proving that a particular subagent was spawned. Actual subagent invocation and agent-level attribution remain inconclusive under this privacy boundary. The evidence cannot establish which agent injected any Skill or convert co-presence into a parent → role → Skill edge. It also cannot distinguish an absent metric export from a metric data point discarded because its `role` was outside the finite allowlist; raw OTLP is intentionally never retained. These outcomes are “not observed,” not evidence that the workflow was unsupported or did not occur.
 
-### Actual normalized presence sets
+### Actual normalized presence sets (retained pre-isolation artifact)
 
 Every array is sorted and deduplicated. Its order has no runtime meaning.
 
@@ -62,11 +64,13 @@ Every array is sorted and deduplicated. Its order has no runtime meaning.
 | `subagent-parallel`       |   2 | `[renma-topology-child-alpha-20260806, renma-topology-child-beta-20260806, renma-topology-orchestrator-parallel-20260806]`                                           | `[]`           |
 | `subagent-parallel`       |   3 | `[renma-topology-child-alpha-20260806, renma-topology-child-beta-20260806, renma-topology-orchestrator-parallel-20260806]`                                           | `[]`           |
 
-The privacy-safe normalized evidence is recorded in [`evidence/codex-cli-0.146.0.json`](evidence/codex-cli-0.146.0.json). It contains no raw OTLP payload, prompt, response, reasoning, transcript, tool input, tool output, task result, or agent-thread identifier.
+The retained output-allowlisted evidence is recorded in [`evidence/codex-cli-0.146.0.json`](evidence/codex-cli-0.146.0.json). It contains no raw OTLP payload, prompt, response, reasoning, transcript, tool input, tool output, task result, or agent-thread identifier. Output filtering does not repair the earlier input-isolation gap: user Skill metadata could have entered the old invocation context without appearing in this artifact.
 
 ## Scenario matrix
 
-All 22 synthetic Skill fixtures were installed in every isolated process. The user prompt named only the scenario root Skill. Descendant Skill names occurred only in the fixture/configuration path, not in the user prompt.
+All 22 project-scoped synthetic Skill fixtures were installed in every experiment workspace. The user prompt named only the scenario root Skill. Descendant Skill names occurred only in the fixture/configuration path, not in the user prompt.
+
+Those fixtures do not represent every Skill that the Codex runtime can provide. The [Codex Skill-discovery documentation](https://learn.chatgpt.com/docs/build-skills#where-codex-loads-local-skills) also lists user Skills from `$HOME/.agents/skills`, administrator Skills from `/etc/codex/skills`, and bundled system Skills. The current runner isolates the user location with a fresh temporary `HOME` and isolates Codex state with a fresh `CODEX_HOME`; it does not claim to remove administrator-provided or bundled system Skills. The retained artifact above was generated before user-location isolation was added.
 
 ### Phase A: multi-level nesting without subagents
 
@@ -113,27 +117,30 @@ The child-only Skill observations show that those labels reached the same loopba
 
 ## Isolation and privacy controls
 
-For each of the 24 runs, the runner:
+For every new run, the current runner:
 
-- created a fresh temporary workspace;
-- installed only fixed synthetic Skills and, in Phase B, fixed synthetic custom agents;
-- launched one separate parent `codex exec --ephemeral` process with `--ignore-user-config`, `--ignore-rules`, explicit multi-agent enablement, `--model gpt-5.6-sol`, and `model_reasoning_effort="medium"`;
-- used a read-only sandbox, disabled approvals, and skipped the temporary workspace's Git check;
-- disabled OTel logs and traces and kept `otel.log_user_prompt=false`;
-- redirected metrics only to an ephemeral OTLP/HTTP JSON endpoint on `127.0.0.1`;
-- discarded Codex stdout and stderr;
-- waited for the parent process to exit; Phase B fixtures required the parent to wait for every requested subagent before completing;
-- stopped new collector connections, drained accepted in-flight requests, and only then created the normalized snapshot; and
-- removed the temporary workspace in a `finally` cleanup.
+- fails before starting any scenario unless `CODEX_API_KEY` is explicitly supplied;
+- creates one fresh temporary isolation root containing distinct workspace, `HOME`, and `CODEX_HOME` directories;
+- verifies that the per-run `HOME` and `CODEX_HOME` are empty and that the exact environment passed to Codex points to them;
+- installs the fixed project-scoped synthetic Skills and, in Phase B, fixed synthetic custom agents only in the temporary workspace;
+- launches one separate parent `codex exec --ephemeral` process with `--ignore-user-config`, `--ignore-rules`, explicit multi-agent enablement, `--model gpt-5.6-sol`, and `model_reasoning_effort="medium"`;
+- uses a read-only sandbox, disables approvals, and skips the temporary workspace's Git check;
+- disables OTel logs and traces and keeps `otel.log_user_prompt=false`;
+- redirects metrics only to an ephemeral OTLP/HTTP JSON endpoint on `127.0.0.1`;
+- discards Codex stdout and stderr;
+- waits for the parent process to exit; Phase B fixtures require the parent to wait for every requested subagent before completing;
+- stops new collector connections, drains accepted in-flight requests, and only then creates the normalized snapshot; and
+- removes the entire per-run isolation root, including `HOME`, `CODEX_HOME`, and any state Codex created there, in a `finally` cleanup.
 
-The runner never passes `process.env` through to a child. It constructs a finite execution-only environment for version/host helpers, then adds the separate authentication allowlist only for Codex authentication checks and experiment invocations. It forwards only defined values for these names:
+The runner never passes `process.env` through to a child. It constructs a finite execution-only environment for version/host helpers from defined values of `PATH`, `TMPDIR`, `TMP`, `TEMP`, `LANG`, `LC_ALL`, and `LC_CTYPE`. Those helpers receive no authentication variable.
 
-- executable and runtime handling: `PATH`, `TMPDIR`, `TMP`, `TEMP`, `LANG`, `LC_ALL`, and `LC_CTYPE`;
-- authentication lookup: `HOME`, `CODEX_HOME`, and `CODEX_API_KEY`.
+For an experiment invocation, the runner starts with that execution-only environment, assigns generated per-run paths to `HOME` and `CODEX_HOME`, and adds only `CODEX_API_KEY` from the caller. It never reads or forwards the caller's `HOME` or `CODEX_HOME`, never inspects or copies the caller's Skill or Codex-state directories, and does not support implicit saved-login authentication. The generated locations exist for input isolation and state containment; they are not authentication variables.
 
-Undefined variables are omitted. The runner requires `PATH` plus at least one explicit authentication route and checks saved-login status before starting scenario runs when `CODEX_API_KEY` is absent. If authentication or an invocation fails, it stops without forwarding additional variables. No environment values are recorded in console summaries or evidence.
+The [Codex environment-variable reference](https://learn.chatgpt.com/docs/config-file/environment-variables#core-locations) describes `CODEX_HOME` as the root for configuration, authentication, logs, sessions, and Skills, and exposes `CODEX_API_KEY` to `codex exec`, not to `codex login status`. The [non-interactive-mode documentation](https://learn.chatgpt.com/docs/non-interactive-mode#permissions-and-safety) separately says `--ignore-user-config` skips `$CODEX_HOME/config.toml`. The runner's preflight therefore validates the key's presence, path containment, exact environment binding, and empty authentication/state directories locally. The real `codex exec` is the only authentication attempt and receives that same preflighted environment. Missing authentication, missing isolation, a nonempty state directory, or an invocation failure stops the experiment without falling back to a saved profile or forwarding additional variables.
 
 The runner does not inspect Codex session stores, transcripts, JSONL, local databases, notifications, user history, or task output. It does not use `notify`. Raw OTLP request bodies exist only in memory while being bounded and parsed and are never persisted.
+
+Input isolation and output filtering are separate controls. The per-run paths prevent discovery from the caller's user Skill and Codex-state locations. Independently, the collector accepts only the finite synthetic provider labels below; a discarded label is not evidence that the corresponding Skill was unavailable or absent from the runtime. Administrator Skills under `/etc/codex/skills` and Skills bundled with Codex may remain available and are outside the project fixture set.
 
 The collector accepts only:
 
@@ -142,16 +149,16 @@ The collector accepts only:
 
 It discards unknown names/roles, every other status, malformed duplicate allowlisted attributes, non-target metrics, counter values, exemplars, resource/scope attributes, unexpected IDs or nicknames, and all content-bearing fields before normalization. Empty Skill and role sets remain valid observations.
 
-Retained evidence is limited to schema/date/provider/experiment/scenario identifiers, the exact requested model identifier and reasoning effort, non-identifying environment metadata, wrapper-generated pseudonymous run ID, Codex exit status, sorted presence sets, exact verified Skill status when applicable, and first accepted collector receipt time. It contains no inferred edges, ordering, counts, task results, responses, or compliance judgments.
+Newly generated evidence is limited to schema/date/provider/experiment/scenario identifiers, the finite `api-key` authentication-isolation mode, the exact requested model identifier and reasoning effort, non-identifying environment metadata, wrapper-generated pseudonymous run ID, Codex exit status, sorted presence sets, exact verified Skill status when applicable, and first accepted collector receipt time. It contains no paths, environment values, credentials, account data, inferred edges, ordering, counts, task results, responses, or compliance judgments. The retained pre-isolation artifact does not contain the new mode field.
 
-The normalized artifact is privacy-safe within that allowlist. Residual execution boundaries remain: Codex must receive the minimum authentication variables above, authentication state remains accessible to the Codex process, and a read-only sandbox prevents writes but does not by itself guarantee that every host-level read is impossible. The experiment therefore minimizes inputs and persistence; it does not claim that executing Codex is equivalent to an isolated zero-access environment.
+Residual execution boundaries remain: the individual Codex process receives `CODEX_API_KEY`, administrator-provided and bundled system Skills may remain available, and a read-only sandbox prevents writes but does not by itself guarantee that every host-level read is impossible. The experiment minimizes inputs and persistence; it does not claim that executing Codex is equivalent to an isolated zero-access environment. The retained artifact is output-allowlisted but was not regenerated under these input-isolation controls.
 
 ## Reproduce
 
 Prerequisites:
 
 - Node.js 22 or newer;
-- an authenticated `codex` CLI installation; and
+- a `CODEX_API_KEY` supplied through a secure process environment; and
 - `codex-cli 0.146.0` to reproduce the recorded version.
 
 Run:
@@ -159,7 +166,7 @@ Run:
 ```sh
 npm ci
 npm run check
-npm run experiment:codex:skill-topology-boundaries -- \
+CODEX_API_KEY="$CODEX_API_KEY" npm run experiment:codex:skill-topology-boundaries -- \
   --runs 3 \
   --model gpt-5.6-sol \
   --reasoning-effort medium
@@ -172,7 +179,9 @@ The ignored local report is written to:
 experiments/codex-skill-topology-boundaries/.local/experiment-report.json
 ```
 
-The console summary contains only allowlisted experiment/environment metadata, per-scenario counts of runs with non-empty Skill/role sets, and a failed-process count. Missing labels do not fail the harness. A nonzero/null Codex process status or malformed experiment configuration does.
+The console summary contains only allowlisted experiment/environment metadata, the finite `api-key` isolation mode, per-scenario counts of runs with non-empty Skill/role sets, and a failed-process count. It contains no environment value or credential. Missing labels do not fail the harness. Missing `CODEX_API_KEY`, missing/contaminated isolation directories, a nonzero/null Codex process status, or malformed experiment configuration does.
+
+The current maintainer command is the block above. In the environment used for this PR update it stops before scenario execution because `CODEX_API_KEY` is unavailable, so the retained evidence was not replaced.
 
 ## Non-goals
 

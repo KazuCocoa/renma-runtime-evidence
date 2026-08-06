@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { spawn } from "node:child_process";
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
-import { arch, platform, release, tmpdir } from "node:os";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { arch, platform, release } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -18,12 +18,16 @@ import {
 } from "./allowlist.js";
 import { startLocalCollector, type LocalCollector } from "./collector.js";
 import {
-  assertExperimentChildEnvironment,
+  AUTHENTICATION_ISOLATION_MODE,
   buildCodexExecArguments,
   buildExperimentChildEnvironment,
   buildExecutionChildEnvironment,
+  cleanupIsolatedRunDirectories,
+  createIsolatedRunDirectories,
   normalizeRequestedModelConfiguration,
   parseRunnerArguments,
+  preflightIsolatedExperimentEnvironment,
+  requireCodexApiKey,
   type RequestedModelConfiguration,
 } from "./runner-config.js";
 
@@ -50,7 +54,7 @@ interface ScenarioDefinition {
   prompt: string;
 }
 
-interface RunSummary extends RuntimePresenceSet {
+export interface RunSummary extends RuntimePresenceSet {
   schemaVersion: 1;
   provider: "codex";
   experiment: typeof EXPERIMENT_ID;
@@ -59,32 +63,139 @@ interface RunSummary extends RuntimePresenceSet {
   codexExitCode: number | null;
 }
 
-interface ScenarioSummary {
+export interface ScenarioSummary {
   scenario: ScenarioId;
   runs: RunSummary[];
 }
 
-interface ExperimentEnvironment {
+export interface ExperimentEnvironment {
   codexVersion: string;
   operatingSystem: string;
   architecture: string;
   nodeVersion: string;
 }
 
-interface ExperimentReport {
+export interface ExperimentReport {
   schemaVersion: 1;
   experimentDate: string;
   environment: ExperimentEnvironment;
   provider: "codex";
   experiment: typeof EXPERIMENT_ID;
   modelConfiguration: RequestedModelConfiguration;
+  authenticationIsolationMode: typeof AUTHENTICATION_ISOLATION_MODE;
   runsPerScenario: number;
   scenarios: ScenarioSummary[];
+}
+
+export interface ExperimentConsoleSummary {
+  experimentDate: string;
+  environment: ExperimentEnvironment;
+  provider: "codex";
+  experiment: typeof EXPERIMENT_ID;
+  modelConfiguration: RequestedModelConfiguration;
+  authenticationIsolationMode: typeof AUTHENTICATION_ISOLATION_MODE;
+  runsPerScenario: number;
+  scenarioPresence: Record<
+    string,
+    { runsWithSkills: number; runsWithRoles: number }
+  >;
+  failedRuns: number;
 }
 
 interface ExperimentFixtures {
   skills: ReadonlyMap<SyntheticSkillName, string>;
   agents: ReadonlyMap<SyntheticAgentRole, string>;
+}
+
+export function buildExperimentReport(options: {
+  experimentDate: string;
+  environment: ExperimentEnvironment;
+  modelConfiguration: RequestedModelConfiguration;
+  runsPerScenario: number;
+  scenarios: readonly ScenarioSummary[];
+}): ExperimentReport {
+  return {
+    schemaVersion: 1,
+    experimentDate: options.experimentDate,
+    environment: {
+      codexVersion: options.environment.codexVersion,
+      operatingSystem: options.environment.operatingSystem,
+      architecture: options.environment.architecture,
+      nodeVersion: options.environment.nodeVersion,
+    },
+    provider: "codex",
+    experiment: EXPERIMENT_ID,
+    modelConfiguration: {
+      requestedModel: options.modelConfiguration.requestedModel,
+      requestedReasoningEffort:
+        options.modelConfiguration.requestedReasoningEffort,
+    },
+    authenticationIsolationMode: AUTHENTICATION_ISOLATION_MODE,
+    runsPerScenario: options.runsPerScenario,
+    scenarios: options.scenarios.map(({ scenario, runs }) => ({
+      scenario,
+      runs: runs.map((run) => {
+        const normalizedRun: RunSummary = {
+          schemaVersion: 1,
+          provider: "codex",
+          experiment: EXPERIMENT_ID,
+          scenario: run.scenario,
+          experimentRunId: run.experimentRunId,
+          codexExitCode: run.codexExitCode,
+          injectedSkills: [...run.injectedSkills],
+          spawnedRoles: [...run.spawnedRoles],
+        };
+        if (run.verifiedSkillStatus === "ok") {
+          normalizedRun.verifiedSkillStatus = "ok";
+        }
+        if (run.collectorReceipt) {
+          normalizedRun.collectorReceipt = {
+            firstAcceptedAt: run.collectorReceipt.firstAcceptedAt,
+          };
+        }
+        return normalizedRun;
+      }),
+    })),
+  };
+}
+
+export function buildConsoleSummary(
+  report: ExperimentReport,
+): ExperimentConsoleSummary {
+  const scenarioPresence = Object.fromEntries(
+    report.scenarios.map(({ scenario, runs }) => [
+      scenario,
+      {
+        runsWithSkills: runs.filter((run) => run.injectedSkills.length > 0)
+          .length,
+        runsWithRoles: runs.filter((run) => run.spawnedRoles.length > 0).length,
+      },
+    ]),
+  );
+  const failedRuns = report.scenarios
+    .flatMap(({ runs }) => runs)
+    .filter((run) => run.codexExitCode !== 0).length;
+
+  return {
+    experimentDate: report.experimentDate,
+    environment: {
+      codexVersion: report.environment.codexVersion,
+      operatingSystem: report.environment.operatingSystem,
+      architecture: report.environment.architecture,
+      nodeVersion: report.environment.nodeVersion,
+    },
+    provider: report.provider,
+    experiment: report.experiment,
+    modelConfiguration: {
+      requestedModel: report.modelConfiguration.requestedModel,
+      requestedReasoningEffort:
+        report.modelConfiguration.requestedReasoningEffort,
+    },
+    authenticationIsolationMode: report.authenticationIsolationMode,
+    runsPerScenario: report.runsPerScenario,
+    scenarioPresence,
+    failedRuns,
+  };
 }
 
 const scenarioDefinitions: readonly ScenarioDefinition[] = [
@@ -201,33 +312,6 @@ async function readCommandOutput(
   });
   const output = result.stdout.trim();
   return result.exitCode === 0 && output ? output : undefined;
-}
-
-async function verifyCodexAuthentication(
-  childEnvironment: NodeJS.ProcessEnv,
-): Promise<"api-key" | "saved-login"> {
-  if (childEnvironment.CODEX_API_KEY) {
-    return "api-key";
-  }
-
-  let result: { exitCode: number | null; stdout: string };
-  try {
-    result = await runProcess("codex", ["login", "status"], {
-      environment: childEnvironment,
-    });
-  } catch (error) {
-    throw new Error(
-      "Unable to check Codex authentication with the minimized child environment; the runner will not broaden the forwarded variables",
-      { cause: error },
-    );
-  }
-  if (result.exitCode !== 0) {
-    throw new Error(
-      "Codex saved authentication is unavailable through the forwarded HOME or CODEX_HOME under the minimized child environment; the runner will not broaden the forwarded variables",
-    );
-  }
-
-  return "saved-login";
 }
 
 async function readExperimentEnvironment(
@@ -347,16 +431,22 @@ async function runOnce(
   definition: ScenarioDefinition,
   fixtures: ExperimentFixtures,
   modelConfiguration: RequestedModelConfiguration,
-  childEnvironment: NodeJS.ProcessEnv,
-  authenticationRoute: "api-key" | "saved-login",
+  codexSourceEnvironment: NodeJS.ProcessEnv,
 ): Promise<RunSummary> {
   const experimentRunId = randomUUID();
-  const temporaryWorkspace = await mkdtemp(
-    join(tmpdir(), "renma-skill-topology-codex-"),
-  );
+  const isolatedDirectories = await createIsolatedRunDirectories();
+  const temporaryWorkspace = isolatedDirectories.workspaceDirectory;
   let collector: LocalCollector | undefined;
 
   try {
+    const childEnvironment = buildExperimentChildEnvironment(
+      codexSourceEnvironment,
+      isolatedDirectories,
+    );
+    await preflightIsolatedExperimentEnvironment(
+      childEnvironment,
+      isolatedDirectories,
+    );
     collector = await startLocalCollector(definition.id);
     await installSkillFixtures(temporaryWorkspace, fixtures.skills);
     if (definition.installCustomAgents) {
@@ -386,7 +476,7 @@ async function runOnce(
     }
     if (result.exitCode !== 0) {
       throw new Error(
-        `Codex for scenario ${definition.id} exited with status ${String(result.exitCode)} under the minimized environment using the explicit ${authenticationRoute} authentication route. The requested model, configuration, network, or authentication may be unavailable; the runner will not broaden the forwarded variables`,
+        `Codex for scenario ${definition.id} exited with status ${String(result.exitCode)} under the isolated environment using the explicit ${AUTHENTICATION_ISOLATION_MODE} authentication route. The requested model, configuration, network, or authentication may be unavailable; the runner will not reuse caller HOME/CODEX_HOME or broaden the forwarded variables`,
       );
     }
     const presence = await collector.closeAndSnapshot();
@@ -404,7 +494,7 @@ async function runOnce(
     try {
       await collector?.closeAndSnapshot();
     } finally {
-      await rm(temporaryWorkspace, { recursive: true, force: true });
+      await cleanupIsolatedRunDirectories(isolatedDirectories);
     }
   }
 }
@@ -416,11 +506,13 @@ async function main(): Promise<void> {
     requestedModel,
     requestedReasoningEffort,
   );
+  const codexApiKey = requireCodexApiKey(process.env);
   const executionEnvironment = buildExecutionChildEnvironment(process.env);
-  const codexEnvironment = buildExperimentChildEnvironment(process.env);
-  assertExperimentChildEnvironment(codexEnvironment);
-  const [authenticationRoute, environment, fixtures] = await Promise.all([
-    verifyCodexAuthentication(codexEnvironment),
+  const codexSourceEnvironment: NodeJS.ProcessEnv = {
+    ...executionEnvironment,
+    CODEX_API_KEY: codexApiKey,
+  };
+  const [environment, fixtures] = await Promise.all([
     readExperimentEnvironment(executionEnvironment),
     readFixtures(),
   ]);
@@ -434,62 +526,38 @@ async function main(): Promise<void> {
           definition,
           fixtures,
           modelConfiguration,
-          codexEnvironment,
-          authenticationRoute,
+          codexSourceEnvironment,
         ),
       );
     }
     scenarios.push({ scenario: definition.id, runs: runSummaries });
   }
 
-  const report: ExperimentReport = {
-    schemaVersion: 1,
+  const report = buildExperimentReport({
     experimentDate: new Date().toISOString().slice(0, 10),
     environment,
-    provider: "codex",
-    experiment: EXPERIMENT_ID,
     modelConfiguration,
     runsPerScenario: runs,
     scenarios,
-  };
+  });
 
   await mkdir(dirname(outputPath), { recursive: true });
   await writeFile(outputPath, `${JSON.stringify(report, null, 2)}\n`, "utf8");
 
-  const scenarioPresence = Object.fromEntries(
-    scenarios.map(({ scenario, runs: scenarioRuns }) => [
-      scenario,
-      {
-        runsWithSkills: scenarioRuns.filter(
-          (run) => run.injectedSkills.length > 0,
-        ).length,
-        runsWithRoles: scenarioRuns.filter((run) => run.spawnedRoles.length > 0)
-          .length,
-      },
-    ]),
-  );
-  const failedRuns = scenarios
-    .flatMap(({ runs: scenarioRuns }) => scenarioRuns)
-    .filter((run) => run.codexExitCode !== 0).length;
-  process.stdout.write(
-    `${JSON.stringify({
-      experimentDate: report.experimentDate,
-      environment: report.environment,
-      provider: report.provider,
-      experiment: report.experiment,
-      modelConfiguration: report.modelConfiguration,
-      runsPerScenario: report.runsPerScenario,
-      scenarioPresence,
-      failedRuns,
-    })}\n`,
-  );
+  const consoleSummary = buildConsoleSummary(report);
+  process.stdout.write(`${JSON.stringify(consoleSummary)}\n`);
 
-  if (failedRuns > 0) {
+  if (consoleSummary.failedRuns > 0) {
     process.stderr.write(
-      `Experiment incomplete: ${failedRuns} Codex process(es) did not exit successfully.\n`,
+      `Experiment incomplete: ${consoleSummary.failedRuns} Codex process(es) did not exit successfully.\n`,
     );
     process.exitCode = 1;
   }
 }
 
-await main();
+if (
+  process.argv[1] &&
+  resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+) {
+  await main();
+}
