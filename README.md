@@ -98,7 +98,9 @@ payloads and disallowed fields from the public result.
 These tests establish only sorted, deduplicated Skill presence across one
 collector lifetime. The result exposes no occurrence counts, execution claim,
 ordering, session or agent attribution, nesting, or dependency edges. An
-actual-Codex CLI smoke test is intentionally deferred to a separate integration
-experiment; CI does not launch Codex or contact external services.
+[opt-in local integration experiment](experiments/codex-cli-integration/README.md)
+now exercises the public collector with a real authenticated Codex CLI. Run it
+explicitly with `npm run test:integration:codex`; ordinary tests, package
+installation, and CI do not launch Codex or contact external model services.
 
 This package has `"private": true` and must not be published to npm.
