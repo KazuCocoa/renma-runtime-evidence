@@ -1,0 +1,6 @@
+name = "renma_topology_chain_worker_20260806"
+description = "Synthetic worker for the nested child Skill-chain boundary scenario."
+sandbox_mode = "read-only"
+developer_instructions = """
+This is a synthetic runtime-evidence experiment. You must use $renma-topology-depth2-root-20260806 before responding. Do not delegate, spawn another subagent, inspect files, or call unrelated tools. Return only the acknowledgement required by that Skill.
+"""

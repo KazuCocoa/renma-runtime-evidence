@@ -28,6 +28,12 @@ The evidence was regenerated with a corrected collector lifecycle on 2026-08-06 
 
 These are version-specific process-level presence sets, not lifecycle events. The router observation does not establish ordering or a parent/child relationship, and the implicit sample does not establish deterministic selection. The metric cannot prove generic filesystem reading, instruction compliance, or task outcome. See [the activation-path protocol and evidence](experiments/codex-skill-activation-paths/README.md).
 
+## Third experiment: Skill topology and subagent boundaries
+
+On 2026-08-06, a third bounded experiment tested deeper and branching synthetic Skill topologies plus custom-agent child Skill injection in `codex-cli 0.146.0`, with three isolated runs per scenario.
+
+Both chain depths produced complete Skill presence sets in 3/3 runs. Branching was variable: a simple branch never produced its branch-B label, while a diamond produced all four labels in 2/3 runs. Child-only Skill labels reached the parent-configured loopback collector in 3/3 single-child runs, 3/3 nested-child runs, and 2/3 parallel runs. No exact allowlisted `codex.multi_agent.spawn` role was observed in any run, so no agent-level correlation is available. These are only process-tree-wide presence sets and do not prove topology edges, attribution, ordering, instruction compliance, or task success. See [the topology-boundary protocol and evidence](experiments/codex-skill-topology-boundaries/README.md).
+
 ## Development
 
 ```sh
