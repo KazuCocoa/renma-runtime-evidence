@@ -2,8 +2,22 @@
   "name": "@renma/runtime-evidence",
   "version": "0.0.0",
   "private": true,
-  "description": "Privacy-preserving experiments for agent runtime evidence",
+  "description": "Privacy-bounded provider runtime evidence",
   "type": "module",
+  "main": "./.build/src/index.js",
+  "types": "./.build/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./.build/src/index.d.ts",
+      "import": "./.build/src/index.js"
+    },
+    "./schema/codex-skill-presence-snapshot.schema.json": "./schema/codex-skill-presence-snapshot.schema.json"
+  },
+  "files": [
+    ".build/src",
+    "schema",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "check": "npm run format:check && npm run typecheck && npm test",
@@ -13,7 +27,7 @@
     "experiment:codex:subagent-spawn-signals": "npm run build && node .build/experiments/codex-subagent-spawn-signals/src/run-experiment.js",
     "format": "prettier --write . --ignore-unknown",
     "format:check": "prettier --check . --ignore-unknown",
-    "test": "npm run build && node --test .build/experiments/*/test/*.test.js",
+    "test": "npm run build && node --test .build/test/*.test.js .build/experiments/*/test/*.test.js",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "engines": {

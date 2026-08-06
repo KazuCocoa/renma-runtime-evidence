@@ -5,11 +5,12 @@
     "moduleResolution": "NodeNext",
     "rootDir": ".",
     "outDir": ".build",
+    "declaration": true,
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["experiments/**/*.ts"]
+  "include": ["src/**/*.ts", "test/**/*.ts", "experiments/**/*.ts"]
 }

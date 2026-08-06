@@ -28,3 +28,9 @@ The collectors bind to `127.0.0.1`, hold an OTLP request only long enough to par
 Each synthetic Codex process runs with an ephemeral session, ignored user configuration, read-only sandboxing, no approvals, no OTel logs, and no OTel traces. Its prompt and response are never written by the experiment runner. Codex stdout and stderr are discarded. Codex metrics instrumentation must remain enabled for the OTLP metrics exporter to operate, but the runner replaces the default Statsig exporter with the loopback collector.
 
 The activation-path experiment stops and drains the collector after each Codex child exits, waits for accepted requests to finish processing, and only then collapses accepted cumulative exports into a sorted, deduplicated process-level name set. Empty sets are retained honestly. Neither a repeated metric point nor its absence is converted into invocation counts, ordering, relationships, file-read claims, compliance, or outcomes.
+
+## Initial library collector
+
+The private, pre-release library accepts a caller-authorized Skill allowlist only after applying fixed entry, Unicode-scalar, UTF-8-byte, and control-character bounds. The allowlist itself is not copied into evidence. A label can appear in a snapshot only after an exact `codex.skill.injected` point with one exact string `skill` attribute and one exact string `status=ok` attribute is accepted during that collector lifetime.
+
+An otherwise valid successful label outside the allowlist changes only `unrecognizedSkillObserved` to `true`; the value is not logged, hashed, encoded, counted, returned, or persisted. Library snapshots omit the experiment-only timestamps, run IDs, environment metadata, process status, and Codex version. The library neither launches Codex nor reads authentication, home, session, or transcript state.

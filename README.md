@@ -6,6 +6,27 @@ It is separate from Renma because Renma manages declared Skill assets, identitie
 
 Runtime evidence records observations, not semantic conclusions. It does not establish that a Skill was followed, that routing was correct, or that a task succeeded. Conversation content—including prompts, responses, reasoning, transcripts, source code, tool inputs, and tool outputs—is outside the collection boundary.
 
+## Library status
+
+The package now contains an initial private, pre-release library API for one supported capability: collector-lifetime presence of caller-allowlisted labels from Codex's exact `codex.skill.injected` metric with exact `status=ok`.
+
+```ts
+import { createCodexSkillEvidenceCollector } from "@renma/runtime-evidence";
+
+const collector = await createCodexSkillEvidenceCollector({
+  allowedSkills: ["my-allowed-skill"],
+});
+
+// The caller configures and launches Codex with collector.endpoint.
+const snapshot = await collector.closeAndSnapshot();
+```
+
+The snapshot is provider-specific and reports only sorted, deduplicated injection presence plus a boolean for an otherwise valid successful label outside the caller allowlist. It has no raw-event callback and contains no count, order, timestamp, topology, agent attribution, unknown label, task output, or automatic persistence.
+
+The allowlist accepts 1–128 input entries. Exact duplicates within that limit are deduplicated. Each well-formed name must contain 1–256 Unicode scalar values, encode to at most 1,024 UTF-8 bytes, and contain no C0, DEL, or C1 control character. The collector binds only to `127.0.0.1`, accepts only `POST /v1/metrics`, caps requests at 2 MiB, and uses a five-second graceful shutdown window before force-closing active connections.
+
+See the [public snapshot schema](schema/codex-skill-presence-snapshot.schema.json) and the [initial API decision](docs/decisions/0001-codex-skill-injection-presence.md). This package remains `"private": true` and must not be published.
+
 ## First experiment: Codex Skill injection
 
 The first provider under investigation is Codex. On 2026-08-04, the experiment tested whether `codex-cli 0.146.0` could export the documented `skill.injected` counter to a user-controlled, loopback-only OpenTelemetry collector.
