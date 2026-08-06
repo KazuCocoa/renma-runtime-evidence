@@ -4,7 +4,7 @@ Status: accepted for the initial private, pre-release library implementation.
 
 ## Context
 
-The completed Codex experiments established a narrow provider boundary that can be implemented without collecting conversation content: a loopback OTLP/HTTP collector can accept the exact `codex.skill.injected` counter and retain an allowlisted Skill label only when the same point has exact `status=ok`.
+The completed Codex experiments established a narrow provider boundary that can be implemented without collecting conversation content: a loopback OTLP/HTTP collector can accept the exact `codex.skill.injected` counter and retain an allowlisted Skill label only when the same point has exact `status=ok` and a valid, recorded, strictly positive counter value.
 
 The experiments also showed why stronger language would be misleading. The counter is cumulative telemetry, not a lifecycle event. Its presence does not show that Codex read a particular file, followed instructions, completed a task, or associated a Skill with a particular agent or model thread. Branching and subagent experiments did not produce a sound basis for reconstructing order, counts, topology, or attribution.
 
@@ -16,7 +16,7 @@ The first public API is explicitly Codex-specific:
 createCodexSkillEvidenceCollector({ allowedSkills });
 ```
 
-It returns a loopback endpoint and an idempotent `closeAndSnapshot()` operation. The snapshot fixes `provider: "codex"`, `signal: "skill-injected"`, and `observationScope: "collector-lifetime"`. It contains only sorted, deduplicated caller-allowlisted Skill labels observed in valid successful points plus a boolean indicating that at least one otherwise valid successful point used a label outside the allowlist.
+It returns a loopback endpoint and an idempotent `closeAndSnapshot()` operation. The snapshot fixes `provider: "codex"`, `signal: "skill-injected"`, and `observationScope: "collector-lifetime"`. It contains only sorted, deduplicated caller-allowlisted Skill labels observed in valid, recorded, strictly positive successful points plus a boolean indicating that at least one otherwise valid positive successful point used a label outside the allowlist.
 
 The caller owns the Codex process and its metrics configuration. The library neither launches nor configures Codex and never writes a snapshot automatically.
 
@@ -28,7 +28,7 @@ Shared abstractions may be considered after another provider has a tested privac
 
 ## Why the term is injection presence
 
-An accepted point is evidence only that the provider emitted `codex.skill.injected` with an allowlisted `skill` and exact `status=ok`. The API therefore uses `injectedSkills` and `skill-injected`.
+An accepted point is evidence only that the provider emitted `codex.skill.injected` with an allowlisted `skill`, exact `status=ok`, no OTLP `NO_RECORDED_VALUE` marker, and exactly one valid numeric counter representation whose value is strictly positive. The API therefore uses `injectedSkills` and `skill-injected`.
 
 It does not call the evidence read, executed, selected, followed, or completed. Those terms imply filesystem access, model behavior, routing, or outcomes that the metric does not establish.
 
@@ -52,7 +52,7 @@ A future caller integration may choose to compare a snapshot with Renma data, bu
 
 ## Privacy and lifecycle consequences
 
-The caller allowlist is validated before the loopback server opens. Raw requests are bounded, parsed only in memory, atomically reduced to finite state, and cleared. Unknown labels are compared and discarded without logging, hashing, encoding, counting, or persistence. Shutdown stops new connections, drains accepted requests, and force-closes active connections after the documented grace period.
+The caller allowlist is validated before the loopback server opens. Raw requests are bounded, parsed only in memory, atomically reduced to finite state, and cleared. Counter values and datapoint flags are inspected only to enforce recorded, strictly positive presence and are then discarded without retention, exposure, logging, hashing, encoding, or counting. Unknown labels are compared and discarded under the same restrictions. Shutdown stops new connections, drains accepted requests, and force-closes active connections after the documented grace period.
 
 This produces a deliberately small API at the cost of excluding raw event callbacks, debugging payloads, automatic persistence, process management, and generic telemetry access.
 

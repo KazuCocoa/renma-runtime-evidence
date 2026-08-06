@@ -9,8 +9,13 @@ const MAX_SKILL_NAME_CODE_POINTS = 256;
 const MAX_SKILL_NAME_UTF8_BYTES = 1024;
 const MAX_REQUEST_BYTES = 2 * 1024 * 1024;
 const SHUTDOWN_GRACE_PERIOD_MS = 5_000;
+const NO_RECORDED_VALUE_FLAG = 1;
+const MAX_UINT32 = 0xffff_ffff;
+const MIN_INT64 = -(1n << 63n);
+const MAX_INT64 = (1n << 63n) - 1n;
 
 const unsupportedControlCharacters = /[\u0000-\u001f\u007f-\u009f]/u;
+const decimalInteger = /^-?(?:0|[1-9][0-9]*)$/u;
 
 export interface CodexSkillEvidenceCollectorOptions {
   readonly allowedSkills: readonly string[];
@@ -144,6 +149,53 @@ function readRequiredStringAttribute(
   return value.stringValue;
 }
 
+function hasOwn(record: UnknownRecord, key: string): boolean {
+  return Object.prototype.hasOwnProperty.call(record, key);
+}
+
+function hasNoRecordedValueFlag(point: UnknownRecord): boolean {
+  if (!hasOwn(point, "flags")) {
+    return false;
+  }
+  if (
+    typeof point.flags !== "number" ||
+    !Number.isInteger(point.flags) ||
+    point.flags < 0 ||
+    point.flags > MAX_UINT32
+  ) {
+    throw malformedPayload();
+  }
+  return point.flags % 2 === NO_RECORDED_VALUE_FLAG;
+}
+
+function hasStrictlyPositiveValue(point: UnknownRecord): boolean {
+  const hasIntegerValue = hasOwn(point, "asInt");
+  const hasDoubleValue = hasOwn(point, "asDouble");
+  if (hasIntegerValue === hasDoubleValue) {
+    throw malformedPayload();
+  }
+
+  if (hasIntegerValue) {
+    if (
+      typeof point.asInt !== "string" ||
+      point.asInt.length > 20 ||
+      !decimalInteger.test(point.asInt)
+    ) {
+      throw malformedPayload();
+    }
+    const value = BigInt(point.asInt);
+    if (value < MIN_INT64 || value > MAX_INT64) {
+      throw malformedPayload();
+    }
+    return value > 0n;
+  }
+
+  if (typeof point.asDouble !== "number" || !Number.isFinite(point.asDouble)) {
+    throw malformedPayload();
+  }
+  return point.asDouble > 0;
+}
+
 function parseRequestObservation(
   payload: unknown,
   allowedSkills: ReadonlySet<string>,
@@ -173,7 +225,11 @@ function parseRequestObservation(
           const attributes = requireArray(point.attributes);
           const skill = readRequiredStringAttribute(attributes, "skill");
           const status = readRequiredStringAttribute(attributes, "status");
-          if (status !== "ok") {
+          if (hasNoRecordedValueFlag(point)) {
+            continue;
+          }
+          const hasPresence = hasStrictlyPositiveValue(point);
+          if (status !== "ok" || !hasPresence) {
             continue;
           }
           if (allowedSkills.has(skill)) {

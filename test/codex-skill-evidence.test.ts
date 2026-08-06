@@ -61,10 +61,13 @@ function stringAttribute(key: string, value: string): unknown {
   return attribute(key, { stringValue: value });
 }
 
-function point(attributes: unknown[]): unknown {
+function point(
+  attributes: unknown[],
+  valueAndFlags: Record<string, unknown> = { asInt: "47" },
+): unknown {
   return {
     attributes,
-    asInt: "47",
+    ...valueAndFlags,
     exemplars: [{ value: "PRIVATE_EXEMPLAR" }],
     timestampUnixNano: "PRIVATE_TIMESTAMP",
     agentId: "PRIVATE_AGENT_ID",
@@ -304,6 +307,191 @@ test("accepts only an exact successful Codex Skill injection", async () => {
   });
 });
 
+test("accepts positive OTLP integer-string and finite double counters", async () => {
+  const collector = await createCodexSkillEvidenceCollector({
+    allowedSkills: [allowedAlpha, allowedBeta],
+  });
+  const result = await sendRequest(
+    collector.endpoint,
+    payload([
+      metric("codex.skill.injected", [
+        point(
+          [
+            stringAttribute("skill", allowedAlpha),
+            stringAttribute("status", "ok"),
+          ],
+          { asInt: "9223372036854775807" },
+        ),
+        point(
+          [
+            stringAttribute("skill", allowedBeta),
+            stringAttribute("status", "ok"),
+          ],
+          { asDouble: Number.MIN_VALUE },
+        ),
+      ]),
+    ]),
+  );
+  const snapshot = await collector.closeAndSnapshot();
+
+  assert.equal(result.statusCode, 200);
+  assert.deepEqual(snapshot.injectedSkills, [allowedAlpha, allowedBeta]);
+  assert.equal(snapshot.unrecognizedSkillObserved, false);
+});
+
+test("rejects missing, conflicting, and malformed counter values", async (t) => {
+  const malformedValues: Array<{
+    name: string;
+    valueAndFlags: Record<string, unknown>;
+    status?: string;
+  }> = [
+    { name: "missing value", valueAndFlags: {} },
+    {
+      name: "missing value with non-ok status",
+      valueAndFlags: {},
+      status: "error",
+    },
+    {
+      name: "both integer and double values",
+      valueAndFlags: { asInt: "1", asDouble: 1 },
+    },
+    { name: "non-decimal integer", valueAndFlags: { asInt: "1e3" } },
+    { name: "numeric integer", valueAndFlags: { asInt: 1 } },
+    {
+      name: "out-of-range integer",
+      valueAndFlags: { asInt: "9223372036854775808" },
+    },
+    { name: "non-finite double string", valueAndFlags: { asDouble: "NaN" } },
+    { name: "non-numeric double", valueAndFlags: { asDouble: null } },
+    {
+      name: "malformed no-recorded-value flag",
+      valueAndFlags: { flags: "1", asInt: "47" },
+    },
+  ];
+
+  for (const malformedValue of malformedValues) {
+    await t.test(malformedValue.name, async () => {
+      const collector = await createCodexSkillEvidenceCollector({
+        allowedSkills: [allowedAlpha],
+      });
+      const result = await sendRequest(
+        collector.endpoint,
+        payload([
+          metric("codex.skill.injected", [
+            point(
+              [
+                stringAttribute("skill", allowedAlpha),
+                stringAttribute("status", malformedValue.status ?? "ok"),
+              ],
+              malformedValue.valueAndFlags,
+            ),
+          ]),
+        ]),
+      );
+      const snapshot = await collector.closeAndSnapshot();
+
+      assert.equal(result.statusCode, 400);
+      assert.equal(result.body, "");
+      assert.deepEqual(snapshot.injectedSkills, []);
+      assert.equal(snapshot.unrecognizedSkillObserved, false);
+    });
+  }
+});
+
+test("rejects a JSON number that parses to a non-finite double", async () => {
+  const collector = await createCodexSkillEvidenceCollector({
+    allowedSkills: [allowedAlpha],
+  });
+  const finiteMarker = 9123456789;
+  const finiteBody = payload([
+    metric("codex.skill.injected", [
+      point(
+        [
+          stringAttribute("skill", allowedAlpha),
+          stringAttribute("status", "ok"),
+        ],
+        { asDouble: finiteMarker },
+      ),
+    ]),
+  ]);
+  const result = await sendRequest(
+    collector.endpoint,
+    finiteBody.replace(String(finiteMarker), "1e400"),
+  );
+  const snapshot = await collector.closeAndSnapshot();
+
+  assert.equal(result.statusCode, 400);
+  assert.deepEqual(snapshot.injectedSkills, []);
+  assert.equal(snapshot.unrecognizedSkillObserved, false);
+});
+
+test("ignores zero and negative counters for allowlisted and unknown labels", async () => {
+  const unknownSkill = "PRIVATE_NON_POSITIVE_UNKNOWN";
+  const valueCases: Array<Record<string, unknown>> = [
+    { asInt: "0" },
+    { asInt: "-1" },
+    { asDouble: 0 },
+    { asDouble: -0.25 },
+  ];
+  const collector = await createCodexSkillEvidenceCollector({
+    allowedSkills: [allowedAlpha],
+  });
+  const dataPoints = valueCases.flatMap((valueAndFlags) => [
+    point(
+      [stringAttribute("skill", allowedAlpha), stringAttribute("status", "ok")],
+      valueAndFlags,
+    ),
+    point(
+      [stringAttribute("skill", unknownSkill), stringAttribute("status", "ok")],
+      valueAndFlags,
+    ),
+  ]);
+  const result = await sendRequest(
+    collector.endpoint,
+    payload([metric("codex.skill.injected", dataPoints)]),
+  );
+  const snapshot = await collector.closeAndSnapshot();
+
+  assert.equal(result.statusCode, 200);
+  assert.deepEqual(snapshot.injectedSkills, []);
+  assert.equal(snapshot.unrecognizedSkillObserved, false);
+  assert.equal(JSON.stringify(snapshot).includes(unknownSkill), false);
+});
+
+test("ignores valid NO_RECORDED_VALUE points before reading a value", async () => {
+  const unknownSkill = "PRIVATE_NO_RECORDED_UNKNOWN";
+  const collector = await createCodexSkillEvidenceCollector({
+    allowedSkills: [allowedAlpha],
+  });
+  const result = await sendRequest(
+    collector.endpoint,
+    payload([
+      metric("codex.skill.injected", [
+        point(
+          [
+            stringAttribute("skill", allowedAlpha),
+            stringAttribute("status", "ok"),
+          ],
+          { flags: 1, asInt: "47" },
+        ),
+        point(
+          [
+            stringAttribute("skill", unknownSkill),
+            stringAttribute("status", "ok"),
+          ],
+          { flags: 3 },
+        ),
+      ]),
+    ]),
+  );
+  const snapshot = await collector.closeAndSnapshot();
+
+  assert.equal(result.statusCode, 200);
+  assert.deepEqual(snapshot.injectedSkills, []);
+  assert.equal(snapshot.unrecognizedSkillObserved, false);
+  assert.equal(JSON.stringify(snapshot).includes(unknownSkill), false);
+});
+
 test("ignores non-ok statuses and non-exact metric names", async () => {
   const collector = await createCodexSkillEvidenceCollector({
     allowedSkills: [allowedAlpha],
@@ -498,6 +686,32 @@ test("atomically rejects a malformed request without partial snapshot mutation",
   );
 });
 
+test("atomically rejects a malformed value after an acceptable point", async () => {
+  const collector = await createCodexSkillEvidenceCollector({
+    allowedSkills: [allowedAlpha, allowedBeta],
+  });
+  const result = await sendRequest(
+    collector.endpoint,
+    payload([
+      metric("codex.skill.injected", [
+        successfulPoint(allowedAlpha),
+        point(
+          [
+            stringAttribute("skill", allowedBeta),
+            stringAttribute("status", "ok"),
+          ],
+          {},
+        ),
+      ]),
+    ]),
+  );
+  const snapshot = await collector.closeAndSnapshot();
+
+  assert.equal(result.statusCode, 400);
+  assert.deepEqual(snapshot.injectedSkills, []);
+  assert.equal(snapshot.unrecognizedSkillObserved, false);
+});
+
 test("enforces the fixed two-MiB request limit", async () => {
   const collector = await createCodexSkillEvidenceCollector({
     allowedSkills: [allowedAlpha],
@@ -675,6 +889,9 @@ test("serialized snapshots exclude content, paths, credentials, IDs, values, has
     "toolOutput",
     "taskResult",
     "counterValue",
+    "asInt",
+    "asDouble",
+    "flags",
     "exemplars",
     "resourceAttributes",
     "scopeAttributes",

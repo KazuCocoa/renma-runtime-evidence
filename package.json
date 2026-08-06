@@ -27,7 +27,9 @@
     "experiment:codex:subagent-spawn-signals": "npm run build && node .build/experiments/codex-subagent-spawn-signals/src/run-experiment.js",
     "format": "prettier --write . --ignore-unknown",
     "format:check": "prettier --check . --ignore-unknown",
+    "prepare": "npm run build",
     "test": "npm run build && node --test .build/test/*.test.js .build/experiments/*/test/*.test.js",
+    "test:package-consumption": "npm run build && node --test .build/test/package-consumption.test.js",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "engines": {

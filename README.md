@@ -8,7 +8,7 @@ Runtime evidence records observations, not semantic conclusions. It does not est
 
 ## Library status
 
-The package now contains an initial private, pre-release library API for one supported capability: collector-lifetime presence of caller-allowlisted labels from Codex's exact `codex.skill.injected` metric with exact `status=ok`.
+The package now contains an initial private, pre-release library API for one supported capability: collector-lifetime presence of caller-allowlisted labels from a valid, recorded, strictly positive datapoint in Codex's exact `codex.skill.injected` counter with exact `status=ok`.
 
 ```ts
 import { createCodexSkillEvidenceCollector } from "@renma/runtime-evidence";
@@ -21,11 +21,21 @@ const collector = await createCodexSkillEvidenceCollector({
 const snapshot = await collector.closeAndSnapshot();
 ```
 
-The snapshot is provider-specific and reports only sorted, deduplicated injection presence plus a boolean for an otherwise valid successful label outside the caller allowlist. It has no raw-event callback and contains no count, order, timestamp, topology, agent attribution, unknown label, task output, or automatic persistence.
+The snapshot is provider-specific and reports only sorted, deduplicated injection presence plus a boolean for an otherwise valid successful positive label outside the caller allowlist. A datapoint marked OTLP `NO_RECORDED_VALUE`, or with a zero or negative counter value, cannot produce either form of presence. The numeric value and flags are discarded after structural validation and are never retained, exposed, logged, hashed, encoded, or counted. The snapshot has no raw-event callback and contains no count, order, timestamp, topology, agent attribution, unknown label, task output, or automatic persistence.
 
 The allowlist accepts 1–128 input entries. Exact duplicates within that limit are deduplicated. Each well-formed name must contain 1–256 Unicode scalar values, encode to at most 1,024 UTF-8 bytes, and contain no C0, DEL, or C1 control character. The collector binds only to `127.0.0.1`, accepts only `POST /v1/metrics`, caps requests at 2 MiB, and uses a five-second graceful shutdown window before force-closing active connections.
 
 See the [public snapshot schema](schema/codex-skill-presence-snapshot.schema.json) and the [initial API decision](docs/decisions/0001-codex-skill-injection-presence.md). This package remains `"private": true` and must not be published.
+
+## Private installation
+
+An authenticated GitHub dependency pinned to a reviewed commit or tag is the supported private consumption path:
+
+```sh
+npm install "github:KazuCocoa/renma-runtime-evidence#<commit-or-tag>"
+```
+
+The `prepare` lifecycle builds the TypeScript sources when npm installs the Git dependency. The resulting dependency includes only the runtime JavaScript, TypeScript declarations, snapshot schema, README, and npm package metadata. Tests, experiment output, local evidence, environment files, and credentials are excluded. npm-registry publication is unsupported and prohibited by `"private": true`.
 
 ## First experiment: Codex Skill injection
 

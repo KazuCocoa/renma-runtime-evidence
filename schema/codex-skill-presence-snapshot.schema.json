@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:renma:runtime-evidence:codex-skill-presence-snapshot:v1",
   "title": "Codex Skill injection presence snapshot",
-  "description": "Privacy-bounded allowlisted Codex Skill injection presence observed during one collector lifetime.",
+  "description": "Privacy-bounded allowlisted Codex Skill injection presence from valid, recorded, strictly positive counter datapoints observed during one collector lifetime.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -19,7 +19,7 @@
     "signal": { "const": "skill-injected" },
     "observationScope": { "const": "collector-lifetime" },
     "injectedSkills": {
-      "description": "Sorted, deduplicated exact caller-allowlisted Skill labels observed with exact status=ok.",
+      "description": "Sorted, deduplicated exact caller-allowlisted Skill labels observed in valid, recorded, strictly positive counter datapoints with exact status=ok.",
       "type": "array",
       "minItems": 0,
       "maxItems": 128,
@@ -34,7 +34,7 @@
       }
     },
     "unrecognizedSkillObserved": {
-      "description": "True only when an otherwise valid exact status=ok point contained a Skill string outside the caller allowlist; that string is not retained.",
+      "description": "True only when an otherwise valid, recorded, strictly positive exact status=ok counter datapoint contained a Skill string outside the caller allowlist; that string is not retained.",
       "type": "boolean"
     }
   }

@@ -34,6 +34,7 @@ test("publishes only the deliberate runtime API from the package root", async ()
   );
   assert.equal(packageJson.name, "@renma/runtime-evidence");
   assert.equal(packageJson.private, true);
+  assert.equal(asRecord(packageJson.scripts).prepare, "npm run build");
   assert.equal(packageJson.main, "./.build/src/index.js");
   assert.equal(packageJson.types, "./.build/src/index.d.ts");
   const packageExports = asRecord(packageJson.exports);
@@ -98,7 +99,7 @@ test("strict snapshot schema fixes the finite public contract", async () => {
   );
   assert.deepEqual(asRecord(properties.unrecognizedSkillObserved), {
     description:
-      "True only when an otherwise valid exact status=ok point contained a Skill string outside the caller allowlist; that string is not retained.",
+      "True only when an otherwise valid, recorded, strictly positive exact status=ok counter datapoint contained a Skill string outside the caller allowlist; that string is not retained.",
     type: "boolean",
   });
 
@@ -133,7 +134,11 @@ test("README and decision document state the private provider boundary", async (
   assert.match(readme, /initial private, pre-release library API/);
   assert.match(readme, /`"private": true`/);
   assert.match(readme, /collector-lifetime presence/);
+  assert.match(readme, /valid, recorded, strictly positive datapoint/);
+  assert.match(readme, /supported private consumption path/);
+  assert.match(readme, /github:KazuCocoa\/renma-runtime-evidence/);
   assert.match(decision, /first public API is explicitly Codex-specific/);
+  assert.match(decision, /no OTLP `NO_RECORDED_VALUE` marker/);
   assert.match(decision, /does not call the evidence read, executed, selected/);
   assert.match(decision, /Renma owns statically declared Skill dependencies/);
   assert.match(decision, /does not invoke Renma/);
