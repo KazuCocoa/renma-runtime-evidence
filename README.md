@@ -28,6 +28,14 @@ The evidence was regenerated with a corrected collector lifecycle on 2026-08-06 
 
 These are version-specific process-level presence sets, not lifecycle events. The router observation does not establish ordering or a parent/child relationship, and the implicit sample does not establish deterministic selection. The metric cannot prove generic filesystem reading, instruction compliance, or task outcome. See [the activation-path protocol and evidence](experiments/codex-skill-activation-paths/README.md).
 
+## Third experiment: Skill topology and subagent boundaries
+
+On 2026-08-06, a third bounded experiment tested deeper and branching synthetic Skill topologies plus custom-agent child Skill configuration in `codex-cli 0.146.0`, with three runs per scenario. The retained evidence explicitly requested `gpt-5.6-sol` with `medium` reasoning for every parent invocation; the custom agents contained no model override. The model name is a mutable alias, not an immutable snapshot identifier.
+
+Both chain depths were complete in 3/3 runs. Branching was variable: a simple branch produced root plus branch A in 3/3 runs and added branch B in 1/3, while a diamond produced all four labels in 1/3 runs. Child-only Skill labels reached the parent-configured loopback collector in 3/3 single-child, nested-child, and parallel runs. No exact allowlisted `codex.multi_agent.spawn` role was observed. All parent invocations exited `0`, but exit status and Skill co-presence do not prove that delegation occurred; actual subagent invocation and agent-level correlation remain inconclusive. These are only invocation-wide presence sets and do not prove topology edges, attribution, ordering, instruction compliance, or task success.
+
+The committed artifact predates user Skill-location isolation: its output is finitely allowlisted, but its original invocation environment reused the caller's saved-login locations. The current runner instead requires `CODEX_API_KEY`, creates fresh per-run `HOME` and `CODEX_HOME` directories, and never forwards the caller's home paths. Because no API key was available for this update, the evidence remains unchanged and must not be treated as proof of the new input boundary. Administrator-provided and bundled system Skills may still exist independently of the project-scoped synthetic fixtures. See [the topology-boundary protocol, blocker, and retained evidence](experiments/codex-skill-topology-boundaries/README.md).
+
 ## Development
 
 ```sh

@@ -1,0 +1,6 @@
+name = "renma_topology_dormant_20260806"
+description = "Synthetic dormant custom agent used only as an unspawned configuration control."
+sandbox_mode = "read-only"
+developer_instructions = """
+This is a synthetic runtime-evidence experiment. You must use $renma-topology-dormant-child-20260806 before responding. Do not delegate, spawn a subagent, inspect files, or call unrelated tools. Return only the acknowledgement required by that Skill.
+"""

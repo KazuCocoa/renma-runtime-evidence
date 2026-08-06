@@ -1,0 +1,479 @@
+{
+  "schemaVersion": 1,
+  "experimentDate": "2026-08-06",
+  "environment": {
+    "codexVersion": "codex-cli 0.146.0",
+    "operatingSystem": "macOS 26.5.2 (25F84)",
+    "architecture": "arm64",
+    "nodeVersion": "v24.18.0"
+  },
+  "provider": "codex",
+  "experiment": "codex-skill-topology-boundaries",
+  "modelConfiguration": {
+    "requestedModel": "gpt-5.6-sol",
+    "requestedReasoningEffort": "medium"
+  },
+  "runsPerScenario": 3,
+  "scenarios": [
+    {
+      "scenario": "nested-chain-depth-2",
+      "runs": [
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "nested-chain-depth-2",
+          "experimentRunId": "f103d8b9-e03c-4cd3-9571-2ecbb4623b76",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-depth2-level1-20260806",
+            "renma-topology-depth2-level2-20260806",
+            "renma-topology-depth2-root-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T02:59:55.567Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "nested-chain-depth-2",
+          "experimentRunId": "e5a20f6b-cf40-4a3f-9631-d8ed83717b3d",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-depth2-level1-20260806",
+            "renma-topology-depth2-level2-20260806",
+            "renma-topology-depth2-root-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:00:11.562Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "nested-chain-depth-2",
+          "experimentRunId": "01328831-7806-4c19-98f9-687b2d128606",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-depth2-level1-20260806",
+            "renma-topology-depth2-level2-20260806",
+            "renma-topology-depth2-root-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:00:29.715Z"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "nested-chain-depth-3",
+      "runs": [
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "nested-chain-depth-3",
+          "experimentRunId": "beae89a7-5b5e-4d4e-b07d-5932987971e6",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-depth3-level1-20260806",
+            "renma-topology-depth3-level2-20260806",
+            "renma-topology-depth3-level3-20260806",
+            "renma-topology-depth3-root-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:00:54.615Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "nested-chain-depth-3",
+          "experimentRunId": "fd882960-f5dd-4ff6-a3d1-63b05bfd1c5d",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-depth3-level1-20260806",
+            "renma-topology-depth3-level2-20260806",
+            "renma-topology-depth3-level3-20260806",
+            "renma-topology-depth3-root-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:01:16.557Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "nested-chain-depth-3",
+          "experimentRunId": "505e9c48-7b6f-4652-938a-ff122f8e9cf1",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-depth3-level1-20260806",
+            "renma-topology-depth3-level2-20260806",
+            "renma-topology-depth3-level3-20260806",
+            "renma-topology-depth3-root-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:01:40.176Z"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "nested-branch",
+      "runs": [
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "nested-branch",
+          "experimentRunId": "75a220e4-c6a3-4b9b-9929-c301978c8dba",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-branch-a-20260806",
+            "renma-topology-branch-b-20260806",
+            "renma-topology-branch-root-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:01:53.071Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "nested-branch",
+          "experimentRunId": "41ad21c7-da54-40a2-9de9-1258f27d3729",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-branch-a-20260806",
+            "renma-topology-branch-root-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:02:10.407Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "nested-branch",
+          "experimentRunId": "7adeea54-16f8-411a-b443-c99f100908ce",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-branch-a-20260806",
+            "renma-topology-branch-root-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:02:26.246Z"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "nested-diamond",
+      "runs": [
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "nested-diamond",
+          "experimentRunId": "65d4128b-a854-4c3e-a06b-c5948ca03282",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-diamond-branch-a-20260806",
+            "renma-topology-diamond-branch-b-20260806",
+            "renma-topology-diamond-root-20260806",
+            "renma-topology-diamond-shared-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:02:48.375Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "nested-diamond",
+          "experimentRunId": "829e9a7f-e6ed-40e3-84cb-e6b21d7a22eb",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-diamond-root-20260806",
+            "renma-topology-diamond-shared-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:03:09.057Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "nested-diamond",
+          "experimentRunId": "b0e95af0-e3d8-48ef-bba7-fce91eb89103",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-diamond-root-20260806",
+            "renma-topology-diamond-shared-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:03:29.234Z"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "subagent-config-dormant",
+      "runs": [
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "subagent-config-dormant",
+          "experimentRunId": "dd20b003-be04-450e-9e67-969607f0649b",
+          "codexExitCode": 0,
+          "injectedSkills": ["renma-topology-orchestrator-dormant-20260806"],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:03:34.073Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "subagent-config-dormant",
+          "experimentRunId": "51fef4c2-2984-4e00-8590-6b876e6ffe09",
+          "codexExitCode": 0,
+          "injectedSkills": ["renma-topology-orchestrator-dormant-20260806"],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:03:38.929Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "subagent-config-dormant",
+          "experimentRunId": "d0ed8150-37c6-40e7-b1e1-e864535b82fc",
+          "codexExitCode": 0,
+          "injectedSkills": ["renma-topology-orchestrator-dormant-20260806"],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:03:42.470Z"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "subagent-single-skill",
+      "runs": [
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "subagent-single-skill",
+          "experimentRunId": "4d0d322a-90dd-4ec9-9a38-25545a2052e2",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-child-single-20260806",
+            "renma-topology-orchestrator-single-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:04:25.818Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "subagent-single-skill",
+          "experimentRunId": "159bdc05-ec53-44f6-adb1-11fe877496f8",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-child-single-20260806",
+            "renma-topology-orchestrator-single-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:05:00.451Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "subagent-single-skill",
+          "experimentRunId": "44b462df-b38f-4d07-a18c-b04d288f27ef",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-child-single-20260806",
+            "renma-topology-orchestrator-single-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:05:41.916Z"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "subagent-nested-chain",
+      "runs": [
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "subagent-nested-chain",
+          "experimentRunId": "6af2700f-1ff6-4955-b1bc-33c767facf50",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-depth2-level1-20260806",
+            "renma-topology-depth2-level2-20260806",
+            "renma-topology-depth2-root-20260806",
+            "renma-topology-orchestrator-chain-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:06:37.766Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "subagent-nested-chain",
+          "experimentRunId": "36e57ff8-9cd0-406a-ba1e-c76eb91e0a86",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-depth2-level1-20260806",
+            "renma-topology-depth2-level2-20260806",
+            "renma-topology-depth2-root-20260806",
+            "renma-topology-orchestrator-chain-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:07:30.466Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "subagent-nested-chain",
+          "experimentRunId": "817b0b4f-3fa3-4a94-af8f-c25762fc5353",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-depth2-level1-20260806",
+            "renma-topology-depth2-level2-20260806",
+            "renma-topology-depth2-root-20260806",
+            "renma-topology-orchestrator-chain-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:08:27.850Z"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "subagent-parallel",
+      "runs": [
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "subagent-parallel",
+          "experimentRunId": "681a3fa7-c554-4092-b890-8234a8deda62",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-child-alpha-20260806",
+            "renma-topology-child-beta-20260806",
+            "renma-topology-orchestrator-parallel-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:09:11.699Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "subagent-parallel",
+          "experimentRunId": "7f9b4ad7-6a7c-41e9-abb8-99f4b4d2cacf",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-child-alpha-20260806",
+            "renma-topology-child-beta-20260806",
+            "renma-topology-orchestrator-parallel-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:09:49.203Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-topology-boundaries",
+          "scenario": "subagent-parallel",
+          "experimentRunId": "544c9dd8-11aa-4963-90b3-f593817229ec",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-topology-child-alpha-20260806",
+            "renma-topology-child-beta-20260806",
+            "renma-topology-orchestrator-parallel-20260806"
+          ],
+          "spawnedRoles": [],
+          "verifiedSkillStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-06T03:10:25.049Z"
+          }
+        }
+      ]
+    }
+  ]
+}

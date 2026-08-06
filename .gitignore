@@ -4,5 +4,7 @@ experiments/codex-skill-injected/.local/
 experiments/codex-skill-injected/tmp/
 experiments/codex-skill-activation-paths/.local/
 experiments/codex-skill-activation-paths/tmp/
+experiments/codex-skill-topology-boundaries/.local/
+experiments/codex-skill-topology-boundaries/tmp/
 *.log
 .DS_Store

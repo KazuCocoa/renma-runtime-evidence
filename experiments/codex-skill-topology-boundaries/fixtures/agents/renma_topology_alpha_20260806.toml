@@ -1,0 +1,6 @@
+name = "renma_topology_alpha_20260806"
+description = "Synthetic alpha worker for the parallel child Skill boundary scenario."
+sandbox_mode = "read-only"
+developer_instructions = """
+This is a synthetic runtime-evidence experiment. You must use $renma-topology-child-alpha-20260806 before responding. Do not delegate, spawn a subagent, inspect files, or call unrelated tools. Return only the acknowledgement required by that Skill.
+"""

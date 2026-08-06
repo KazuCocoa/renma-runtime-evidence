@@ -1,0 +1,199 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:renma:runtime-evidence:experimental:codex-skill-topology-boundaries-report",
+  "title": "Experimental Codex Skill topology-boundary observations",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "experimentDate",
+    "environment",
+    "provider",
+    "experiment",
+    "modelConfiguration",
+    "runsPerScenario",
+    "scenarios"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "experimentDate": { "type": "string", "format": "date" },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "codexVersion",
+        "operatingSystem",
+        "architecture",
+        "nodeVersion"
+      ],
+      "properties": {
+        "codexVersion": {
+          "type": "string",
+          "pattern": "^codex-cli [0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?$"
+        },
+        "operatingSystem": { "type": "string", "minLength": 1 },
+        "architecture": { "type": "string", "minLength": 1 },
+        "nodeVersion": {
+          "type": "string",
+          "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+"
+        }
+      }
+    },
+    "provider": { "const": "codex" },
+    "experiment": { "const": "codex-skill-topology-boundaries" },
+    "modelConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requestedModel", "requestedReasoningEffort"],
+      "properties": {
+        "requestedModel": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$"
+        },
+        "requestedReasoningEffort": {
+          "enum": ["minimal", "low", "medium", "high", "xhigh"]
+        }
+      }
+    },
+    "authenticationIsolationMode": { "const": "api-key" },
+    "runsPerScenario": { "type": "integer", "minimum": 3, "maximum": 10 },
+    "scenarios": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": { "$ref": "#/$defs/scenarioSummary" }
+    }
+  },
+  "$defs": {
+    "scenarioId": {
+      "enum": [
+        "nested-chain-depth-2",
+        "nested-chain-depth-3",
+        "nested-branch",
+        "nested-diamond",
+        "subagent-config-dormant",
+        "subagent-single-skill",
+        "subagent-nested-chain",
+        "subagent-parallel"
+      ]
+    },
+    "skillName": {
+      "enum": [
+        "renma-topology-depth2-root-20260806",
+        "renma-topology-depth2-level1-20260806",
+        "renma-topology-depth2-level2-20260806",
+        "renma-topology-depth3-root-20260806",
+        "renma-topology-depth3-level1-20260806",
+        "renma-topology-depth3-level2-20260806",
+        "renma-topology-depth3-level3-20260806",
+        "renma-topology-branch-root-20260806",
+        "renma-topology-branch-a-20260806",
+        "renma-topology-branch-b-20260806",
+        "renma-topology-diamond-root-20260806",
+        "renma-topology-diamond-branch-a-20260806",
+        "renma-topology-diamond-branch-b-20260806",
+        "renma-topology-diamond-shared-20260806",
+        "renma-topology-orchestrator-dormant-20260806",
+        "renma-topology-dormant-child-20260806",
+        "renma-topology-orchestrator-single-20260806",
+        "renma-topology-child-single-20260806",
+        "renma-topology-orchestrator-chain-20260806",
+        "renma-topology-orchestrator-parallel-20260806",
+        "renma-topology-child-alpha-20260806",
+        "renma-topology-child-beta-20260806"
+      ]
+    },
+    "agentRole": {
+      "enum": [
+        "renma_topology_dormant_20260806",
+        "renma_topology_worker_20260806",
+        "renma_topology_chain_worker_20260806",
+        "renma_topology_alpha_20260806",
+        "renma_topology_beta_20260806"
+      ]
+    },
+    "scenarioSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scenario", "runs"],
+      "properties": {
+        "scenario": { "$ref": "#/$defs/scenarioId" },
+        "runs": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 10,
+          "items": { "$ref": "#/$defs/runSummary" }
+        }
+      }
+    },
+    "runSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "provider",
+        "experiment",
+        "scenario",
+        "experimentRunId",
+        "codexExitCode",
+        "injectedSkills",
+        "spawnedRoles"
+      ],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "provider": { "const": "codex" },
+        "experiment": { "const": "codex-skill-topology-boundaries" },
+        "scenario": { "$ref": "#/$defs/scenarioId" },
+        "experimentRunId": { "type": "string", "format": "uuid" },
+        "codexExitCode": {
+          "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }]
+        },
+        "injectedSkills": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/skillName" }
+        },
+        "spawnedRoles": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/agentRole" }
+        },
+        "verifiedSkillStatus": { "const": "ok" },
+        "collectorReceipt": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["firstAcceptedAt"],
+          "properties": {
+            "firstAcceptedAt": { "type": "string", "format": "date-time" }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "injectedSkills": { "minItems": 1 } },
+            "required": ["injectedSkills"]
+          },
+          "then": { "required": ["verifiedSkillStatus"] },
+          "else": { "not": { "required": ["verifiedSkillStatus"] } }
+        },
+        {
+          "if": {
+            "anyOf": [
+              {
+                "properties": { "injectedSkills": { "minItems": 1 } },
+                "required": ["injectedSkills"]
+              },
+              {
+                "properties": { "spawnedRoles": { "minItems": 1 } },
+                "required": ["spawnedRoles"]
+              }
+            ]
+          },
+          "then": { "required": ["collectorReceipt"] },
+          "else": { "not": { "required": ["collectorReceipt"] } }
+        }
+      ]
+    }
+  }
+}
