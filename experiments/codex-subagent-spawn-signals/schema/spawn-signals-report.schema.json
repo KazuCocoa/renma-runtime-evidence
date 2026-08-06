@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:renma:runtime-evidence:experimental:codex-subagent-spawn-signals-report",
+  "title": "Experimental Codex subagent spawn-signal observations",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "experimentDate",
+    "provider",
+    "experiment",
+    "environment",
+    "modelConfiguration",
+    "authenticationIsolationMode",
+    "runsPerScenario",
+    "scenarios"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "experimentDate": { "type": "string", "format": "date" },
+    "provider": { "const": "codex" },
+    "experiment": { "const": "codex-subagent-spawn-signals" },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["codexVersion"],
+      "properties": {
+        "codexVersion": { "const": "codex-cli 0.146.0" }
+      }
+    },
+    "modelConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requestedModel", "requestedReasoningEffort"],
+      "properties": {
+        "requestedModel": { "const": "gpt-5.6-sol" },
+        "requestedReasoningEffort": { "const": "medium" }
+      }
+    },
+    "authenticationIsolationMode": { "const": "api-key" },
+    "runsPerScenario": { "const": 3 },
+    "scenarios": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "prefixItems": [
+        {
+          "allOf": [
+            { "$ref": "#/$defs/scenarioSummary" },
+            {
+              "properties": {
+                "scenario": { "const": "custom-agents-dormant" }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            { "$ref": "#/$defs/scenarioSummary" },
+            {
+              "properties": {
+                "scenario": { "const": "single-custom-agent" }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            { "$ref": "#/$defs/scenarioSummary" },
+            {
+              "properties": {
+                "scenario": { "const": "nested-custom-agent" }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            { "$ref": "#/$defs/scenarioSummary" },
+            {
+              "properties": {
+                "scenario": { "const": "parallel-custom-agents" }
+              }
+            }
+          ]
+        }
+      ],
+      "items": false
+    }
+  },
+  "$defs": {
+    "scenarioId": {
+      "enum": [
+        "custom-agents-dormant",
+        "single-custom-agent",
+        "nested-custom-agent",
+        "parallel-custom-agents"
+      ]
+    },
+    "agentRole": {
+      "enum": [
+        "renma_spawn_signal_dormant_20260806",
+        "renma_spawn_signal_worker_20260806",
+        "renma_spawn_signal_nested_worker_20260806",
+        "renma_spawn_signal_alpha_20260806",
+        "renma_spawn_signal_beta_20260806"
+      ]
+    },
+    "roleClassification": {
+      "enum": [
+        "allowlisted-role",
+        "non-allowlisted-role",
+        "missing-role",
+        "non-string-role",
+        "duplicate-role-attribute"
+      ]
+    },
+    "scenarioSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scenario", "runs"],
+      "properties": {
+        "scenario": { "$ref": "#/$defs/scenarioId" },
+        "runs": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": { "$ref": "#/$defs/runSummary" }
+        }
+      }
+    },
+    "runSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "provider",
+        "experiment",
+        "scenario",
+        "codexExitCode",
+        "spawnMetricObserved",
+        "spawnDataPointObserved",
+        "spawnRoleClassifications",
+        "spawnedRoles"
+      ],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "provider": { "const": "codex" },
+        "experiment": { "const": "codex-subagent-spawn-signals" },
+        "scenario": { "$ref": "#/$defs/scenarioId" },
+        "codexExitCode": { "const": 0 },
+        "spawnMetricObserved": { "type": "boolean" },
+        "spawnDataPointObserved": { "type": "boolean" },
+        "spawnRoleClassifications": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/roleClassification" }
+        },
+        "spawnedRoles": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/agentRole" }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "spawnMetricObserved": { "const": false } },
+            "required": ["spawnMetricObserved"]
+          },
+          "then": {
+            "properties": {
+              "spawnDataPointObserved": { "const": false },
+              "spawnRoleClassifications": { "maxItems": 0 },
+              "spawnedRoles": { "maxItems": 0 }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "spawnDataPointObserved": { "const": false } },
+            "required": ["spawnDataPointObserved"]
+          },
+          "then": {
+            "properties": {
+              "spawnRoleClassifications": { "maxItems": 0 },
+              "spawnedRoles": { "maxItems": 0 }
+            }
+          },
+          "else": {
+            "properties": {
+              "spawnMetricObserved": { "const": true },
+              "spawnRoleClassifications": { "minItems": 1 }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "spawnRoleClassifications": {
+                "contains": { "const": "allowlisted-role" }
+              }
+            },
+            "required": ["spawnRoleClassifications"]
+          },
+          "else": {
+            "properties": { "spawnedRoles": { "maxItems": 0 } }
+          }
+        }
+      ]
+    }
+  }
+}

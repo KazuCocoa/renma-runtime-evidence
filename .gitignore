@@ -6,5 +6,7 @@ experiments/codex-skill-activation-paths/.local/
 experiments/codex-skill-activation-paths/tmp/
 experiments/codex-skill-topology-boundaries/.local/
 experiments/codex-skill-topology-boundaries/tmp/
+experiments/codex-subagent-spawn-signals/.local/
+experiments/codex-subagent-spawn-signals/tmp/
 *.log
 .DS_Store

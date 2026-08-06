@@ -36,6 +36,12 @@ Both chain depths were complete in 3/3 runs. Branching was variable: a simple br
 
 The committed artifact predates user Skill-location isolation: its output is finitely allowlisted, but its original invocation environment reused the caller's saved-login locations. The current runner instead requires `CODEX_API_KEY`, creates fresh per-run `HOME` and `CODEX_HOME` directories, and never forwards the caller's home paths. Because no API key was available for this update, the evidence remains unchanged and must not be treated as proof of the new input boundary. Administrator-provided and bundled system Skills may still exist independently of the project-scoped synthetic fixtures. See [the topology-boundary protocol, blocker, and retained evidence](experiments/codex-skill-topology-boundaries/README.md).
 
+## Fourth experiment: subagent spawn signals
+
+The fourth bounded experiment narrows the unresolved topology result to the exact `codex.multi_agent.spawn` counter. Across dormant, single, nested, and parallel synthetic custom-agent scenarios, its collector distinguishes an unobserved metric, an observed metric without points, an allowlisted role, a discarded non-allowlisted role, and missing/non-string/duplicated role attributes. Unknown values are neither retained nor hashed; output is limited to booleans, finite classifications, and exact synthetic roles.
+
+The runner fixes three isolated parent invocations per scenario with `codex-cli 0.146.0`, model `gpt-5.6-sol`, medium reasoning, API-key-only authentication, fresh workspace/`HOME`/`CODEX_HOME`, ephemeral execution, and discarded task streams. No runtime evidence was generated because `CODEX_API_KEY` was unavailable; saved login was not inspected or reused. See [the spawn-signal protocol, collector boundary, and regeneration blocker](experiments/codex-subagent-spawn-signals/README.md).
+
 ## Development
 
 ```sh

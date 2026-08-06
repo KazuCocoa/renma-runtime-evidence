@@ -10,6 +10,7 @@
     "experiment:codex": "npm run build && node .build/experiments/codex-skill-injected/src/run-experiment.js",
     "experiment:codex:activation-paths": "npm run build && node .build/experiments/codex-skill-activation-paths/src/run-experiment.js",
     "experiment:codex:skill-topology-boundaries": "npm run build && node .build/experiments/codex-skill-topology-boundaries/src/run-experiment.js",
+    "experiment:codex:subagent-spawn-signals": "npm run build && node .build/experiments/codex-subagent-spawn-signals/src/run-experiment.js",
     "format": "prettier --write . --ignore-unknown",
     "format:check": "prettier --check . --ignore-unknown",
     "test": "npm run build && node --test .build/experiments/*/test/*.test.js",
