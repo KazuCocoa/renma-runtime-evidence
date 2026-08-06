@@ -100,7 +100,11 @@ collector lifetime. The result exposes no occurrence counts, execution claim,
 ordering, session or agent attribution, nesting, or dependency edges. An
 [opt-in local integration experiment](experiments/codex-cli-integration/README.md)
 now exercises the public collector with a real authenticated Codex CLI. Run it
-explicitly with `npm run test:integration:codex`; ordinary tests, package
+explicitly with
+`npm run test:integration:codex -- --allow-codex-analytics`; the mandatory flag
+acknowledges that enabling the configured loopback OTel metrics exporter may
+also cause Codex to send separate analytics events to OpenAI. The loopback
+endpoint does not control that separate path. Ordinary tests, package
 installation, and CI do not launch Codex or contact external model services.
 
 This package has `"private": true` and must not be published to npm.

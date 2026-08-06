@@ -8,16 +8,18 @@ import type { CodexSkillPresenceSnapshot } from "../../../src/index.js";
 import {
   buildCodexExecArguments,
   buildIntegrationReport,
+  buildRepeatedScenarioResult,
   buildScenarioResult,
   FIXTURE_AGENT_ROLE,
   FIXTURE_SKILL_IDS,
   formatConsoleSummary,
+  observeIndependentCollectorRuns,
   parseRunnerArguments,
   reportRequiresFailure,
   requireSupportedCodexVersion,
   SCENARIO_DEFINITIONS,
   SCENARIO_IDS,
-  type ScenarioId,
+  type IntegrationObservations,
   type ScenarioObservation,
 } from "../src/integration-config.js";
 
@@ -35,10 +37,13 @@ function snapshot(
   };
 }
 
-function supportedObservations(): Record<ScenarioId, ScenarioObservation> {
+function supportedObservations(): IntegrationObservations {
   return {
     direct: { snapshot: snapshot([FIXTURE_SKILL_IDS.direct]) },
-    repeated: { snapshot: snapshot([FIXTURE_SKILL_IDS.direct]) },
+    repeated: [
+      { snapshot: snapshot([FIXTURE_SKILL_IDS.direct]) },
+      { snapshot: snapshot([FIXTURE_SKILL_IDS.direct]) },
+    ],
     nested: {
       snapshot: snapshot([
         FIXTURE_SKILL_IDS.nestedChild,
@@ -71,17 +76,68 @@ test("defines four finite scenarios and repeats only the presence baseline", () 
   assert.equal(new Set(Object.values(FIXTURE_SKILL_IDS)).size, 5);
 });
 
-test("accepts only the optional explicit output destination", () => {
-  assert.deepEqual(parseRunnerArguments([]), {});
-  assert.deepEqual(parseRunnerArguments(["--output", "/tmp/report.json"]), {
-    outputPath: "/tmp/report.json",
-  });
-  assert.throws(() => parseRunnerArguments(["--output"]), /Usage:/);
+test("requires explicit analytics consent and accepts an optional output destination in either order", () => {
+  assert.throws(() => parseRunnerArguments([]), /Explicit Codex analytics/);
   assert.throws(
-    () => parseRunnerArguments(["--output", "one", "--output", "two"]),
-    /Usage:/,
+    () => parseRunnerArguments(["--output", "/tmp/report.json"]),
+    /Explicit Codex analytics/,
   );
-  assert.throws(() => parseRunnerArguments(["--runs", "2"]), /Usage:/);
+  assert.deepEqual(parseRunnerArguments(["--allow-codex-analytics"]), {
+    codexAnalyticsExplicitlyAllowed: true,
+  });
+  assert.deepEqual(
+    parseRunnerArguments([
+      "--allow-codex-analytics",
+      "--output",
+      "/tmp/report.json",
+    ]),
+    {
+      codexAnalyticsExplicitlyAllowed: true,
+      outputPath: "/tmp/report.json",
+    },
+  );
+  assert.deepEqual(
+    parseRunnerArguments([
+      "--output",
+      "/tmp/report.json",
+      "--allow-codex-analytics",
+    ]),
+    {
+      codexAnalyticsExplicitlyAllowed: true,
+      outputPath: "/tmp/report.json",
+    },
+  );
+  assert.throws(
+    () =>
+      parseRunnerArguments([
+        "--allow-codex-analytics",
+        "--allow-codex-analytics",
+      ]),
+    /duplicate --allow-codex-analytics/,
+  );
+  assert.throws(
+    () =>
+      parseRunnerArguments([
+        "--allow-codex-analytics",
+        "--output",
+        "one",
+        "--output",
+        "two",
+      ]),
+    /duplicate --output/,
+  );
+  assert.throws(
+    () => parseRunnerArguments(["--allow-codex-analytics", "--output"]),
+    /--output requires a path/,
+  );
+  assert.throws(
+    () => parseRunnerArguments(["--output", "--allow-codex-analytics"]),
+    /--output requires a path/,
+  );
+  assert.throws(
+    () => parseRunnerArguments(["--allow-codex-analytics", "--runs"]),
+    /unknown option/,
+  );
 });
 
 test("requires a compatible semantic Codex CLI version", () => {
@@ -110,6 +166,7 @@ test("builds strict invocation-only telemetry configuration", () => {
     prompt,
     temporaryRepository: "/synthetic/repository",
     enableMultiAgent: false,
+    codexAnalyticsExplicitlyAllowed: true,
   });
 
   for (const required of [
@@ -147,6 +204,7 @@ test("builds strict invocation-only telemetry configuration", () => {
     prompt,
     temporaryRepository: "/synthetic/repository",
     enableMultiAgent: true,
+    codexAnalyticsExplicitlyAllowed: true,
   });
   assert.equal(subagentArgs.includes("multi_agent"), true);
   assert.equal(subagentArgs.includes("agents.enabled=true"), true);
@@ -157,8 +215,20 @@ test("builds strict invocation-only telemetry configuration", () => {
         prompt,
         temporaryRepository: "/synthetic/repository",
         enableMultiAgent: false,
+        codexAnalyticsExplicitlyAllowed: true,
       }),
     /loopback/,
+  );
+  assert.throws(
+    () =>
+      buildCodexExecArguments({
+        collectorEndpoint: "http://127.0.0.1:4318/v1/metrics",
+        prompt,
+        temporaryRepository: "/synthetic/repository",
+        enableMultiAgent: false,
+        codexAnalyticsExplicitlyAllowed: false as true,
+      }),
+    /Explicit Codex analytics consent required/,
   );
 });
 
@@ -166,9 +236,10 @@ test("reduces snapshots to presence without counts, edges, or attribution", () =
   const direct = buildScenarioResult("direct", {
     snapshot: snapshot([FIXTURE_SKILL_IDS.direct], true),
   });
-  const repeated = buildScenarioResult("repeated", {
-    snapshot: snapshot([FIXTURE_SKILL_IDS.direct]),
-  });
+  const repeated = buildRepeatedScenarioResult([
+    { snapshot: snapshot([FIXTURE_SKILL_IDS.direct]) },
+    { snapshot: snapshot([FIXTURE_SKILL_IDS.direct]) },
+  ]);
   const nested = buildScenarioResult("nested", {
     snapshot: snapshot([
       FIXTURE_SKILL_IDS.nestedParent,
@@ -181,8 +252,11 @@ test("reduces snapshots to presence without counts, edges, or attribution", () =
 
   assert.equal(direct.status, "supported");
   assert.equal(direct.unrecognizedSkillObserved, true);
-  assert.deepEqual(repeated.observedSkillIds, [FIXTURE_SKILL_IDS.direct]);
   assert.equal(repeated.status, "supported");
+  assert.deepEqual(
+    repeated.runs.map((run) => run.observedSkillIds),
+    [[FIXTURE_SKILL_IDS.direct], [FIXTURE_SKILL_IDS.direct]],
+  );
   assert.equal(nested.status, "supported");
   assert.equal(nested.runtimeEdgeClaimed, false);
   assert.equal(subagent.status, "supported");
@@ -196,9 +270,6 @@ test("reduces snapshots to presence without counts, edges, or attribution", () =
 
 test("keeps optional absences inconclusive and hard baseline absences failed", () => {
   const direct = buildScenarioResult("direct", { snapshot: snapshot([]) });
-  const repeated = buildScenarioResult("repeated", {
-    snapshot: snapshot([]),
-  });
   const nested = buildScenarioResult("nested", {
     snapshot: snapshot([FIXTURE_SKILL_IDS.nestedParent]),
   });
@@ -210,8 +281,8 @@ test("keeps optional absences inconclusive and hard baseline absences failed", (
   });
 
   assert.deepEqual(
-    [direct.status, repeated.status, nested.status, subagent.status],
-    ["failed", "failed", "inconclusive", "inconclusive"],
+    [direct.status, nested.status, subagent.status],
+    ["failed", "inconclusive", "inconclusive"],
   );
   assert.equal(unavailableSubagent.status, "unsupported");
   assert.equal(nested.runtimeEdgeClaimed, false);
@@ -228,9 +299,130 @@ test("keeps optional absences inconclusive and hard baseline absences failed", (
   );
 });
 
+test("requires two successful repeated processes with presence in both snapshots", () => {
+  const present = (): ScenarioObservation => ({
+    snapshot: snapshot([FIXTURE_SKILL_IDS.direct]),
+  });
+  const absent = (): ScenarioObservation => ({ snapshot: snapshot([]) });
+  const failed = (): ScenarioObservation => ({
+    snapshot: snapshot([FIXTURE_SKILL_IDS.direct]),
+    diagnostic: "process-exit-nonzero",
+  });
+  const cases: readonly {
+    readonly name: string;
+    readonly observations: readonly [ScenarioObservation, ScenarioObservation];
+    readonly runStatuses: readonly [
+      "supported" | "failed",
+      "supported" | "failed",
+    ];
+  }[] = [
+    {
+      name: "both present",
+      observations: [present(), present()],
+      runStatuses: ["supported", "supported"],
+    },
+    {
+      name: "first only",
+      observations: [present(), absent()],
+      runStatuses: ["supported", "failed"],
+    },
+    {
+      name: "second only",
+      observations: [absent(), present()],
+      runStatuses: ["failed", "supported"],
+    },
+    {
+      name: "neither",
+      observations: [absent(), absent()],
+      runStatuses: ["failed", "failed"],
+    },
+    {
+      name: "first process failure",
+      observations: [failed(), present()],
+      runStatuses: ["failed", "supported"],
+    },
+    {
+      name: "second process failure",
+      observations: [present(), failed()],
+      runStatuses: ["supported", "failed"],
+    },
+  ];
+
+  for (const fixture of cases) {
+    const result = buildRepeatedScenarioResult(fixture.observations);
+    assert.deepEqual(
+      result.runs.map(({ status }) => status),
+      fixture.runStatuses,
+      fixture.name,
+    );
+    assert.equal(
+      result.status,
+      fixture.name === "both present" ? "supported" : "failed",
+      fixture.name,
+    );
+  }
+});
+
+test("uses a fresh collector lifetime for each repeated run", async () => {
+  const events: string[] = [];
+  const endpoints: string[] = [];
+  let collectorNumber = 0;
+
+  const observations = await observeIndependentCollectorRuns({
+    allowedSkills: [FIXTURE_SKILL_IDS.direct],
+    prompts: ["FIRST_SYNTHETIC_PROMPT", "SECOND_SYNTHETIC_PROMPT"],
+    createCollector: async (allowedSkills) => {
+      assert.deepEqual(allowedSkills, [FIXTURE_SKILL_IDS.direct]);
+      collectorNumber += 1;
+      const current = collectorNumber;
+      const endpoint = `http://127.0.0.1:${4300 + current}/v1/metrics`;
+      let closed = false;
+      endpoints.push(endpoint);
+      events.push(`create:${current}`);
+      return {
+        endpoint,
+        closeAndSnapshot: async () => {
+          if (!closed) {
+            closed = true;
+            events.push(`close:${current}`);
+          }
+          return snapshot([FIXTURE_SKILL_IDS.direct]);
+        },
+      };
+    },
+    runCodex: async ({ collectorEndpoint, prompt }) => {
+      events.push(`run:${collectorEndpoint}:${prompt}`);
+      return prompt === "FIRST_SYNTHETIC_PROMPT"
+        ? "process-exit-nonzero"
+        : undefined;
+    },
+  });
+
+  assert.equal(new Set(endpoints).size, 2);
+  assert.deepEqual(events, [
+    "create:1",
+    `run:${endpoints[0]}:FIRST_SYNTHETIC_PROMPT`,
+    "close:1",
+    "create:2",
+    `run:${endpoints[1]}:SECOND_SYNTHETIC_PROMPT`,
+    "close:2",
+  ]);
+  assert.deepEqual(
+    observations.map(
+      ({ snapshot: observedSnapshot }) => observedSnapshot?.injectedSkills,
+    ),
+    [[FIXTURE_SKILL_IDS.direct], [FIXTURE_SKILL_IDS.direct]],
+  );
+  assert.deepEqual(
+    observations.map(({ diagnostic }) => diagnostic),
+    ["process-exit-nonzero", undefined],
+  );
+});
+
 test("reports only approved fields and fails the required baseline", () => {
   const supportedReport = buildIntegrationReport({
     codexVersion: "codex-cli 0.146.0",
+    codexAnalyticsExplicitlyAllowed: true,
     observations: supportedObservations(),
   });
   assert.equal(reportRequiresFailure(supportedReport), false);
@@ -244,18 +436,24 @@ test("reports only approved fields and fails the required baseline", () => {
     taskSuccessClaimed: false,
   });
   assert.equal(supportedReport.exportedMetric, "codex.skill.injected");
+  assert.equal(supportedReport.codexAnalyticsExplicitlyAllowed, true);
   const summary = formatConsoleSummary(supportedReport);
   assert.match(summary, /Collector semantics: presence/);
-  assert.match(summary, /presence confirmed/);
+  assert.match(summary, /Codex analytics explicitly allowed: true/);
+  assert.match(summary, /run 1:/);
+  assert.match(summary, /run 2:/);
   assert.match(summary, /no runtime edge implied/);
   assert.match(summary, /agent attribution unavailable/);
 
-  const failedObservations = supportedObservations();
-  failedObservations.direct = { snapshot: snapshot([]) };
+  const failedObservations: IntegrationObservations = {
+    ...supportedObservations(),
+    direct: { snapshot: snapshot([]) },
+  };
   assert.equal(
     reportRequiresFailure(
       buildIntegrationReport({
         codexVersion: "codex-cli 0.146.0",
+        codexAnalyticsExplicitlyAllowed: true,
         observations: failedObservations,
       }),
     ),

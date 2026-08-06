@@ -14,13 +14,14 @@ import {
   FIXTURE_AGENT_ROLE,
   FIXTURE_SKILL_IDS,
   formatConsoleSummary,
+  observeIndependentCollectorRuns,
   parseRunnerArguments,
   reportRequiresFailure,
   requireSupportedCodexVersion,
   SCENARIO_DEFINITIONS,
   type ScenarioDefinition,
   type ScenarioDiagnostic,
-  type ScenarioId,
+  type IntegrationObservations,
   type ScenarioObservation,
 } from "./integration-config.js";
 
@@ -39,6 +40,9 @@ const REQUIRED_EXEC_HELP_MARKERS = [
 ] as const;
 const SAFE_ERROR_PREFIXES = [
   "Usage:",
+  "Explicit Codex analytics consent required:",
+  "Integration argument error:",
+  "Scenario configuration error:",
   "Unable to determine the installed Codex CLI version",
   "This harness requires codex-cli",
   "Collector endpoint must be",
@@ -387,51 +391,77 @@ async function observeScenario(
   definition: ScenarioDefinition,
   temporaryRepository: string,
   multiAgentAvailable: boolean,
-): Promise<ScenarioObservation> {
+  codexAnalyticsExplicitlyAllowed: true,
+): Promise<ScenarioObservation[]> {
   if (definition.requiresMultiAgent && !multiAgentAvailable) {
-    return { diagnostic: "multi-agent-unavailable" };
+    return definition.prompts.map(() => ({
+      diagnostic: "multi-agent-unavailable",
+    }));
   }
 
-  const collector = await createCodexSkillEvidenceCollector({
+  return observeIndependentCollectorRuns({
     allowedSkills: definition.allowedSkills,
-  });
-  activeCollectors.add(collector);
-  let diagnostic: ScenarioDiagnostic | undefined;
-  try {
-    for (const prompt of definition.prompts) {
+    prompts: definition.prompts,
+    createCollector: async (allowedSkills) => {
+      const collector = await createCodexSkillEvidenceCollector({
+        allowedSkills,
+      });
+      activeCollectors.add(collector);
+      return {
+        endpoint: collector.endpoint,
+        closeAndSnapshot: async () => {
+          try {
+            return await collector.closeAndSnapshot();
+          } finally {
+            activeCollectors.delete(collector);
+          }
+        },
+      };
+    },
+    runCodex: async ({ collectorEndpoint, prompt }) => {
       const result = await runBoundedProcess(
         "codex",
         buildCodexExecArguments({
-          collectorEndpoint: collector.endpoint,
+          collectorEndpoint,
           prompt,
           temporaryRepository,
           enableMultiAgent: definition.requiresMultiAgent,
+          codexAnalyticsExplicitlyAllowed,
         }),
         {
           cwd: temporaryRepository,
           timeoutMs: CODEX_EXEC_TIMEOUT_MS,
         },
       );
-      diagnostic = diagnosticForProcess(result);
-      if (diagnostic) {
-        break;
-      }
-    }
+      return diagnosticForProcess(result);
+    },
+  });
+}
 
-    const snapshot = await collector.closeAndSnapshot();
-    activeCollectors.delete(collector);
-    const observation: {
-      snapshot: typeof snapshot;
-      diagnostic?: ScenarioDiagnostic;
-    } = { snapshot };
-    if (diagnostic) {
-      observation.diagnostic = diagnostic;
-    }
-    return observation;
-  } finally {
-    await collector.closeAndSnapshot();
-    activeCollectors.delete(collector);
+function requireSingleObservation(
+  scenario: "direct" | "nested" | "subagent",
+  observations: readonly ScenarioObservation[],
+): ScenarioObservation {
+  const observation = observations[0];
+  if (observations.length !== 1 || !observation) {
+    throw new Error(
+      `Scenario configuration error: ${scenario} requires one collector lifetime`,
+    );
   }
+  return observation;
+}
+
+function requireRepeatedObservations(
+  observations: readonly ScenarioObservation[],
+): readonly [ScenarioObservation, ScenarioObservation] {
+  const first = observations[0];
+  const second = observations[1];
+  if (observations.length !== 2 || !first || !second) {
+    throw new Error(
+      "Scenario configuration error: repeated requires two independent collector lifetimes",
+    );
+  }
+  return [first, second];
 }
 
 async function writeRequestedReport(
@@ -453,23 +483,53 @@ async function writeRequestedReport(
 
 async function main(): Promise<void> {
   installSignalCleanup();
-  const { outputPath } = parseRunnerArguments(process.argv.slice(2));
+  const { outputPath, codexAnalyticsExplicitlyAllowed } = parseRunnerArguments(
+    process.argv.slice(2),
+  );
   const [{ codexVersion, multiAgentAvailable }, fixtures] = await Promise.all([
     inspectCodexPrerequisites(),
     readFixtureContents(),
   ]);
   const temporaryFixture = await createTemporaryFixtureRepository(fixtures);
 
-  const observations = {} as Record<ScenarioId, ScenarioObservation>;
+  const scenarioObservations = new Map<
+    ScenarioDefinition["id"],
+    ScenarioObservation[]
+  >();
   for (const definition of SCENARIO_DEFINITIONS) {
-    observations[definition.id] = await observeScenario(
-      definition,
-      temporaryFixture.repositoryDirectory,
-      multiAgentAvailable,
+    scenarioObservations.set(
+      definition.id,
+      await observeScenario(
+        definition,
+        temporaryFixture.repositoryDirectory,
+        multiAgentAvailable,
+        codexAnalyticsExplicitlyAllowed,
+      ),
     );
   }
 
-  const report = buildIntegrationReport({ codexVersion, observations });
+  const observations: IntegrationObservations = {
+    direct: requireSingleObservation(
+      "direct",
+      scenarioObservations.get("direct") ?? [],
+    ),
+    repeated: requireRepeatedObservations(
+      scenarioObservations.get("repeated") ?? [],
+    ),
+    nested: requireSingleObservation(
+      "nested",
+      scenarioObservations.get("nested") ?? [],
+    ),
+    subagent: requireSingleObservation(
+      "subagent",
+      scenarioObservations.get("subagent") ?? [],
+    ),
+  };
+  const report = buildIntegrationReport({
+    codexVersion,
+    codexAnalyticsExplicitlyAllowed,
+    observations,
+  });
   const serializedReport = `${JSON.stringify(report, null, 2)}\n`;
   process.stderr.write(`${formatConsoleSummary(report)}\n`);
   process.stdout.write(serializedReport);
