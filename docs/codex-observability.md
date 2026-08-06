@@ -2,12 +2,13 @@
 
 These concepts are distinct:
 
-| Layer                   | Meaning                                                            | Initial target? |
-| ----------------------- | ------------------------------------------------------------------ | --------------- |
-| Discovery or enablement | Codex found a Skill and made its metadata available for selection. | No              |
-| Injection               | Codex added the selected Skill instructions to model context.      | Yes             |
-| Execution or compliance | The model followed some or all injected instructions.              | No              |
-| Task outcome            | The task succeeded or produced a good result.                      | No              |
+| Layer                   | Meaning                                                            | Observable here? |
+| ----------------------- | ------------------------------------------------------------------ | ---------------- |
+| Discovery or enablement | Codex found a Skill and made its metadata available for selection. | No               |
+| Injection               | Codex added selected Skill instructions to model context.          | Counter presence |
+| Generic filesystem read | A Skill file was read through ordinary filesystem access.          | No               |
+| Execution or compliance | The model followed some or all injected instructions.              | No               |
+| Task outcome            | The task succeeded or produced a good result.                      | No               |
 
 Codex documentation describes progressive Skill disclosure and explicit invocation with `$skill-name`. It also documents `skill.injected` in the internal metrics catalog, with `status` and `skill` fields. The catalog notes that displayed metric names omit a `codex.` prefix.
 
@@ -49,3 +50,21 @@ This behavior is version-specific and the exportability of `skill.injected` is n
 - Production counter interpretation and correlation remain future work.
 
 This PR intentionally does not add production aggregation, per-session or per-turn correlation, chain reconstruction, or routing analysis.
+
+## Activation-path result
+
+The second experiment held seven installed synthetic Skills constant and varied five activation paths in separate `codex-cli 0.146.0` processes. Three runs per scenario observed:
+
+The committed evidence comes from the corrected harness rerun completed on 2026-08-06 JST. Each run waited for the Codex child to exit, drained accepted and in-flight collector requests, awaited collector shutdown, and created its normalized snapshot afterward. All 15 corrected sets and exit codes were checked; the scenario results were unchanged from the earlier racy run.
+
+| Scenario          | Allowlisted process-level Skill set                                                   | Runs |
+| ----------------- | ------------------------------------------------------------------------------------- | ---- |
+| discovered-only   | `[]`                                                                                  | 3/3  |
+| explicit-single   | `[renma-activation-explicit-single-20260805]`                                         | 3/3  |
+| explicit-multiple | `[renma-activation-explicit-alpha-20260805, renma-activation-explicit-beta-20260805]` | 3/3  |
+| router-to-target  | `[renma-activation-router-20260805, renma-activation-router-target-20260805]`         | 3/3  |
+| implicit-match    | `[renma-activation-implicit-20260805]`                                                | 3/3  |
+
+All 15 Codex processes exited with status `0`. The implicit sample is an observed result, not a deterministic support claim. The router sample establishes only that both labels were present in the accepted counter data for each isolated process; it does not establish order, nesting, or a parent/child relationship.
+
+No direct-file-read scenario is included because `codex.skill.injected` cannot independently establish a generic filesystem read. An absent label likewise cannot prove that a Skill file was not read or that instructions were not followed. See [the full activation-path protocol](../experiments/codex-skill-activation-paths/README.md).

@@ -1,0 +1,242 @@
+{
+  "schemaVersion": 1,
+  "experimentDate": "2026-08-05",
+  "environment": {
+    "codexVersion": "codex-cli 0.146.0",
+    "operatingSystem": "macOS 26.5.2 (25F84)",
+    "architecture": "arm64",
+    "nodeVersion": "v24.18.0"
+  },
+  "provider": "codex",
+  "experiment": "codex-skill-activation-paths",
+  "exportedMetric": "codex.skill.injected",
+  "runsPerScenario": 3,
+  "scenarios": [
+    {
+      "scenario": "discovered-only",
+      "runs": [
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-activation-paths",
+          "scenario": "discovered-only",
+          "experimentRunId": "8074934f-61c5-4eb7-9003-bcda09c8ea0d",
+          "codexExitCode": 0,
+          "injectedSkills": []
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-activation-paths",
+          "scenario": "discovered-only",
+          "experimentRunId": "e590fbb0-1a92-49ff-ac4e-7247b4cc6411",
+          "codexExitCode": 0,
+          "injectedSkills": []
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-activation-paths",
+          "scenario": "discovered-only",
+          "experimentRunId": "d6b7ca06-3731-40e2-b0cb-78fbe6f23e7c",
+          "codexExitCode": 0,
+          "injectedSkills": []
+        }
+      ]
+    },
+    {
+      "scenario": "explicit-single",
+      "runs": [
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-activation-paths",
+          "scenario": "explicit-single",
+          "experimentRunId": "908c1df9-30da-42c2-b41c-b5da1e2e692a",
+          "codexExitCode": 0,
+          "injectedSkills": ["renma-activation-explicit-single-20260805"],
+          "verifiedStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-05T23:02:33.829Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-activation-paths",
+          "scenario": "explicit-single",
+          "experimentRunId": "ebf47ba2-8e7c-45b1-81c0-73ceac8f48d0",
+          "codexExitCode": 0,
+          "injectedSkills": ["renma-activation-explicit-single-20260805"],
+          "verifiedStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-05T23:03:33.921Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-activation-paths",
+          "scenario": "explicit-single",
+          "experimentRunId": "1d30dfee-a2ee-4cee-bf29-490da5d5c5f0",
+          "codexExitCode": 0,
+          "injectedSkills": ["renma-activation-explicit-single-20260805"],
+          "verifiedStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-05T23:07:44.496Z"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "explicit-multiple",
+      "runs": [
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-activation-paths",
+          "scenario": "explicit-multiple",
+          "experimentRunId": "3603ce7a-e05f-403b-946b-561d191e1108",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-activation-explicit-alpha-20260805",
+            "renma-activation-explicit-beta-20260805"
+          ],
+          "verifiedStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-05T23:07:50.507Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-activation-paths",
+          "scenario": "explicit-multiple",
+          "experimentRunId": "d2bc1046-4a43-44a5-90c1-d51b0c7773fe",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-activation-explicit-alpha-20260805",
+            "renma-activation-explicit-beta-20260805"
+          ],
+          "verifiedStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-05T23:08:00.079Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-activation-paths",
+          "scenario": "explicit-multiple",
+          "experimentRunId": "da94e63b-9793-4afd-befc-5329f0cee66a",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-activation-explicit-alpha-20260805",
+            "renma-activation-explicit-beta-20260805"
+          ],
+          "verifiedStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-05T23:08:07.514Z"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "router-to-target",
+      "runs": [
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-activation-paths",
+          "scenario": "router-to-target",
+          "experimentRunId": "2dfc41f2-f0fd-4b80-a633-704c8e78106c",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-activation-router-20260805",
+            "renma-activation-router-target-20260805"
+          ],
+          "verifiedStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-05T23:08:21.051Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-activation-paths",
+          "scenario": "router-to-target",
+          "experimentRunId": "50c7e667-96f2-477e-93ba-ba14cdc6a5ea",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-activation-router-20260805",
+            "renma-activation-router-target-20260805"
+          ],
+          "verifiedStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-05T23:08:34.467Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-activation-paths",
+          "scenario": "router-to-target",
+          "experimentRunId": "fff4a6da-5336-4654-bd9c-951be1b9676e",
+          "codexExitCode": 0,
+          "injectedSkills": [
+            "renma-activation-router-20260805",
+            "renma-activation-router-target-20260805"
+          ],
+          "verifiedStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-05T23:08:43.309Z"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "implicit-match",
+      "runs": [
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-activation-paths",
+          "scenario": "implicit-match",
+          "experimentRunId": "dd952a03-b492-44c6-b843-7742a58e42fb",
+          "codexExitCode": 0,
+          "injectedSkills": ["renma-activation-implicit-20260805"],
+          "verifiedStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-05T23:08:56.740Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-activation-paths",
+          "scenario": "implicit-match",
+          "experimentRunId": "5585ce1b-e8f0-4148-9674-370cd65905db",
+          "codexExitCode": 0,
+          "injectedSkills": ["renma-activation-implicit-20260805"],
+          "verifiedStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-05T23:09:08.648Z"
+          }
+        },
+        {
+          "schemaVersion": 1,
+          "provider": "codex",
+          "experiment": "codex-skill-activation-paths",
+          "scenario": "implicit-match",
+          "experimentRunId": "c4fe5f90-8ae8-413d-a6c0-03cb14df6206",
+          "codexExitCode": 0,
+          "injectedSkills": ["renma-activation-implicit-20260805"],
+          "verifiedStatus": "ok",
+          "collectorReceipt": {
+            "firstAcceptedAt": "2026-08-05T23:09:19.241Z"
+          }
+        }
+      ]
+    }
+  ]
+}

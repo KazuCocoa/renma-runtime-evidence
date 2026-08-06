@@ -8,18 +8,23 @@ The collector must not persist or transmit user prompts, assistant responses, re
 
 Codex session transcripts, JSONL conversation caches, local databases, and other user-history stores are not experiment inputs and must not be inspected.
 
-## Allowlist
+## Allowlists
 
-This experiment may retain only:
+Each experiment has a separate finite allowlist. Across the current experiments, retained evidence may contain only:
 
 - provider (`codex`);
-- observation type (`skill-injected`);
-- the unique synthetic Skill name;
-- injection status;
+- the finite experiment and scenario identifier, where applicable;
+- observation type (`skill-injected`) or the exact provider metric name;
+- exact synthetic Skill names declared by that experiment;
+- exact verified injection status (`ok`) when an accepted set is non-empty;
 - the locally measured Codex version;
-- collector receipt timestamp; and
-- a locally generated pseudonymous experiment run ID.
+- collector receipt timestamp;
+- a locally generated pseudonymous experiment run ID;
+- process exit status; and
+- non-identifying operating-system, architecture, and Node.js version metadata.
 
-The collector binds to `127.0.0.1`, holds an OTLP request only long enough to parse it in memory, and emits a normalized record only when both the metric name and synthetic Skill identity match the allowlist. It never writes raw request bodies. Attributes on non-target metrics and unexpected attributes on the target metric are ignored.
+The collectors bind to `127.0.0.1`, hold an OTLP request only long enough to parse it in memory, and emit normalized evidence only when the metric name, synthetic Skill identity, and exact `status=ok` match the experiment allowlist. They never write raw request bodies. Unknown names and statuses, attributes on non-target metrics, unexpected attributes on the target metric, and content-bearing fields are discarded before persistence.
 
-The synthetic Codex process runs with ephemeral sessions, ignored user configuration, read-only sandboxing, no approvals, no OTel logs, and no OTel traces. Its prompt and response are never written by the experiment runner. Codex metrics instrumentation must remain enabled for the OTLP metrics exporter to operate, but the runner replaces the default Statsig exporter with the loopback collector.
+Each synthetic Codex process runs with an ephemeral session, ignored user configuration, read-only sandboxing, no approvals, no OTel logs, and no OTel traces. Its prompt and response are never written by the experiment runner. Codex stdout and stderr are discarded. Codex metrics instrumentation must remain enabled for the OTLP metrics exporter to operate, but the runner replaces the default Statsig exporter with the loopback collector.
+
+The activation-path experiment stops and drains the collector after each Codex child exits, waits for accepted requests to finish processing, and only then collapses accepted cumulative exports into a sorted, deduplicated process-level name set. Empty sets are retained honestly. Neither a repeated metric point nor its absence is converted into invocation counts, ordering, relationships, file-read claims, compliance, or outcomes.

@@ -8,9 +8,10 @@
     "build": "tsc -p tsconfig.json",
     "check": "npm run format:check && npm run typecheck && npm test",
     "experiment:codex": "npm run build && node .build/experiments/codex-skill-injected/src/run-experiment.js",
+    "experiment:codex:activation-paths": "npm run build && node .build/experiments/codex-skill-activation-paths/src/run-experiment.js",
     "format": "prettier --write . --ignore-unknown",
     "format:check": "prettier --check . --ignore-unknown",
-    "test": "npm run build && node --test .build/experiments/codex-skill-injected/test/*.test.js",
+    "test": "npm run build && node --test .build/experiments/*/test/*.test.js",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "engines": {

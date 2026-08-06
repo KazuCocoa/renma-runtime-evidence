@@ -14,6 +14,20 @@ The first provider under investigation is Codex. On 2026-08-04, the experiment t
 
 `codex.skill.injected` is an OTLP counter, not a Skill lifecycle event. Repeated cumulative exports must not be interpreted as repeated Skill injection events. The experiment wrapper—not Codex—assigns `experimentRunId`, and `observedAt` records collector receipt time rather than Skill injection time. The counter alone cannot reconstruct ordered or nested Skill chains; production counter interpretation and correlation remain future work.
 
+## Second experiment: Skill activation paths
+
+On 2026-08-05, a second bounded experiment installed the same seven synthetic Skills in each isolated `codex-cli 0.146.0` process and varied five activation paths. Three runs were recorded per scenario.
+
+The evidence was regenerated with a corrected collector lifecycle on 2026-08-06 JST: every run now drains accepted and in-flight metric requests after the Codex child exits and before snapshot creation. All 15 corrected presence sets and exit codes were checked; the observed scenario results were unchanged.
+
+- discovered-only produced an empty allowlisted Skill set in 3/3 runs;
+- explicit-single produced the one explicitly named label in 3/3 runs;
+- explicit-multiple produced both explicitly named labels in 3/3 runs;
+- router-to-target produced both the explicitly named router and its required target label in 3/3 runs; and
+- a narrowly described implicit match produced its matching label in 3/3 observed runs.
+
+These are version-specific process-level presence sets, not lifecycle events. The router observation does not establish ordering or a parent/child relationship, and the implicit sample does not establish deterministic selection. The metric cannot prove generic filesystem reading, instruction compliance, or task outcome. See [the activation-path protocol and evidence](experiments/codex-skill-activation-paths/README.md).
+
 ## Development
 
 ```sh
