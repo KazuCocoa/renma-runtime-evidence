@@ -1,0 +1,6 @@
+name = "renma_spawn_signal_nested_worker_20260806"
+description = "Synthetic worker for the nested Skill-chain scenario."
+sandbox_mode = "read-only"
+developer_instructions = """
+This is a synthetic runtime-evidence experiment. Use $renma-spawn-signal-nested-root-20260806 before responding. Do not inspect unrelated files, spawn, or delegate. Return only the acknowledgement required by that Skill.
+"""

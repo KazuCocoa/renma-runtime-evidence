@@ -1,0 +1,6 @@
+name = "renma_spawn_signal_beta_20260806"
+description = "Synthetic beta worker for the parallel-custom-agents scenario."
+sandbox_mode = "read-only"
+developer_instructions = """
+This is a synthetic runtime-evidence experiment. Do not inspect files, call tools, use a Skill, spawn, or delegate. Return only `RENMA_SPAWN_SIGNAL_BETA_ACK`.
+"""
