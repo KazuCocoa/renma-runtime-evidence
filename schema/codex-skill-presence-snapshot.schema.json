@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:renma:runtime-evidence:codex-skill-presence-snapshot:v1",
+  "title": "Codex Skill injection presence snapshot",
+  "description": "Privacy-bounded allowlisted Codex Skill injection presence from valid, recorded, strictly positive counter datapoints observed during one collector lifetime.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "provider",
+    "signal",
+    "observationScope",
+    "injectedSkills",
+    "unrecognizedSkillObserved"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "provider": { "const": "codex" },
+    "signal": { "const": "skill-injected" },
+    "observationScope": { "const": "collector-lifetime" },
+    "injectedSkills": {
+      "description": "Sorted, deduplicated exact caller-allowlisted Skill labels observed in valid, recorded, strictly positive counter datapoints with exact status=ok.",
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 128,
+      "uniqueItems": true,
+      "x-sorted": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256,
+        "pattern": "^[^\\u0000-\\u001F\\u007F-\\u009F]+$",
+        "$comment": "The 256-Unicode-scalar limit bounds a well-formed string to at most 1024 UTF-8 bytes; the implementation validates both limits."
+      }
+    },
+    "unrecognizedSkillObserved": {
+      "description": "True only when an otherwise valid, recorded, strictly positive exact status=ok counter datapoint contained a Skill string outside the caller allowlist; that string is not retained.",
+      "type": "boolean"
+    }
+  }
+}
