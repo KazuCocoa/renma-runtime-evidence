@@ -118,4 +118,20 @@ also cause Codex to send separate analytics events to OpenAI. The loopback
 endpoint does not control that separate path. Ordinary tests, package
 installation, and CI do not launch Codex or contact external model services.
 
+A second opt-in command,
+`npm run test:integration:codex:characterize -- --allow-codex-analytics`,
+installs only two fixed synthetic Skills and compares three isolated direct
+scenarios: neither requested, target requested, and control requested. Each
+scenario gets a fresh workspace, `HOME`, `CODEX_HOME`, collector, and in-memory
+evidence result. It requires `CODEX_API_KEY` so it never reads or copies saved
+Codex state. Fixed workspace artifacts confirm only whether each synthetic
+fixture's deterministic instruction completed; the report retains booleans,
+fixed enums, and bounded diagnostics rather than prompts, outputs, paths, or
+file content. On 2026-08-07, the API-key-backed `codex-cli 0.146.0` matrix
+classified all three rows as `inconsistent`: every process exited nonzero with
+no artifact, evidence, or OTLP request, and an isolated bounded diagnostic
+classified the failure as `quota-or-rate-limit`. This supports no selection or
+execution inference. The characterization remains opt-in and is not part of
+CI.
+
 This package has `"private": true` and must not be published to npm.

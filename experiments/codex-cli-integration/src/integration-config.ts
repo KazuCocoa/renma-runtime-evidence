@@ -127,6 +127,7 @@ export interface CodexInvocationOptions {
   readonly prompt: string;
   readonly temporaryRepository: string;
   readonly enableMultiAgent: boolean;
+  readonly sandboxMode?: "read-only" | "workspace-write";
   readonly codexAnalyticsExplicitlyAllowed: true;
 }
 
@@ -364,7 +365,7 @@ export function buildCodexExecArguments(
     "--color",
     "never",
     "--sandbox",
-    "read-only",
+    options.sandboxMode ?? "read-only",
     ...multiAgentArguments,
     "-C",
     options.temporaryRepository,
