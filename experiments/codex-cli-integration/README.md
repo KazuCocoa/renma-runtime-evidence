@@ -81,15 +81,19 @@ The command succeeds for any of the first three internally consistent characteri
 
 ### Controlled-run status (2026-08-07)
 
-The locally installed version was `codex-cli 0.146.0`. This environment had neither `CODEX_API_KEY` nor `OPENAI_API_KEY`, and `codex login status` returned `Not logged in` when run with fresh empty `HOME` and `CODEX_HOME`. The real characterization therefore stopped at its authentication-isolation prerequisite before creating a collector or launching a model task.
+The locally installed version was `codex-cli 0.146.0`. `CODEX_API_KEY` was present and was exported only to the experiment process tree. The real command ran all three scenarios with the required fresh isolation. An unchanged retry produced the same bounded result.
 
-| Scenario            | Target artifact | Control artifact | Target evidence | Control evidence | Result  |
-| ------------------- | --------------- | ---------------- | --------------- | ---------------- | ------- |
-| `neither-requested` | not observed    | not observed     | not observed    | not observed     | not run |
-| `target-requested`  | not observed    | not observed     | not observed    | not observed     | not run |
-| `control-requested` | not observed    | not observed     | not observed    | not observed     | not run |
+| Scenario            | Process status | Target artifact | Control artifact | Target evidence | Control evidence | Pipeline          | Result         |
+| ------------------- | -------------- | --------------- | ---------------- | --------------- | ---------------- | ----------------- | -------------- |
+| `neither-requested` | `exit-nonzero` | `false`         | `false`          | `false`         | `false`          | `no-otlp-request` | `inconsistent` |
+| `target-requested`  | `exit-nonzero` | `false`         | `false`          | `false`         | `false`          | `no-otlp-request` | `inconsistent` |
+| `control-requested` | `exit-nonzero` | `false`         | `false`          | `false`         | `false`          | `no-otlp-request` | `inconsistent` |
 
-There is consequently no observed characterization enum and no evidence yet that `codex.skill.injected` did or did not distinguish the requested Skill from the unused control. The prior one-Skill direct result remains insufficient for that question. This document deliberately records the unsupported run instead of reusing saved Codex state, relaxing per-scenario isolation, or fabricating a matrix.
+Overall classification: `inconsistent`.
+
+A response-body-free API authentication probe succeeded, and a redacted Codex health check in another fresh `HOME` and `CODEX_HOME` reported authentication, provider HTTP reachability, and WebSocket reachability as healthy. One additional isolated `codex exec` diagnostic immediately reduced its discarded failure stream to the fixed category `quota-or-rate-limit`; no raw stdout or stderr was retained. Every matrix and diagnostic scenario root was removed afterward, including its workspace, `HOME`, and `CODEX_HOME`. No caller Codex configuration or saved authentication was read, persisted, or modified.
+
+This result says only that the tested API-key Codex CLI path did not complete under the available quota/rate-limit state. It does not determine whether `codex.skill.injected` represents availability/context injection, selection or `SKILL.md` reading, or successful instruction execution. The prior one-Skill direct result remains insufficient for that question, and no selection-related matrix was inferred or fabricated.
 
 ## Scenarios
 

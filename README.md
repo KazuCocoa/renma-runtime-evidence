@@ -127,6 +127,11 @@ evidence result. It requires `CODEX_API_KEY` so it never reads or copies saved
 Codex state. Fixed workspace artifacts confirm only whether each synthetic
 fixture's deterministic instruction completed; the report retains booleans,
 fixed enums, and bounded diagnostics rather than prompts, outputs, paths, or
-file content. This characterization remains opt-in and is not part of CI.
+file content. On 2026-08-07, the API-key-backed `codex-cli 0.146.0` matrix
+classified all three rows as `inconsistent`: every process exited nonzero with
+no artifact, evidence, or OTLP request, and an isolated bounded diagnostic
+classified the failure as `quota-or-rate-limit`. This supports no selection or
+execution inference. The characterization remains opt-in and is not part of
+CI.
 
 This package has `"private": true` and must not be published to npm.
