@@ -28,6 +28,7 @@ import {
   type IntegrationObservations,
   type ScenarioObservation,
 } from "../src/integration-config.js";
+import { CHARACTERIZATION_SKILLS } from "../src/skill-injected-characterization.js";
 
 function diagnostics(
   overrides: Partial<CodexSkillEvidenceDiagnosticsSnapshot> = {},
@@ -639,7 +640,10 @@ test("keeps every fixture synthetic, exact, and project-scoped", async () => {
   const skillDirectories = await readdir(join(fixtureRoot, "skills"));
   assert.deepEqual(
     skillDirectories.sort(),
-    Object.values(FIXTURE_SKILL_IDS).sort(),
+    [
+      ...Object.values(FIXTURE_SKILL_IDS),
+      ...Object.values(CHARACTERIZATION_SKILLS).map(({ id }) => id),
+    ].sort(),
   );
 
   for (const skillId of Object.values(FIXTURE_SKILL_IDS)) {

@@ -1,6 +1,6 @@
 # Local Codex CLI integration experiment
 
-This local, opt-in experiment invokes the real installed `codex` command and feeds only exact allowlisted `codex.skill.injected` metric labels into the public `@renma/runtime-evidence` collector. It asks whether four bounded synthetic scenarios produce collector-lifetime Skill presence. It is not a Skill execution test.
+This local, opt-in experiment invokes the real installed `codex` command and feeds only exact allowlisted `codex.skill.injected` metric labels into the public `@renma/runtime-evidence` collector. The original runner asks whether four bounded synthetic scenarios produce collector-lifetime Skill presence. A separate two-Skill runner characterizes whether that metric distinguishes a requested fixture from an installed but unrelated control. Neither runner treats the metric as Skill execution evidence.
 
 ## Prerequisites and explicit consent
 
@@ -16,6 +16,8 @@ This acknowledgement is required because Codex gates the configured OTel metrics
 The harness checks `codex --version`, the required `codex exec` flags, and `codex login status` without printing authentication output. It uses the existing login only for the child invocation. It does not read, copy, print, or persist credentials. If the installed CLI cannot safely accept the telemetry configuration through `-c` overrides, strict configuration causes a clear failing result; the harness never edits `~/.codex/config.toml` or another persistent Codex location.
 
 The Skill layout and explicit invocation syntax follow the current Codex documentation: repository Skills are installed under `.agents/skills`, and the prompt uses `$skill-name`. The subagent scenario also installs one project-scoped custom agent under `.codex/agents`. See [Build skills](https://developers.openai.com/codex/skills), [multi-agent behavior](https://developers.openai.com/codex/multi-agent), and [advanced configuration](https://developers.openai.com/codex/config-file/config-advanced).
+
+The two-Skill characterization has a stricter authentication prerequisite: `CODEX_API_KEY` must be present. It creates fresh empty `HOME` and `CODEX_HOME` directories for every scenario and forwards only that API key plus a finite execution-environment allowlist. It never reads, copies, or falls back to the caller's saved-login files or configuration.
 
 ## Run
 
@@ -44,6 +46,50 @@ npm run test:integration:codex -- --allow-codex-analytics --output /tmp/codex-in
 ```
 
 The flags may appear in any order. With `--direct-only`, the destination receives only the public direct evidence snapshot. The harness refuses to overwrite an existing output file.
+
+## Two-Skill `skill.injected` characterization
+
+Run the controlled three-scenario matrix explicitly with:
+
+```sh
+npm run test:integration:codex:characterize -- --allow-codex-analytics
+```
+
+This command installs exactly these two repository-owned synthetic fixtures in every scenario:
+
+- target: `renma-integration-characterization-target-20260807`;
+- control: `renma-integration-characterization-control-20260807`.
+
+The target and control instructions each create a different fixed workspace file with a different fixed token. The runner inspects only the two known paths and records only whether each file's complete contents exactly match its fixed token. It does not enumerate, return, or persist workspace content. Codex stdout and stderr are discarded.
+
+| Scenario            | Prompt category                                        | Expected fixed artifacts    |
+| ------------------- | ------------------------------------------------------ | --------------------------- |
+| `neither-requested` | Explicitly requests neither installed synthetic Skill. | Neither target nor control. |
+| `target-requested`  | Uses the proven `$target-skill-id` invocation form.    | Target only.                |
+| `control-requested` | Uses the proven `$control-skill-id` invocation form.   | Control only.               |
+
+Every row uses a newly created temporary isolation root containing a distinct workspace, `HOME`, and `CODEX_HOME`; a newly listening loopback collector; and a new in-memory observation. Both Skill fixtures are installed from repository-owned text into that row's workspace. No custom-agent fixture is installed, multi-agent support is disabled, and no nested or subagent task is run. The root is removed in `finally` cleanup after its fixed artifact predicates and drained collector snapshot have been reduced.
+
+Each row retains only its fixed scenario/request category, Codex process-status enum, target/control artifact-match booleans, target/control evidence booleans, an unknown-label boolean, the existing bounded diagnostics, the six-stage pipeline classification, and one fixed characterization enum. The overall enum is:
+
+- `requested-skill-only`: the no-request row emitted neither label, each explicit row emitted only its requested label, and all artifact predicates matched;
+- `all-available-skills`: every row emitted both installed labels and all artifact predicates matched;
+- `no-skill-evidence`: no row emitted either label and all artifact predicates matched;
+- `inconsistent`: a process or transport decode failed, the metrics pipeline was not usable, an artifact predicate did not match, an unknown label was observed, or the evidence matrix matched none of the three coherent patterns.
+
+The command succeeds for any of the first three internally consistent characterizations. Success does not mean the metric was proved to represent selection or execution. An `--output` destination may be supplied explicitly; the runner creates a new mode-0600 file and refuses to overwrite an existing path. Ordinary tests and GitHub Actions never invoke this command.
+
+### Controlled-run status (2026-08-07)
+
+The locally installed version was `codex-cli 0.146.0`. This environment had neither `CODEX_API_KEY` nor `OPENAI_API_KEY`, and `codex login status` returned `Not logged in` when run with fresh empty `HOME` and `CODEX_HOME`. The real characterization therefore stopped at its authentication-isolation prerequisite before creating a collector or launching a model task.
+
+| Scenario            | Target artifact | Control artifact | Target evidence | Control evidence | Result  |
+| ------------------- | --------------- | ---------------- | --------------- | ---------------- | ------- |
+| `neither-requested` | not observed    | not observed     | not observed    | not observed     | not run |
+| `target-requested`  | not observed    | not observed     | not observed    | not observed     | not run |
+| `control-requested` | not observed    | not observed     | not observed    | not observed     | not run |
+
+There is consequently no observed characterization enum and no evidence yet that `codex.skill.injected` did or did not distinguish the requested Skill from the unused control. The prior one-Skill direct result remains insufficient for that question. This document deliberately records the unsupported run instead of reusing saved Codex state, relaxing per-scenario isolation, or fabricating a matrix.
 
 ## Scenarios
 
@@ -135,7 +181,7 @@ The invocation has several distinct data paths:
 
 For every run, the local evidence collector is configured with only that scenario's exact synthetic Skill identifiers. It discards all non-allowlisted content before producing its public result and never exposes raw OTLP. Task stdout and stderr are discarded, and `--ephemeral` prevents session rollout persistence. The harness never records Codex prompts, responses, reasoning, transcripts, source content, tool inputs, tool outputs, full configuration, credentials, raw telemetry, analytics events, or temporary/user paths.
 
-The command intentionally reuses the caller's normal Codex authentication location because authentication is a prerequisite, but `--ignore-user-config` prevents the invocation from loading the user's `config.toml`. It never modifies `~/.codex/config.toml`. All telemetry changes are invocation-scoped. For the spawned child only, the experiment temporarily selects the runtime-evidence loopback endpoint as the effective metrics exporter; this may replace another effective metrics exporter for that process. No relay or fan-out behavior is implemented. The temporary git repository is the only mutated repository and is removed after the run.
+The original command intentionally reuses the caller's normal Codex authentication location because authentication is a prerequisite, but `--ignore-user-config` prevents the invocation from loading the user's `config.toml`. The two-Skill characterization instead requires an API key and gives every scenario fresh `HOME` and `CODEX_HOME` directories. Neither command modifies `~/.codex/config.toml`. All telemetry changes are invocation-scoped. For the spawned child only, the experiment temporarily selects the runtime-evidence loopback endpoint as the effective metrics exporter; this may replace another effective metrics exporter for that process. No relay or fan-out behavior is implemented. Temporary repositories are removed after their runs.
 
 The only supported evidence is collector-lifetime presence of an exact allowlisted Skill label from a valid, recorded, strictly positive `codex.skill.injected` datapoint with `status=ok`. The experiment does not claim Skill execution, occurrence counts, ordering, session or turn attribution, nesting edges, agent attribution, instruction compliance, task success, or causality.
 

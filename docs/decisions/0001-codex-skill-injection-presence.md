@@ -8,6 +8,8 @@ The completed Codex experiments established a narrow provider boundary that can 
 
 The experiments also showed why stronger language would be misleading. The counter is cumulative telemetry, not a lifecycle event. Its presence does not show that Codex read a particular file, followed instructions, completed a task, or associated a Skill with a particular agent or model thread. Branching and subagent experiments did not produce a sound basis for reconstructing order, counts, topology, or attribution.
 
+A controlled two-Skill characterization runner now defines three isolated direct scenarios with both a target and an unrelated control installed: neither requested, target requested, and control requested. Separate fixed artifact predicates can confirm whether each synthetic fixture's deterministic instruction completed, while separate allowlisted presence booleans record `codex.skill.injected`. On 2026-08-07 the installed `codex-cli 0.146.0` could not run this matrix under the required fresh `HOME` and `CODEX_HOME` isolation because no API key was available and saved-login authentication was unavailable in the empty locations. No matrix result was inferred from the earlier one-Skill run.
+
 ## Decision
 
 The first public API is explicitly Codex-specific:
@@ -30,7 +32,7 @@ Shared abstractions may be considered after another provider has a tested privac
 
 An accepted point is evidence only that the provider emitted `codex.skill.injected` with an allowlisted `skill`, exact `status=ok`, no OTLP `NO_RECORDED_VALUE` marker, and exactly one valid numeric counter representation whose value is strictly positive. Canonical decimal-string `asInt` and finite numeric `asDouble` representations are valid. The tested Codex exporter uses a JSON number for `asInt`, so an explicit provider-compatibility rule also accepts that form only when it is a finite safe integer. The API therefore uses `injectedSkills` and `skill-injected`.
 
-It does not call the evidence read, executed, selected, followed, or completed. Those terms imply filesystem access, model behavior, routing, or outcomes that the metric does not establish.
+It does not call the evidence read, executed, selected, followed, or completed. Those terms imply filesystem access, model behavior, routing, or outcomes that the metric does not establish. Until the controlled two-Skill matrix is actually observed, the repository has no evidence that the metric distinguishes a requested Skill from another available Skill. Even a future requested-only matrix would be empirical support for a selection-related signal in that tested CLI path, not a provider guarantee of instruction execution.
 
 ## Why the scope is one collector lifetime
 
