@@ -52,7 +52,14 @@ export interface CodexSkillEvidenceDiagnosticsSnapshot {
   readonly zeroTargetDataPoints: number;
   readonly negativeTargetDataPoints: number;
   readonly targetDataPointsWithNoRecordedValue: number;
-  readonly targetDataPointsWithUnsupportedOrMissingValue: number;
+  readonly targetDataPointsWithCanonicalIntValue: number;
+  readonly targetDataPointsWithJsonNumberIntValue: number;
+  readonly targetDataPointsWithDoubleValue: number;
+  readonly targetDataPointsWithMissingValue: number;
+  readonly targetDataPointsWithConflictingValues: number;
+  readonly targetDataPointsWithInvalidIntValue: number;
+  readonly targetDataPointsWithInvalidDoubleValue: number;
+  readonly targetDataPointsWithInvalidFlags: number;
   readonly acceptedAllowlistedSkillDataPoints: number;
   readonly unknownOrMissingSkillLabelDataPoints: number;
   readonly counterSaturationObserved: boolean;
@@ -92,7 +99,14 @@ interface MutableDiagnostics {
   zeroTargetDataPoints: number;
   negativeTargetDataPoints: number;
   targetDataPointsWithNoRecordedValue: number;
-  targetDataPointsWithUnsupportedOrMissingValue: number;
+  targetDataPointsWithCanonicalIntValue: number;
+  targetDataPointsWithJsonNumberIntValue: number;
+  targetDataPointsWithDoubleValue: number;
+  targetDataPointsWithMissingValue: number;
+  targetDataPointsWithConflictingValues: number;
+  targetDataPointsWithInvalidIntValue: number;
+  targetDataPointsWithInvalidDoubleValue: number;
+  targetDataPointsWithInvalidFlags: number;
   acceptedAllowlistedSkillDataPoints: number;
   unknownOrMissingSkillLabelDataPoints: number;
   counterSaturationObserved: boolean;
@@ -106,7 +120,7 @@ type RecordedValueSign = "positive" | "zero" | "negative";
 type RecordedValueObservation =
   | { readonly kind: "recorded"; readonly sign: RecordedValueSign }
   | { readonly kind: "no-recorded-value" }
-  | { readonly kind: "unsupported-or-missing" };
+  | { readonly kind: "missing" };
 type DecodeFailureCounter =
   | "requestReadFailures"
   | "requestBodyTooLargeFailures"
@@ -135,7 +149,14 @@ function createZeroDiagnostics(): MutableDiagnostics {
     zeroTargetDataPoints: 0,
     negativeTargetDataPoints: 0,
     targetDataPointsWithNoRecordedValue: 0,
-    targetDataPointsWithUnsupportedOrMissingValue: 0,
+    targetDataPointsWithCanonicalIntValue: 0,
+    targetDataPointsWithJsonNumberIntValue: 0,
+    targetDataPointsWithDoubleValue: 0,
+    targetDataPointsWithMissingValue: 0,
+    targetDataPointsWithConflictingValues: 0,
+    targetDataPointsWithInvalidIntValue: 0,
+    targetDataPointsWithInvalidDoubleValue: 0,
+    targetDataPointsWithInvalidFlags: 0,
     acceptedAllowlistedSkillDataPoints: 0,
     unknownOrMissingSkillLabelDataPoints: 0,
     counterSaturationObserved: false,
@@ -174,7 +195,14 @@ function mergeDiagnostics(
     "zeroTargetDataPoints",
     "negativeTargetDataPoints",
     "targetDataPointsWithNoRecordedValue",
-    "targetDataPointsWithUnsupportedOrMissingValue",
+    "targetDataPointsWithCanonicalIntValue",
+    "targetDataPointsWithJsonNumberIntValue",
+    "targetDataPointsWithDoubleValue",
+    "targetDataPointsWithMissingValue",
+    "targetDataPointsWithConflictingValues",
+    "targetDataPointsWithInvalidIntValue",
+    "targetDataPointsWithInvalidDoubleValue",
+    "targetDataPointsWithInvalidFlags",
     "acceptedAllowlistedSkillDataPoints",
     "unknownOrMissingSkillLabelDataPoints",
   ] as const) {
@@ -298,7 +326,10 @@ function hasOwn(record: UnknownRecord, key: string): boolean {
   return Object.prototype.hasOwnProperty.call(record, key);
 }
 
-function hasNoRecordedValueFlag(point: UnknownRecord): boolean | undefined {
+function readNoRecordedValueFlag(
+  point: UnknownRecord,
+  diagnostics: MutableDiagnostics,
+): boolean {
   if (!hasOwn(point, "flags")) {
     return false;
   }
@@ -308,56 +339,92 @@ function hasNoRecordedValueFlag(point: UnknownRecord): boolean | undefined {
     point.flags < 0 ||
     point.flags > MAX_UINT32
   ) {
-    return undefined;
+    incrementDiagnostic(diagnostics, "targetDataPointsWithInvalidFlags");
+    throw malformedPayload();
   }
   return point.flags % 2 === NO_RECORDED_VALUE_FLAG;
 }
 
+function readCodexCompatibleJsonNumberInt(
+  value: unknown,
+): RecordedValueSign | undefined {
+  if (typeof value !== "number" || !Number.isSafeInteger(value)) {
+    return undefined;
+  }
+  return value > 0 ? "positive" : value === 0 ? "zero" : "negative";
+}
+
 function readRecordedValueObservation(
   point: UnknownRecord,
+  diagnostics: MutableDiagnostics,
 ): RecordedValueObservation {
-  const noRecordedValue = hasNoRecordedValueFlag(point);
-  if (noRecordedValue === undefined) {
-    return { kind: "unsupported-or-missing" };
-  }
-  if (noRecordedValue) {
-    return { kind: "no-recorded-value" };
-  }
+  const noRecordedValue = readNoRecordedValueFlag(point, diagnostics);
   const hasIntegerValue = hasOwn(point, "asInt");
   const hasDoubleValue = hasOwn(point, "asDouble");
-  if (hasIntegerValue === hasDoubleValue) {
-    return { kind: "unsupported-or-missing" };
+  if (hasIntegerValue && hasDoubleValue) {
+    incrementDiagnostic(diagnostics, "targetDataPointsWithConflictingValues");
+    throw malformedPayload();
+  }
+  if (!hasIntegerValue && !hasDoubleValue) {
+    incrementDiagnostic(diagnostics, "targetDataPointsWithMissingValue");
+    if (noRecordedValue) {
+      return { kind: "no-recorded-value" };
+    }
+    return { kind: "missing" };
   }
 
+  let sign: RecordedValueSign;
   if (hasIntegerValue) {
+    if (typeof point.asInt === "string") {
+      if (point.asInt.length > 20 || !decimalInteger.test(point.asInt)) {
+        incrementDiagnostic(diagnostics, "targetDataPointsWithInvalidIntValue");
+        throw malformedPayload();
+      }
+      const value = BigInt(point.asInt);
+      if (value < MIN_INT64 || value > MAX_INT64) {
+        incrementDiagnostic(diagnostics, "targetDataPointsWithInvalidIntValue");
+        throw malformedPayload();
+      }
+      incrementDiagnostic(diagnostics, "targetDataPointsWithCanonicalIntValue");
+      sign = value > 0n ? "positive" : value === 0n ? "zero" : "negative";
+    } else {
+      const compatibleSign = readCodexCompatibleJsonNumberInt(point.asInt);
+      if (compatibleSign === undefined) {
+        incrementDiagnostic(diagnostics, "targetDataPointsWithInvalidIntValue");
+        throw malformedPayload();
+      }
+      incrementDiagnostic(
+        diagnostics,
+        "targetDataPointsWithJsonNumberIntValue",
+      );
+      sign = compatibleSign;
+    }
+  } else {
     if (
-      typeof point.asInt !== "string" ||
-      point.asInt.length > 20 ||
-      !decimalInteger.test(point.asInt)
+      typeof point.asDouble !== "number" ||
+      !Number.isFinite(point.asDouble)
     ) {
-      return { kind: "unsupported-or-missing" };
+      incrementDiagnostic(
+        diagnostics,
+        "targetDataPointsWithInvalidDoubleValue",
+      );
+      throw malformedPayload();
     }
-    const value = BigInt(point.asInt);
-    if (value < MIN_INT64 || value > MAX_INT64) {
-      return { kind: "unsupported-or-missing" };
-    }
-    return {
-      kind: "recorded",
-      sign: value > 0n ? "positive" : value === 0n ? "zero" : "negative",
-    };
-  }
-
-  if (typeof point.asDouble !== "number" || !Number.isFinite(point.asDouble)) {
-    return { kind: "unsupported-or-missing" };
-  }
-  return {
-    kind: "recorded",
-    sign:
+    incrementDiagnostic(diagnostics, "targetDataPointsWithDoubleValue");
+    sign =
       point.asDouble > 0
         ? "positive"
         : point.asDouble === 0
           ? "zero"
-          : "negative",
+          : "negative";
+  }
+
+  if (noRecordedValue) {
+    return { kind: "no-recorded-value" };
+  }
+  return {
+    kind: "recorded",
+    sign,
   };
 }
 
@@ -396,7 +463,6 @@ function parseRequestObservation(
   const root = requireRecord(payload);
   const injectedSkills = new Set<string>();
   let unrecognizedSkillObserved = false;
-  let unsupportedValueObserved = false;
 
   for (const resourceCandidate of requireArray(root.resourceMetrics)) {
     incrementDiagnostic(diagnostics, "resourceMetricsEntriesInspected");
@@ -445,7 +511,10 @@ function parseRequestObservation(
             );
           }
 
-          const valueObservation = readRecordedValueObservation(point);
+          const valueObservation = readRecordedValueObservation(
+            point,
+            diagnostics,
+          );
           if (valueObservation.kind === "no-recorded-value") {
             incrementDiagnostic(
               diagnostics,
@@ -453,12 +522,7 @@ function parseRequestObservation(
             );
             continue;
           }
-          if (valueObservation.kind === "unsupported-or-missing") {
-            incrementDiagnostic(
-              diagnostics,
-              "targetDataPointsWithUnsupportedOrMissingValue",
-            );
-            unsupportedValueObserved = true;
+          if (valueObservation.kind === "missing") {
             continue;
           }
           const valueSign = valueObservation.sign;
@@ -487,11 +551,6 @@ function parseRequestObservation(
     }
   }
 
-  if (unsupportedValueObserved) {
-    injectedSkills.clear();
-    unrecognizedSkillObserved = false;
-    diagnostics.acceptedAllowlistedSkillDataPoints = 0;
-  }
   return { injectedSkills, unrecognizedSkillObserved };
 }
 
@@ -651,6 +710,7 @@ export async function createCodexSkillEvidenceCollector(
           response.writeHead(200, { "content-type": "application/json" });
           response.end("{}\n");
         } catch {
+          requestDiagnostics.acceptedAllowlistedSkillDataPoints = 0;
           mergeDiagnostics(diagnostics, requestDiagnostics);
           recordDecodeFailure("otlpValidationFailures");
           response.writeHead(400).end();
@@ -735,8 +795,22 @@ export async function createCodexSkillEvidenceCollector(
       negativeTargetDataPoints: diagnostics.negativeTargetDataPoints,
       targetDataPointsWithNoRecordedValue:
         diagnostics.targetDataPointsWithNoRecordedValue,
-      targetDataPointsWithUnsupportedOrMissingValue:
-        diagnostics.targetDataPointsWithUnsupportedOrMissingValue,
+      targetDataPointsWithCanonicalIntValue:
+        diagnostics.targetDataPointsWithCanonicalIntValue,
+      targetDataPointsWithJsonNumberIntValue:
+        diagnostics.targetDataPointsWithJsonNumberIntValue,
+      targetDataPointsWithDoubleValue:
+        diagnostics.targetDataPointsWithDoubleValue,
+      targetDataPointsWithMissingValue:
+        diagnostics.targetDataPointsWithMissingValue,
+      targetDataPointsWithConflictingValues:
+        diagnostics.targetDataPointsWithConflictingValues,
+      targetDataPointsWithInvalidIntValue:
+        diagnostics.targetDataPointsWithInvalidIntValue,
+      targetDataPointsWithInvalidDoubleValue:
+        diagnostics.targetDataPointsWithInvalidDoubleValue,
+      targetDataPointsWithInvalidFlags:
+        diagnostics.targetDataPointsWithInvalidFlags,
       acceptedAllowlistedSkillDataPoints:
         diagnostics.acceptedAllowlistedSkillDataPoints,
       unknownOrMissingSkillLabelDataPoints:

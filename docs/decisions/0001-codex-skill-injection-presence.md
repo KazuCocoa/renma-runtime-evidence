@@ -28,7 +28,7 @@ Shared abstractions may be considered after another provider has a tested privac
 
 ## Why the term is injection presence
 
-An accepted point is evidence only that the provider emitted `codex.skill.injected` with an allowlisted `skill`, exact `status=ok`, no OTLP `NO_RECORDED_VALUE` marker, and exactly one valid numeric counter representation whose value is strictly positive. The API therefore uses `injectedSkills` and `skill-injected`.
+An accepted point is evidence only that the provider emitted `codex.skill.injected` with an allowlisted `skill`, exact `status=ok`, no OTLP `NO_RECORDED_VALUE` marker, and exactly one valid numeric counter representation whose value is strictly positive. Canonical decimal-string `asInt` and finite numeric `asDouble` representations are valid. The tested Codex exporter uses a JSON number for `asInt`, so an explicit provider-compatibility rule also accepts that form only when it is a finite safe integer. The API therefore uses `injectedSkills` and `skill-injected`.
 
 It does not call the evidence read, executed, selected, followed, or completed. Those terms imply filesystem access, model behavior, routing, or outcomes that the metric does not establish.
 
@@ -52,7 +52,7 @@ A future caller integration may choose to compare a snapshot with Renma data, bu
 
 ## Privacy and lifecycle consequences
 
-The caller allowlist is validated before the loopback server opens. Raw requests are bounded, parsed only in memory, atomically reduced to finite state, and cleared. Counter magnitudes and datapoint flags are inspected only to enforce recorded, strictly positive presence and are then discarded without retention, exposure, logging, hashing, or encoding. The separate diagnostics retain only the datapoint's bounded sign category. Unknown labels are compared and discarded under the same restrictions; diagnostics can retain only a saturating count of unknown-or-missing labels. Shutdown stops new connections, drains accepted requests, and force-closes active connections after the documented grace period.
+The caller allowlist is validated before the loopback server opens. Raw requests are bounded, parsed only in memory, atomically reduced to finite state, and cleared. Counter magnitudes and datapoint flags are inspected only to enforce recorded, strictly positive presence and are then discarded without retention, exposure, logging, hashing, or encoding. The separate diagnostics retain only bounded value-shape and sign categories. A missing numeric field is decoded but ineligible for evidence. Conflicting numeric fields, invalid types or syntax, out-of-range integers, fractional or unsafe JSON-number integers, non-finite doubles, and invalid flags fail the entire request without partial evidence. Unknown labels are compared and discarded under the same restrictions; diagnostics can retain only a saturating count of unknown-or-missing labels. Shutdown stops new connections, drains accepted requests, and force-closes active connections after the documented grace period.
 
 This produces a deliberately small API at the cost of excluding raw event callbacks, debugging payloads, automatic persistence, process management, and generic telemetry access.
 

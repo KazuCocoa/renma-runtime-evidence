@@ -75,7 +75,7 @@ The diagnostics snapshot is a separate immutable receiver result containing only
 2. `request-decode-failure`: a request arrived, but none decoded successfully. Fixed counters further distinguish request-read, body-size, JSON-syntax, and OTLP-validation failures without retaining input.
 3. `decoded-without-metric-datapoints`: valid OTLP metrics arrived, but no metric datapoints were present. This also covers an observed target metric with an empty datapoint list.
 4. `non-target-metric-datapoints-only`: ordinary datapoints arrived, but no `codex.skill.injected` datapoints did. This means only that the tested Codex version and Skill-loading path did not emit the target metric; it is not proof that the Skill was not used.
-5. `target-datapoints-rejected`: target datapoints arrived, but none met all current status, recorded-positive-value, and allowlisted-label evidence rules. Only bounded status, numeric-sign, and unknown-or-missing-label counts are shown.
+5. `target-datapoints-rejected`: target datapoints arrived, but none met all current status, recorded-positive-value, and allowlisted-label evidence rules. Only bounded status, value-shape, numeric-sign, and unknown-or-missing-label counts are shown.
 6. `accepted-skill-evidence`: at least one target datapoint satisfied every current evidence rule.
 
 Diagnostic datapoint counts are transport counts, not provider event counts. Cumulative exports can repeat the same counter state.
@@ -103,18 +103,25 @@ The authenticated direct-only baseline ran with `codex-cli 0.146.0`. Its command
   "targetDataPointsWithStatusOk": 1,
   "targetDataPointsWithStatusError": 0,
   "targetDataPointsWithOtherOrMissingStatus": 0,
-  "positiveTargetDataPoints": 0,
+  "positiveTargetDataPoints": 1,
   "zeroTargetDataPoints": 0,
   "negativeTargetDataPoints": 0,
   "targetDataPointsWithNoRecordedValue": 0,
-  "targetDataPointsWithUnsupportedOrMissingValue": 1,
-  "acceptedAllowlistedSkillDataPoints": 0,
+  "targetDataPointsWithCanonicalIntValue": 0,
+  "targetDataPointsWithJsonNumberIntValue": 1,
+  "targetDataPointsWithDoubleValue": 0,
+  "targetDataPointsWithMissingValue": 0,
+  "targetDataPointsWithConflictingValues": 0,
+  "targetDataPointsWithInvalidIntValue": 0,
+  "targetDataPointsWithInvalidDoubleValue": 0,
+  "targetDataPointsWithInvalidFlags": 0,
+  "acceptedAllowlistedSkillDataPoints": 1,
   "unknownOrMissingSkillLabelDataPoints": 0,
   "counterSaturationObserved": false
 }
 ```
 
-Classification: `target-datapoints-rejected` (stage 5). The target metric arrived with exact `status=ok` and an allowlisted Skill label, but its value had no numeric representation supported by the current public evidence rules. Consequently the public presence snapshot was empty. This does not show that the Skill was unused, and it does not justify an execution, occurrence-count, ordering, session, nesting-edge, agent-attribution, causality, instruction-compliance, or task-success claim. No raw value, payload, arbitrary metric or attribute data, identifier, prompt, response, transcript, or tool data was retained.
+Classification: `accepted-skill-evidence` (stage 6). A bounded diagnostic run first established that the target metric arrived with exact `status=ok`, an allowlisted Skill label, and `asInt` encoded as a positive safe JSON number. The final run applied the explicit Codex provider-compatibility rule for that exact shape and returned the direct synthetic Skill in the public presence snapshot. Fractional, unsafe, conflicting, or otherwise malformed numeric forms still fail the whole request. This result does not justify an execution, occurrence-count, ordering, session, nesting-edge, agent-attribution, causality, instruction-compliance, or task-success claim. No numeric magnitude, raw value, payload, arbitrary metric or attribute data, identifier, prompt, response, transcript, or tool data was retained.
 
 ## Privacy, traffic, and evidence boundary
 

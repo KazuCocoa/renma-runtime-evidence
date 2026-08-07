@@ -22,9 +22,9 @@ const snapshot = await collector.closeAndSnapshot();
 const diagnostics = collector.diagnosticsSnapshot();
 ```
 
-The public evidence snapshot is provider-specific and reports only sorted, deduplicated injection presence plus a boolean for an otherwise valid successful positive label outside the caller allowlist. A datapoint marked OTLP `NO_RECORDED_VALUE`, or with a zero or negative counter value, cannot produce either form of presence. Numeric magnitudes and flags are discarded after structural validation and are never retained, exposed, logged, hashed, or encoded. The public snapshot has no raw-event callback and contains no count, order, timestamp, topology, agent attribution, unknown label, task output, or automatic persistence.
+The public evidence snapshot is provider-specific and reports only sorted, deduplicated injection presence plus a boolean for an otherwise valid successful positive label outside the caller allowlist. A datapoint marked OTLP `NO_RECORDED_VALUE`, without a numeric value, or with a zero or negative counter value cannot produce either form of presence. Canonical decimal-string `asInt` values and finite numeric `asDouble` values are supported. Because the tested Codex exporter emits `asInt` as a JSON number, the provider-specific compatibility path also accepts only finite safe integers in that field; fractional and unsafe numbers remain malformed. Numeric magnitudes and flags are discarded after structural validation and are never retained, exposed, logged, hashed, or encoded. The public snapshot has no raw-event callback and contains no count, order, timestamp, topology, agent attribution, unknown label, task output, or automatic persistence.
 
-`diagnosticsSnapshot()` returns a separate immutable transport snapshot. Its counters distinguish requests; successful decodes; request-read, body-size, JSON-syntax, and OTLP-validation failures; inspected OTLP container levels; all metric datapoints; exact target-metric datapoints; bounded status, numeric-sign, no-recorded-value, and unsupported-or-missing-value categories; accepted allowlisted datapoints; and unknown-or-missing Skill-label datapoints. Every counter saturates at `4294967295`, with a boolean indicating saturation. The diagnostics contain no metric or attribute strings, unknown values, identifiers, payloads, or public Skill evidence, and they are never nested into `closeAndSnapshot()`. Diagnostic datapoint counts are transport observations: cumulative OTLP exports may repeat the same counter state, so they are not Skill injection occurrence counts.
+`diagnosticsSnapshot()` returns a separate immutable transport snapshot. Its counters distinguish requests; successful decodes; request-read, body-size, JSON-syntax, and OTLP-validation failures; inspected OTLP container levels; all metric datapoints; exact target-metric datapoints; bounded status and numeric-sign categories; no-recorded-value; canonical integer, provider-compatible JSON-number integer, double, and missing-value shapes; conflicting or invalid numeric shapes; invalid flags; accepted allowlisted datapoints; and unknown-or-missing Skill-label datapoints. Every counter saturates at `4294967295`, with a boolean indicating saturation. Structurally malformed values fail the whole request with HTTP 400, while an absent numeric field remains a valid but evidence-ineligible protobuf/OTLP compatibility case. The diagnostics contain no metric or attribute strings, numeric magnitudes, unknown values, identifiers, payloads, or public Skill evidence, and they are never nested into `closeAndSnapshot()`. Diagnostic datapoint counts are transport observations: cumulative OTLP exports may repeat the same counter state, so they are not Skill injection occurrence counts.
 
 The allowlist accepts 1–128 input entries. Exact duplicates within that limit are deduplicated. Each well-formed name must contain 1–256 Unicode scalar values, encode to at most 1,024 UTF-8 bytes, and contain no C0, DEL, or C1 control character. The collector binds only to `127.0.0.1`, accepts only `POST /v1/metrics`, caps requests at 2 MiB, and uses a five-second graceful shutdown window before force-closing active connections.
 
@@ -107,11 +107,12 @@ now exercises the public collector with a real authenticated Codex CLI. Run it
 explicitly with
 `npm run test:integration:codex -- --allow-codex-analytics --direct-only` to
 classify the direct pipeline before spending usage on any other scenario. On
-2026-08-07, `codex-cli 0.146.0` sent a valid request with one exact target
-datapoint whose status and Skill label matched, but whose numeric representation
-was unsupported or missing under the current evidence rules. The result was
-therefore stage 5, `target-datapoints-rejected`, with an empty public presence
-snapshot; this is not evidence that the Skill was unused. The mandatory flag
+2026-08-07, bounded shape diagnostics showed that `codex-cli 0.146.0` emitted
+the target point's `asInt` as a positive safe JSON number. After applying only
+that explicit provider-compatibility rule, the direct-only result was stage 6,
+`accepted-skill-evidence`, with the exact allowlisted synthetic Skill in the
+public presence snapshot. This remains presence evidence rather than an
+execution claim. The mandatory flag
 acknowledges that enabling the configured loopback OTel metrics exporter may
 also cause Codex to send separate analytics events to OpenAI. The loopback
 endpoint does not control that separate path. Ordinary tests, package
