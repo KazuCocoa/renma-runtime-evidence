@@ -30,8 +30,44 @@ export interface CodexSkillPresenceSnapshot {
   readonly unrecognizedSkillObserved: boolean;
 }
 
+export interface CodexSkillEvidenceDiagnosticsSnapshot {
+  readonly schemaVersion: 1;
+  readonly otlpMetricsRequestsReceived: number;
+  readonly successfullyDecodedRequests: number;
+  readonly decodeFailures: number;
+  readonly requestReadFailures: number;
+  readonly requestBodyTooLargeFailures: number;
+  readonly jsonParseFailures: number;
+  readonly otlpValidationFailures: number;
+  readonly resourceMetricsEntriesInspected: number;
+  readonly scopeMetricsEntriesInspected: number;
+  readonly metricsInspected: number;
+  readonly metricDataPointsInspected: number;
+  readonly targetMetricsObserved: number;
+  readonly targetDataPointsObserved: number;
+  readonly targetDataPointsWithStatusOk: number;
+  readonly targetDataPointsWithStatusError: number;
+  readonly targetDataPointsWithOtherOrMissingStatus: number;
+  readonly positiveTargetDataPoints: number;
+  readonly zeroTargetDataPoints: number;
+  readonly negativeTargetDataPoints: number;
+  readonly targetDataPointsWithNoRecordedValue: number;
+  readonly targetDataPointsWithCanonicalIntValue: number;
+  readonly targetDataPointsWithJsonNumberIntValue: number;
+  readonly targetDataPointsWithDoubleValue: number;
+  readonly targetDataPointsWithMissingValue: number;
+  readonly targetDataPointsWithConflictingValues: number;
+  readonly targetDataPointsWithInvalidIntValue: number;
+  readonly targetDataPointsWithInvalidDoubleValue: number;
+  readonly targetDataPointsWithInvalidFlags: number;
+  readonly acceptedAllowlistedSkillDataPoints: number;
+  readonly unknownOrMissingSkillLabelDataPoints: number;
+  readonly counterSaturationObserved: boolean;
+}
+
 export interface CodexSkillEvidenceCollector {
   readonly endpoint: string;
+  diagnosticsSnapshot(): CodexSkillEvidenceDiagnosticsSnapshot;
   closeAndSnapshot(): Promise<CodexSkillPresenceSnapshot>;
 }
 
@@ -40,6 +76,140 @@ type UnknownRecord = Record<string, unknown>;
 interface ParsedRequestObservation {
   injectedSkills: Set<string>;
   unrecognizedSkillObserved: boolean;
+}
+
+interface MutableDiagnostics {
+  otlpMetricsRequestsReceived: number;
+  successfullyDecodedRequests: number;
+  decodeFailures: number;
+  requestReadFailures: number;
+  requestBodyTooLargeFailures: number;
+  jsonParseFailures: number;
+  otlpValidationFailures: number;
+  resourceMetricsEntriesInspected: number;
+  scopeMetricsEntriesInspected: number;
+  metricsInspected: number;
+  metricDataPointsInspected: number;
+  targetMetricsObserved: number;
+  targetDataPointsObserved: number;
+  targetDataPointsWithStatusOk: number;
+  targetDataPointsWithStatusError: number;
+  targetDataPointsWithOtherOrMissingStatus: number;
+  positiveTargetDataPoints: number;
+  zeroTargetDataPoints: number;
+  negativeTargetDataPoints: number;
+  targetDataPointsWithNoRecordedValue: number;
+  targetDataPointsWithCanonicalIntValue: number;
+  targetDataPointsWithJsonNumberIntValue: number;
+  targetDataPointsWithDoubleValue: number;
+  targetDataPointsWithMissingValue: number;
+  targetDataPointsWithConflictingValues: number;
+  targetDataPointsWithInvalidIntValue: number;
+  targetDataPointsWithInvalidDoubleValue: number;
+  targetDataPointsWithInvalidFlags: number;
+  acceptedAllowlistedSkillDataPoints: number;
+  unknownOrMissingSkillLabelDataPoints: number;
+  counterSaturationObserved: boolean;
+}
+
+type DiagnosticCounter = Exclude<
+  keyof MutableDiagnostics,
+  "counterSaturationObserved"
+>;
+type RecordedValueSign = "positive" | "zero" | "negative";
+type RecordedValueObservation =
+  | { readonly kind: "recorded"; readonly sign: RecordedValueSign }
+  | { readonly kind: "no-recorded-value" }
+  | { readonly kind: "missing" };
+type DecodeFailureCounter =
+  | "requestReadFailures"
+  | "requestBodyTooLargeFailures"
+  | "jsonParseFailures"
+  | "otlpValidationFailures";
+
+function createZeroDiagnostics(): MutableDiagnostics {
+  return {
+    otlpMetricsRequestsReceived: 0,
+    successfullyDecodedRequests: 0,
+    decodeFailures: 0,
+    requestReadFailures: 0,
+    requestBodyTooLargeFailures: 0,
+    jsonParseFailures: 0,
+    otlpValidationFailures: 0,
+    resourceMetricsEntriesInspected: 0,
+    scopeMetricsEntriesInspected: 0,
+    metricsInspected: 0,
+    metricDataPointsInspected: 0,
+    targetMetricsObserved: 0,
+    targetDataPointsObserved: 0,
+    targetDataPointsWithStatusOk: 0,
+    targetDataPointsWithStatusError: 0,
+    targetDataPointsWithOtherOrMissingStatus: 0,
+    positiveTargetDataPoints: 0,
+    zeroTargetDataPoints: 0,
+    negativeTargetDataPoints: 0,
+    targetDataPointsWithNoRecordedValue: 0,
+    targetDataPointsWithCanonicalIntValue: 0,
+    targetDataPointsWithJsonNumberIntValue: 0,
+    targetDataPointsWithDoubleValue: 0,
+    targetDataPointsWithMissingValue: 0,
+    targetDataPointsWithConflictingValues: 0,
+    targetDataPointsWithInvalidIntValue: 0,
+    targetDataPointsWithInvalidDoubleValue: 0,
+    targetDataPointsWithInvalidFlags: 0,
+    acceptedAllowlistedSkillDataPoints: 0,
+    unknownOrMissingSkillLabelDataPoints: 0,
+    counterSaturationObserved: false,
+  };
+}
+
+function incrementDiagnostic(
+  diagnostics: MutableDiagnostics,
+  counter: DiagnosticCounter,
+  amount = 1,
+): void {
+  const remaining = MAX_UINT32 - diagnostics[counter];
+  if (amount > remaining) {
+    diagnostics[counter] = MAX_UINT32;
+    diagnostics.counterSaturationObserved = true;
+  } else {
+    diagnostics[counter] += amount;
+  }
+}
+
+function mergeDiagnostics(
+  diagnostics: MutableDiagnostics,
+  requestDiagnostics: MutableDiagnostics,
+): void {
+  for (const counter of [
+    "resourceMetricsEntriesInspected",
+    "scopeMetricsEntriesInspected",
+    "metricsInspected",
+    "metricDataPointsInspected",
+    "targetMetricsObserved",
+    "targetDataPointsObserved",
+    "targetDataPointsWithStatusOk",
+    "targetDataPointsWithStatusError",
+    "targetDataPointsWithOtherOrMissingStatus",
+    "positiveTargetDataPoints",
+    "zeroTargetDataPoints",
+    "negativeTargetDataPoints",
+    "targetDataPointsWithNoRecordedValue",
+    "targetDataPointsWithCanonicalIntValue",
+    "targetDataPointsWithJsonNumberIntValue",
+    "targetDataPointsWithDoubleValue",
+    "targetDataPointsWithMissingValue",
+    "targetDataPointsWithConflictingValues",
+    "targetDataPointsWithInvalidIntValue",
+    "targetDataPointsWithInvalidDoubleValue",
+    "targetDataPointsWithInvalidFlags",
+    "acceptedAllowlistedSkillDataPoints",
+    "unknownOrMissingSkillLabelDataPoints",
+  ] as const) {
+    incrementDiagnostic(diagnostics, counter, requestDiagnostics[counter]);
+  }
+  diagnostics.counterSaturationObserved ||=
+    requestDiagnostics.counterSaturationObserved;
 }
 
 function malformedPayload(): Error {
@@ -123,16 +293,19 @@ function validateAllowedSkills(options: unknown): Set<string> {
   }
 }
 
-function readRequiredStringAttribute(
+function readOptionalStringAttribute(
   attributes: unknown[],
   requiredKey: "skill" | "status",
-): string {
+): string | undefined {
   const matchingAttributes: UnknownRecord[] = [];
   for (const candidate of attributes) {
     const attribute = requireRecord(candidate);
     if (attribute.key === requiredKey) {
       matchingAttributes.push(attribute);
     }
+  }
+  if (matchingAttributes.length === 0) {
+    return undefined;
   }
   if (matchingAttributes.length !== 1) {
     throw malformedPayload();
@@ -153,7 +326,10 @@ function hasOwn(record: UnknownRecord, key: string): boolean {
   return Object.prototype.hasOwnProperty.call(record, key);
 }
 
-function hasNoRecordedValueFlag(point: UnknownRecord): boolean {
+function readNoRecordedValueFlag(
+  point: UnknownRecord,
+  diagnostics: MutableDiagnostics,
+): boolean {
   if (!hasOwn(point, "flags")) {
     return false;
   }
@@ -163,78 +339,211 @@ function hasNoRecordedValueFlag(point: UnknownRecord): boolean {
     point.flags < 0 ||
     point.flags > MAX_UINT32
   ) {
+    incrementDiagnostic(diagnostics, "targetDataPointsWithInvalidFlags");
     throw malformedPayload();
   }
   return point.flags % 2 === NO_RECORDED_VALUE_FLAG;
 }
 
-function hasStrictlyPositiveValue(point: UnknownRecord): boolean {
+function readCodexCompatibleJsonNumberInt(
+  value: unknown,
+): RecordedValueSign | undefined {
+  if (typeof value !== "number" || !Number.isSafeInteger(value)) {
+    return undefined;
+  }
+  return value > 0 ? "positive" : value === 0 ? "zero" : "negative";
+}
+
+function readRecordedValueObservation(
+  point: UnknownRecord,
+  diagnostics: MutableDiagnostics,
+): RecordedValueObservation {
+  const noRecordedValue = readNoRecordedValueFlag(point, diagnostics);
   const hasIntegerValue = hasOwn(point, "asInt");
   const hasDoubleValue = hasOwn(point, "asDouble");
-  if (hasIntegerValue === hasDoubleValue) {
+  if (hasIntegerValue && hasDoubleValue) {
+    incrementDiagnostic(diagnostics, "targetDataPointsWithConflictingValues");
     throw malformedPayload();
   }
+  if (!hasIntegerValue && !hasDoubleValue) {
+    incrementDiagnostic(diagnostics, "targetDataPointsWithMissingValue");
+    if (noRecordedValue) {
+      return { kind: "no-recorded-value" };
+    }
+    return { kind: "missing" };
+  }
 
+  let sign: RecordedValueSign;
   if (hasIntegerValue) {
+    if (typeof point.asInt === "string") {
+      if (point.asInt.length > 20 || !decimalInteger.test(point.asInt)) {
+        incrementDiagnostic(diagnostics, "targetDataPointsWithInvalidIntValue");
+        throw malformedPayload();
+      }
+      const value = BigInt(point.asInt);
+      if (value < MIN_INT64 || value > MAX_INT64) {
+        incrementDiagnostic(diagnostics, "targetDataPointsWithInvalidIntValue");
+        throw malformedPayload();
+      }
+      incrementDiagnostic(diagnostics, "targetDataPointsWithCanonicalIntValue");
+      sign = value > 0n ? "positive" : value === 0n ? "zero" : "negative";
+    } else {
+      const compatibleSign = readCodexCompatibleJsonNumberInt(point.asInt);
+      if (compatibleSign === undefined) {
+        incrementDiagnostic(diagnostics, "targetDataPointsWithInvalidIntValue");
+        throw malformedPayload();
+      }
+      incrementDiagnostic(
+        diagnostics,
+        "targetDataPointsWithJsonNumberIntValue",
+      );
+      sign = compatibleSign;
+    }
+  } else {
     if (
-      typeof point.asInt !== "string" ||
-      point.asInt.length > 20 ||
-      !decimalInteger.test(point.asInt)
+      typeof point.asDouble !== "number" ||
+      !Number.isFinite(point.asDouble)
     ) {
+      incrementDiagnostic(
+        diagnostics,
+        "targetDataPointsWithInvalidDoubleValue",
+      );
       throw malformedPayload();
     }
-    const value = BigInt(point.asInt);
-    if (value < MIN_INT64 || value > MAX_INT64) {
-      throw malformedPayload();
-    }
-    return value > 0n;
+    incrementDiagnostic(diagnostics, "targetDataPointsWithDoubleValue");
+    sign =
+      point.asDouble > 0
+        ? "positive"
+        : point.asDouble === 0
+          ? "zero"
+          : "negative";
   }
 
-  if (typeof point.asDouble !== "number" || !Number.isFinite(point.asDouble)) {
-    throw malformedPayload();
+  if (noRecordedValue) {
+    return { kind: "no-recorded-value" };
   }
-  return point.asDouble > 0;
+  return {
+    kind: "recorded",
+    sign,
+  };
+}
+
+function inspectMetricDataPoints(
+  metric: UnknownRecord,
+  diagnostics: MutableDiagnostics,
+): void {
+  for (const aggregationName of [
+    "gauge",
+    "sum",
+    "histogram",
+    "exponentialHistogram",
+    "summary",
+  ] as const) {
+    if (!hasOwn(metric, aggregationName)) {
+      continue;
+    }
+    const aggregation = requireRecord(metric[aggregationName]);
+    const dataPoints =
+      aggregation.dataPoints === undefined
+        ? []
+        : requireArray(aggregation.dataPoints);
+    incrementDiagnostic(
+      diagnostics,
+      "metricDataPointsInspected",
+      dataPoints.length,
+    );
+  }
 }
 
 function parseRequestObservation(
   payload: unknown,
   allowedSkills: ReadonlySet<string>,
+  diagnostics: MutableDiagnostics,
 ): ParsedRequestObservation {
   const root = requireRecord(payload);
   const injectedSkills = new Set<string>();
   let unrecognizedSkillObserved = false;
 
   for (const resourceCandidate of requireArray(root.resourceMetrics)) {
+    incrementDiagnostic(diagnostics, "resourceMetricsEntriesInspected");
     const resourceMetric = requireRecord(resourceCandidate);
     for (const scopeCandidate of requireArray(resourceMetric.scopeMetrics)) {
+      incrementDiagnostic(diagnostics, "scopeMetricsEntriesInspected");
       const scopeMetric = requireRecord(scopeCandidate);
       for (const metricCandidate of requireArray(scopeMetric.metrics)) {
+        incrementDiagnostic(diagnostics, "metricsInspected");
         const metric = requireRecord(metricCandidate);
         if (typeof metric.name !== "string") {
           throw malformedPayload();
         }
+        inspectMetricDataPoints(metric, diagnostics);
         if (metric.name !== TARGET_METRIC_NAME) {
           continue;
         }
+
+        incrementDiagnostic(diagnostics, "targetMetricsObserved");
 
         const sum = requireRecord(metric.sum);
         const dataPoints =
           sum.dataPoints === undefined ? [] : requireArray(sum.dataPoints);
         for (const pointCandidate of dataPoints) {
+          incrementDiagnostic(diagnostics, "targetDataPointsObserved");
           const point = requireRecord(pointCandidate);
           const attributes = requireArray(point.attributes);
-          const skill = readRequiredStringAttribute(attributes, "skill");
-          const status = readRequiredStringAttribute(attributes, "status");
-          if (hasNoRecordedValueFlag(point)) {
-            continue;
-          }
-          const hasPresence = hasStrictlyPositiveValue(point);
-          if (status !== "ok" || !hasPresence) {
-            continue;
-          }
-          if (allowedSkills.has(skill)) {
-            injectedSkills.add(skill);
+          const skill = readOptionalStringAttribute(attributes, "skill");
+          const status = readOptionalStringAttribute(attributes, "status");
+          if (status === "ok") {
+            incrementDiagnostic(diagnostics, "targetDataPointsWithStatusOk");
+          } else if (status === "error") {
+            incrementDiagnostic(diagnostics, "targetDataPointsWithStatusError");
           } else {
+            incrementDiagnostic(
+              diagnostics,
+              "targetDataPointsWithOtherOrMissingStatus",
+            );
+          }
+
+          const skillAllowed = skill !== undefined && allowedSkills.has(skill);
+          if (skill === undefined || !skillAllowed) {
+            incrementDiagnostic(
+              diagnostics,
+              "unknownOrMissingSkillLabelDataPoints",
+            );
+          }
+
+          const valueObservation = readRecordedValueObservation(
+            point,
+            diagnostics,
+          );
+          if (valueObservation.kind === "no-recorded-value") {
+            incrementDiagnostic(
+              diagnostics,
+              "targetDataPointsWithNoRecordedValue",
+            );
+            continue;
+          }
+          if (valueObservation.kind === "missing") {
+            continue;
+          }
+          const valueSign = valueObservation.sign;
+          if (valueSign === "positive") {
+            incrementDiagnostic(diagnostics, "positiveTargetDataPoints");
+          } else if (valueSign === "zero") {
+            incrementDiagnostic(diagnostics, "zeroTargetDataPoints");
+          } else {
+            incrementDiagnostic(diagnostics, "negativeTargetDataPoints");
+          }
+
+          if (status !== "ok" || valueSign !== "positive") {
+            continue;
+          }
+          if (skillAllowed && skill !== undefined) {
+            injectedSkills.add(skill);
+            incrementDiagnostic(
+              diagnostics,
+              "acceptedAllowlistedSkillDataPoints",
+            );
+          } else if (skill !== undefined) {
             unrecognizedSkillObserved = true;
           }
         }
@@ -295,6 +604,7 @@ export async function createCodexSkillEvidenceCollector(
   const allowedSkills = validateAllowedSkills(options);
   const injectedSkills = new Set<string>();
   let unrecognizedSkillObserved = false;
+  const diagnostics = createZeroDiagnostics();
   const inFlightRequests = new Set<Promise<void>>();
 
   function trackRequest(): () => void {
@@ -327,15 +637,26 @@ export async function createCodexSkillEvidenceCollector(
       return;
     }
 
+    incrementDiagnostic(diagnostics, "otlpMetricsRequestsReceived");
     const completeRequest = trackRequest();
     const chunks: Buffer[] = [];
     let receivedBytes = 0;
     let requestTooLarge = false;
     let requestDiscarded = false;
+    let decodeOutcomeRecorded = false;
+
+    const recordDecodeFailure = (failureCounter: DecodeFailureCounter) => {
+      if (!decodeOutcomeRecorded) {
+        decodeOutcomeRecorded = true;
+        incrementDiagnostic(diagnostics, "decodeFailures");
+        incrementDiagnostic(diagnostics, failureCounter);
+      }
+    };
 
     const discardAbortedRequest = () => {
       requestDiscarded = true;
       chunks.length = 0;
+      recordDecodeFailure("requestReadFailures");
       completeRequest();
     };
     request.once("aborted", discardAbortedRequest);
@@ -358,25 +679,44 @@ export async function createCodexSkillEvidenceCollector(
           return;
         }
         if (requestTooLarge) {
+          recordDecodeFailure("requestBodyTooLargeFailures");
           response.writeHead(413).end();
           return;
         }
 
-        const payload: unknown = JSON.parse(
-          Buffer.concat(chunks).toString("utf8"),
-        );
-        const requestObservation = parseRequestObservation(
-          payload,
-          allowedSkills,
-        );
-        for (const skill of requestObservation.injectedSkills) {
-          injectedSkills.add(skill);
+        const requestDiagnostics = createZeroDiagnostics();
+        let payload: unknown;
+        try {
+          payload = JSON.parse(Buffer.concat(chunks).toString("utf8"));
+        } catch {
+          recordDecodeFailure("jsonParseFailures");
+          response.writeHead(400).end();
+          return;
         }
-        unrecognizedSkillObserved ||=
-          requestObservation.unrecognizedSkillObserved;
-        response.writeHead(200, { "content-type": "application/json" });
-        response.end("{}\n");
+        try {
+          const requestObservation = parseRequestObservation(
+            payload,
+            allowedSkills,
+            requestDiagnostics,
+          );
+          for (const skill of requestObservation.injectedSkills) {
+            injectedSkills.add(skill);
+          }
+          unrecognizedSkillObserved ||=
+            requestObservation.unrecognizedSkillObserved;
+          mergeDiagnostics(diagnostics, requestDiagnostics);
+          decodeOutcomeRecorded = true;
+          incrementDiagnostic(diagnostics, "successfullyDecodedRequests");
+          response.writeHead(200, { "content-type": "application/json" });
+          response.end("{}\n");
+        } catch {
+          requestDiagnostics.acceptedAllowlistedSkillDataPoints = 0;
+          mergeDiagnostics(diagnostics, requestDiagnostics);
+          recordDecodeFailure("otlpValidationFailures");
+          response.writeHead(400).end();
+        }
       } catch {
+        recordDecodeFailure("requestReadFailures");
         response.writeHead(400).end();
       } finally {
         chunks.length = 0;
@@ -428,8 +768,60 @@ export async function createCodexSkillEvidenceCollector(
     });
   }
 
+  function createDiagnosticsSnapshot(): CodexSkillEvidenceDiagnosticsSnapshot {
+    return Object.freeze({
+      schemaVersion: 1 as const,
+      otlpMetricsRequestsReceived: diagnostics.otlpMetricsRequestsReceived,
+      successfullyDecodedRequests: diagnostics.successfullyDecodedRequests,
+      decodeFailures: diagnostics.decodeFailures,
+      requestReadFailures: diagnostics.requestReadFailures,
+      requestBodyTooLargeFailures: diagnostics.requestBodyTooLargeFailures,
+      jsonParseFailures: diagnostics.jsonParseFailures,
+      otlpValidationFailures: diagnostics.otlpValidationFailures,
+      resourceMetricsEntriesInspected:
+        diagnostics.resourceMetricsEntriesInspected,
+      scopeMetricsEntriesInspected: diagnostics.scopeMetricsEntriesInspected,
+      metricsInspected: diagnostics.metricsInspected,
+      metricDataPointsInspected: diagnostics.metricDataPointsInspected,
+      targetMetricsObserved: diagnostics.targetMetricsObserved,
+      targetDataPointsObserved: diagnostics.targetDataPointsObserved,
+      targetDataPointsWithStatusOk: diagnostics.targetDataPointsWithStatusOk,
+      targetDataPointsWithStatusError:
+        diagnostics.targetDataPointsWithStatusError,
+      targetDataPointsWithOtherOrMissingStatus:
+        diagnostics.targetDataPointsWithOtherOrMissingStatus,
+      positiveTargetDataPoints: diagnostics.positiveTargetDataPoints,
+      zeroTargetDataPoints: diagnostics.zeroTargetDataPoints,
+      negativeTargetDataPoints: diagnostics.negativeTargetDataPoints,
+      targetDataPointsWithNoRecordedValue:
+        diagnostics.targetDataPointsWithNoRecordedValue,
+      targetDataPointsWithCanonicalIntValue:
+        diagnostics.targetDataPointsWithCanonicalIntValue,
+      targetDataPointsWithJsonNumberIntValue:
+        diagnostics.targetDataPointsWithJsonNumberIntValue,
+      targetDataPointsWithDoubleValue:
+        diagnostics.targetDataPointsWithDoubleValue,
+      targetDataPointsWithMissingValue:
+        diagnostics.targetDataPointsWithMissingValue,
+      targetDataPointsWithConflictingValues:
+        diagnostics.targetDataPointsWithConflictingValues,
+      targetDataPointsWithInvalidIntValue:
+        diagnostics.targetDataPointsWithInvalidIntValue,
+      targetDataPointsWithInvalidDoubleValue:
+        diagnostics.targetDataPointsWithInvalidDoubleValue,
+      targetDataPointsWithInvalidFlags:
+        diagnostics.targetDataPointsWithInvalidFlags,
+      acceptedAllowlistedSkillDataPoints:
+        diagnostics.acceptedAllowlistedSkillDataPoints,
+      unknownOrMissingSkillLabelDataPoints:
+        diagnostics.unknownOrMissingSkillLabelDataPoints,
+      counterSaturationObserved: diagnostics.counterSaturationObserved,
+    });
+  }
+
   return {
     endpoint: `http://127.0.0.1:${address.port}/v1/metrics`,
+    diagnosticsSnapshot: createDiagnosticsSnapshot,
     closeAndSnapshot: async () => {
       shutdownPromise ??= drainAndClose();
       await shutdownPromise;

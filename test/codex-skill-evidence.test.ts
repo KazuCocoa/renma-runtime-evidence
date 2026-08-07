@@ -6,6 +6,7 @@ import test from "node:test";
 import {
   createCodexSkillEvidenceCollector,
   type CodexSkillEvidenceCollector,
+  type CodexSkillEvidenceDiagnosticsSnapshot,
 } from "../src/index.js";
 
 const allowedAlpha = "allowed-alpha";
@@ -14,6 +15,46 @@ const allowedBeta = "allowed-beta";
 interface HttpResult {
   statusCode: number | undefined;
   body: string;
+}
+
+function diagnostics(
+  overrides: Partial<CodexSkillEvidenceDiagnosticsSnapshot> = {},
+): CodexSkillEvidenceDiagnosticsSnapshot {
+  return {
+    schemaVersion: 1,
+    otlpMetricsRequestsReceived: 0,
+    successfullyDecodedRequests: 0,
+    decodeFailures: 0,
+    requestReadFailures: 0,
+    requestBodyTooLargeFailures: 0,
+    jsonParseFailures: 0,
+    otlpValidationFailures: 0,
+    resourceMetricsEntriesInspected: 0,
+    scopeMetricsEntriesInspected: 0,
+    metricsInspected: 0,
+    metricDataPointsInspected: 0,
+    targetMetricsObserved: 0,
+    targetDataPointsObserved: 0,
+    targetDataPointsWithStatusOk: 0,
+    targetDataPointsWithStatusError: 0,
+    targetDataPointsWithOtherOrMissingStatus: 0,
+    positiveTargetDataPoints: 0,
+    zeroTargetDataPoints: 0,
+    negativeTargetDataPoints: 0,
+    targetDataPointsWithNoRecordedValue: 0,
+    targetDataPointsWithCanonicalIntValue: 0,
+    targetDataPointsWithJsonNumberIntValue: 0,
+    targetDataPointsWithDoubleValue: 0,
+    targetDataPointsWithMissingValue: 0,
+    targetDataPointsWithConflictingValues: 0,
+    targetDataPointsWithInvalidIntValue: 0,
+    targetDataPointsWithInvalidDoubleValue: 0,
+    targetDataPointsWithInvalidFlags: 0,
+    acceptedAllowlistedSkillDataPoints: 0,
+    unknownOrMissingSkillLabelDataPoints: 0,
+    counterSaturationObserved: false,
+    ...overrides,
+  };
 }
 
 function sendRequest(
@@ -307,6 +348,242 @@ test("accepts only an exact successful Codex Skill injection", async () => {
   });
 });
 
+test("starts with a separate immutable zero diagnostics snapshot", async () => {
+  const collector = await createCodexSkillEvidenceCollector({
+    allowedSkills: [allowedAlpha],
+  });
+  const first = collector.diagnosticsSnapshot();
+  const second = collector.diagnosticsSnapshot();
+
+  assert.deepEqual(first, diagnostics());
+  assert.equal(Object.isFrozen(first), true);
+  assert.notStrictEqual(first, second);
+  for (const [key, value] of Object.entries(first)) {
+    if (key === "counterSaturationObserved") {
+      assert.equal(typeof value, "boolean");
+    } else {
+      assert.equal(Number.isInteger(value), true);
+      assert.equal((value as number) >= 0, true);
+      assert.equal((value as number) <= 0xffff_ffff, true);
+    }
+  }
+  assert.throws(() => {
+    (
+      first as { otlpMetricsRequestsReceived: number }
+    ).otlpMetricsRequestsReceived = 99;
+  }, TypeError);
+  assert.deepEqual(collector.diagnosticsSnapshot(), diagnostics());
+  await collector.closeAndSnapshot();
+});
+
+test("diagnoses a valid empty OTLP request independently from evidence", async () => {
+  const collector = await createCodexSkillEvidenceCollector({
+    allowedSkills: [allowedAlpha],
+  });
+  const result = await sendRequest(
+    collector.endpoint,
+    JSON.stringify({ resourceMetrics: [] }),
+  );
+  const evidence = await collector.closeAndSnapshot();
+
+  assert.equal(result.statusCode, 200);
+  assert.deepEqual(evidence.injectedSkills, []);
+  assert.deepEqual(
+    collector.diagnosticsSnapshot(),
+    diagnostics({
+      otlpMetricsRequestsReceived: 1,
+      successfullyDecodedRequests: 1,
+    }),
+  );
+});
+
+test("counts malformed requests before decoding without retaining input", async () => {
+  const privateMalformedInput = "PRIVATE_MALFORMED_DIAGNOSTIC_INPUT_4D60";
+  const collector = await createCodexSkillEvidenceCollector({
+    allowedSkills: [allowedAlpha],
+  });
+  const result = await sendRequest(collector.endpoint, privateMalformedInput);
+  const evidence = await collector.closeAndSnapshot();
+  const observedDiagnostics = collector.diagnosticsSnapshot();
+
+  assert.equal(result.statusCode, 400);
+  assert.deepEqual(
+    observedDiagnostics,
+    diagnostics({
+      otlpMetricsRequestsReceived: 1,
+      decodeFailures: 1,
+      jsonParseFailures: 1,
+    }),
+  );
+  assert.equal(
+    JSON.stringify({ evidence, observedDiagnostics }).includes(
+      privateMalformedInput,
+    ),
+    false,
+  );
+});
+
+test("counts non-target metric datapoints without exposing their names or attributes", async () => {
+  const privateMetricName = "PRIVATE_OTHER_METRIC_9C6F";
+  const privateAttributeValue = "PRIVATE_ATTRIBUTE_VALUE_C7D2";
+  const collector = await createCodexSkillEvidenceCollector({
+    allowedSkills: [allowedAlpha],
+  });
+  const result = await sendRequest(
+    collector.endpoint,
+    payload([
+      metric(privateMetricName, [
+        point([stringAttribute("PRIVATE_KEY", privateAttributeValue)]),
+        point([]),
+      ]),
+    ]),
+  );
+  const evidence = await collector.closeAndSnapshot();
+  const observedDiagnostics = collector.diagnosticsSnapshot();
+
+  assert.equal(result.statusCode, 200);
+  assert.deepEqual(
+    observedDiagnostics,
+    diagnostics({
+      otlpMetricsRequestsReceived: 1,
+      successfullyDecodedRequests: 1,
+      resourceMetricsEntriesInspected: 1,
+      scopeMetricsEntriesInspected: 1,
+      metricsInspected: 1,
+      metricDataPointsInspected: 2,
+    }),
+  );
+  const serialized = JSON.stringify({ evidence, observedDiagnostics });
+  assert.equal(serialized.includes(privateMetricName), false);
+  assert.equal(serialized.includes(privateAttributeValue), false);
+});
+
+test("diagnoses target status, sign, acceptance, and bounded Skill-label categories", async () => {
+  const privateUnknownSkill = "PRIVATE_UNKNOWN_DIAGNOSTIC_SKILL_D96A";
+  const collector = await createCodexSkillEvidenceCollector({
+    allowedSkills: [allowedAlpha],
+  });
+  const result = await sendRequest(
+    collector.endpoint,
+    payload([
+      metric("codex.skill.injected", [
+        successfulPoint(allowedAlpha),
+        successfulPoint(allowedAlpha, "error"),
+        point(
+          [
+            stringAttribute("skill", allowedAlpha),
+            stringAttribute("status", "ok"),
+          ],
+          { asInt: "0" },
+        ),
+        point(
+          [
+            stringAttribute("skill", allowedAlpha),
+            stringAttribute("status", "ok"),
+          ],
+          { asDouble: -0.5 },
+        ),
+        successfulPoint(allowedAlpha, "PRIVATE_UNEXPECTED_STATUS"),
+        point([stringAttribute("skill", allowedAlpha)]),
+        successfulPoint(privateUnknownSkill),
+        point([stringAttribute("status", "ok")]),
+      ]),
+    ]),
+  );
+  const evidence = await collector.closeAndSnapshot();
+  const observedDiagnostics = collector.diagnosticsSnapshot();
+
+  assert.equal(result.statusCode, 200);
+  assert.deepEqual(evidence.injectedSkills, [allowedAlpha]);
+  assert.equal(evidence.unrecognizedSkillObserved, true);
+  assert.deepEqual(
+    observedDiagnostics,
+    diagnostics({
+      otlpMetricsRequestsReceived: 1,
+      successfullyDecodedRequests: 1,
+      resourceMetricsEntriesInspected: 1,
+      scopeMetricsEntriesInspected: 1,
+      metricsInspected: 1,
+      metricDataPointsInspected: 8,
+      targetMetricsObserved: 1,
+      targetDataPointsObserved: 8,
+      targetDataPointsWithStatusOk: 5,
+      targetDataPointsWithStatusError: 1,
+      targetDataPointsWithOtherOrMissingStatus: 2,
+      positiveTargetDataPoints: 6,
+      zeroTargetDataPoints: 1,
+      negativeTargetDataPoints: 1,
+      targetDataPointsWithCanonicalIntValue: 7,
+      targetDataPointsWithDoubleValue: 1,
+      acceptedAllowlistedSkillDataPoints: 1,
+      unknownOrMissingSkillLabelDataPoints: 2,
+    }),
+  );
+  const serialized = JSON.stringify({ evidence, observedDiagnostics });
+  assert.equal(serialized.includes(privateUnknownSkill), false);
+  assert.equal(serialized.includes("PRIVATE_UNEXPECTED_STATUS"), false);
+});
+
+test("aggregates diagnostics monotonically across requests and returns defensive copies", async () => {
+  const collector = await createCodexSkillEvidenceCollector({
+    allowedSkills: [allowedAlpha],
+  });
+  assert.equal(
+    (
+      await sendRequest(
+        collector.endpoint,
+        payload([metric("PRIVATE_OTHER_METRIC", [point([])])]),
+      )
+    ).statusCode,
+    200,
+  );
+  const afterFirst = collector.diagnosticsSnapshot();
+  assert.equal(
+    (
+      await sendRequest(
+        collector.endpoint,
+        payload([
+          metric("codex.skill.injected", [successfulPoint(allowedAlpha)]),
+        ]),
+      )
+    ).statusCode,
+    200,
+  );
+  await collector.closeAndSnapshot();
+  const afterSecond = collector.diagnosticsSnapshot();
+
+  assert.deepEqual(
+    afterFirst,
+    diagnostics({
+      otlpMetricsRequestsReceived: 1,
+      successfullyDecodedRequests: 1,
+      resourceMetricsEntriesInspected: 1,
+      scopeMetricsEntriesInspected: 1,
+      metricsInspected: 1,
+      metricDataPointsInspected: 1,
+    }),
+  );
+  assert.deepEqual(
+    afterSecond,
+    diagnostics({
+      otlpMetricsRequestsReceived: 2,
+      successfullyDecodedRequests: 2,
+      resourceMetricsEntriesInspected: 2,
+      scopeMetricsEntriesInspected: 2,
+      metricsInspected: 2,
+      metricDataPointsInspected: 2,
+      targetMetricsObserved: 1,
+      targetDataPointsObserved: 1,
+      targetDataPointsWithStatusOk: 1,
+      positiveTargetDataPoints: 1,
+      targetDataPointsWithCanonicalIntValue: 1,
+      acceptedAllowlistedSkillDataPoints: 1,
+    }),
+  );
+  assert.equal(afterFirst.otlpMetricsRequestsReceived, 1);
+  assert.notStrictEqual(afterFirst, afterSecond);
+});
+
 test("accepts positive OTLP integer-string and finite double counters", async () => {
   const collector = await createCodexSkillEvidenceCollector({
     allowedSkills: [allowedAlpha, allowedBeta],
@@ -339,38 +616,103 @@ test("accepts positive OTLP integer-string and finite double counters", async ()
   assert.equal(snapshot.unrecognizedSkillObserved, false);
 });
 
-test("rejects missing, conflicting, and malformed counter values", async (t) => {
-  const malformedValues: Array<{
-    name: string;
-    valueAndFlags: Record<string, unknown>;
-    status?: string;
+test("keeps a missing numeric field distinct and does not clear valid evidence", async () => {
+  const collector = await createCodexSkillEvidenceCollector({
+    allowedSkills: [allowedAlpha, allowedBeta],
+  });
+  const result = await sendRequest(
+    collector.endpoint,
+    payload([
+      metric("codex.skill.injected", [
+        successfulPoint(allowedAlpha),
+        point(
+          [
+            stringAttribute("skill", allowedBeta),
+            stringAttribute("status", "ok"),
+          ],
+          {},
+        ),
+      ]),
+    ]),
+  );
+  const snapshot = await collector.closeAndSnapshot();
+  const observedDiagnostics = collector.diagnosticsSnapshot();
+
+  assert.equal(result.statusCode, 200);
+  assert.equal(result.body, "{}\n");
+  assert.deepEqual(snapshot.injectedSkills, [allowedAlpha]);
+  assert.equal(observedDiagnostics.successfullyDecodedRequests, 1);
+  assert.equal(observedDiagnostics.decodeFailures, 0);
+  assert.equal(observedDiagnostics.targetDataPointsWithMissingValue, 1);
+  assert.equal(observedDiagnostics.targetDataPointsWithInvalidIntValue, 0);
+  assert.equal(observedDiagnostics.acceptedAllowlistedSkillDataPoints, 1);
+});
+
+test("strictly rejects conflicting and malformed numeric shapes", async (t) => {
+  const malformedValues: ReadonlyArray<{
+    readonly name: string;
+    readonly valueAndFlags: Record<string, unknown>;
+    readonly diagnosticCounter:
+      | "targetDataPointsWithConflictingValues"
+      | "targetDataPointsWithInvalidIntValue"
+      | "targetDataPointsWithInvalidDoubleValue"
+      | "targetDataPointsWithInvalidFlags";
   }> = [
-    { name: "missing value", valueAndFlags: {} },
-    {
-      name: "missing value with non-ok status",
-      valueAndFlags: {},
-      status: "error",
-    },
     {
       name: "both integer and double values",
       valueAndFlags: { asInt: "1", asDouble: 1 },
+      diagnosticCounter: "targetDataPointsWithConflictingValues",
     },
-    { name: "non-decimal integer", valueAndFlags: { asInt: "1e3" } },
-    { name: "numeric integer", valueAndFlags: { asInt: 1 } },
+    {
+      name: "non-decimal integer",
+      valueAndFlags: { asInt: "1e3" },
+      diagnosticCounter: "targetDataPointsWithInvalidIntValue",
+    },
     {
       name: "out-of-range integer",
       valueAndFlags: { asInt: "9223372036854775808" },
+      diagnosticCounter: "targetDataPointsWithInvalidIntValue",
     },
-    { name: "non-finite double string", valueAndFlags: { asDouble: "NaN" } },
-    { name: "non-numeric double", valueAndFlags: { asDouble: null } },
     {
-      name: "malformed no-recorded-value flag",
+      name: "fractional JSON-number integer",
+      valueAndFlags: { asInt: 1.5 },
+      diagnosticCounter: "targetDataPointsWithInvalidIntValue",
+    },
+    {
+      name: "unsafe JSON-number integer",
+      valueAndFlags: { asInt: Number.MAX_SAFE_INTEGER + 2 },
+      diagnosticCounter: "targetDataPointsWithInvalidIntValue",
+    },
+    {
+      name: "invalid integer type",
+      valueAndFlags: { asInt: true },
+      diagnosticCounter: "targetDataPointsWithInvalidIntValue",
+    },
+    {
+      name: "invalid double type",
+      valueAndFlags: { asDouble: "NaN" },
+      diagnosticCounter: "targetDataPointsWithInvalidDoubleValue",
+    },
+    {
+      name: "null double",
+      valueAndFlags: { asDouble: null },
+      diagnosticCounter: "targetDataPointsWithInvalidDoubleValue",
+    },
+    {
+      name: "malformed flags type",
       valueAndFlags: { flags: "1", asInt: "47" },
+      diagnosticCounter: "targetDataPointsWithInvalidFlags",
+    },
+    {
+      name: "out-of-range flags",
+      valueAndFlags: { flags: 0x1_0000_0000, asInt: "47" },
+      diagnosticCounter: "targetDataPointsWithInvalidFlags",
     },
   ];
 
   for (const malformedValue of malformedValues) {
     await t.test(malformedValue.name, async () => {
+      const privateInvalidValue = "PRIVATE_INVALID_NUMERIC_INPUT_4B72";
       const collector = await createCodexSkillEvidenceCollector({
         allowedSkills: [allowedAlpha],
       });
@@ -381,7 +723,8 @@ test("rejects missing, conflicting, and malformed counter values", async (t) => 
             point(
               [
                 stringAttribute("skill", allowedAlpha),
-                stringAttribute("status", malformedValue.status ?? "ok"),
+                stringAttribute("status", "ok"),
+                stringAttribute("private", privateInvalidValue),
               ],
               malformedValue.valueAndFlags,
             ),
@@ -389,11 +732,22 @@ test("rejects missing, conflicting, and malformed counter values", async (t) => 
         ]),
       );
       const snapshot = await collector.closeAndSnapshot();
+      const observedDiagnostics = collector.diagnosticsSnapshot();
 
       assert.equal(result.statusCode, 400);
       assert.equal(result.body, "");
       assert.deepEqual(snapshot.injectedSkills, []);
       assert.equal(snapshot.unrecognizedSkillObserved, false);
+      assert.equal(observedDiagnostics.successfullyDecodedRequests, 0);
+      assert.equal(observedDiagnostics.decodeFailures, 1);
+      assert.equal(observedDiagnostics.otlpValidationFailures, 1);
+      assert.equal(observedDiagnostics[malformedValue.diagnosticCounter], 1);
+      assert.equal(
+        JSON.stringify({ snapshot, observedDiagnostics }).includes(
+          privateInvalidValue,
+        ),
+        false,
+      );
     });
   }
 });
@@ -420,9 +774,66 @@ test("rejects a JSON number that parses to a non-finite double", async () => {
   );
   const snapshot = await collector.closeAndSnapshot();
 
+  const observedDiagnostics = collector.diagnosticsSnapshot();
+
   assert.equal(result.statusCode, 400);
   assert.deepEqual(snapshot.injectedSkills, []);
   assert.equal(snapshot.unrecognizedSkillObserved, false);
+  assert.equal(observedDiagnostics.successfullyDecodedRequests, 0);
+  assert.equal(observedDiagnostics.decodeFailures, 1);
+  assert.equal(observedDiagnostics.otlpValidationFailures, 1);
+  assert.equal(observedDiagnostics.targetDataPointsWithInvalidDoubleValue, 1);
+});
+
+test("accepts only safe-integer JSON-number asInt through Codex compatibility", async () => {
+  const privatePositiveMagnitude = 7_345_293;
+  const privateNegativeMagnitude = -7_345_294;
+  const collector = await createCodexSkillEvidenceCollector({
+    allowedSkills: [allowedAlpha, allowedBeta],
+  });
+  const result = await sendRequest(
+    collector.endpoint,
+    payload([
+      metric("codex.skill.injected", [
+        point(
+          [
+            stringAttribute("skill", allowedAlpha),
+            stringAttribute("status", "ok"),
+          ],
+          { asInt: privatePositiveMagnitude },
+        ),
+        point(
+          [
+            stringAttribute("skill", allowedBeta),
+            stringAttribute("status", "ok"),
+          ],
+          { asInt: 0 },
+        ),
+        point(
+          [
+            stringAttribute("skill", "PRIVATE_NON_POSITIVE_SKILL"),
+            stringAttribute("status", "ok"),
+          ],
+          { asInt: privateNegativeMagnitude },
+        ),
+      ]),
+    ]),
+  );
+  const snapshot = await collector.closeAndSnapshot();
+  const observedDiagnostics = collector.diagnosticsSnapshot();
+  const serialized = JSON.stringify({ snapshot, observedDiagnostics });
+
+  assert.equal(result.statusCode, 200);
+  assert.deepEqual(snapshot.injectedSkills, [allowedAlpha]);
+  assert.equal(snapshot.unrecognizedSkillObserved, false);
+  assert.equal(observedDiagnostics.successfullyDecodedRequests, 1);
+  assert.equal(observedDiagnostics.targetDataPointsWithJsonNumberIntValue, 3);
+  assert.equal(observedDiagnostics.positiveTargetDataPoints, 1);
+  assert.equal(observedDiagnostics.zeroTargetDataPoints, 1);
+  assert.equal(observedDiagnostics.negativeTargetDataPoints, 1);
+  assert.equal(observedDiagnostics.acceptedAllowlistedSkillDataPoints, 1);
+  assert.equal(serialized.includes(String(privatePositiveMagnitude)), false);
+  assert.equal(serialized.includes(String(privateNegativeMagnitude)), false);
 });
 
 test("ignores zero and negative counters for allowlisted and unknown labels", async () => {
@@ -489,6 +900,18 @@ test("ignores valid NO_RECORDED_VALUE points before reading a value", async () =
   assert.equal(result.statusCode, 200);
   assert.deepEqual(snapshot.injectedSkills, []);
   assert.equal(snapshot.unrecognizedSkillObserved, false);
+  assert.equal(
+    collector.diagnosticsSnapshot().targetDataPointsWithNoRecordedValue,
+    2,
+  );
+  assert.equal(
+    collector.diagnosticsSnapshot().targetDataPointsWithCanonicalIntValue,
+    1,
+  );
+  assert.equal(
+    collector.diagnosticsSnapshot().targetDataPointsWithMissingValue,
+    1,
+  );
   assert.equal(JSON.stringify(snapshot).includes(unknownSkill), false);
 });
 
@@ -542,12 +965,8 @@ test("classifies an unknown successful Skill without retaining or transforming i
   }
 });
 
-test("rejects missing, duplicate, and non-string required attributes", async (t) => {
+test("rejects duplicate and non-string evidence attributes", async (t) => {
   const malformedPoints: Array<{ name: string; value: unknown }> = [
-    {
-      name: "missing skill",
-      value: point([stringAttribute("status", "ok")]),
-    },
     {
       name: "duplicate skill",
       value: point([
@@ -562,10 +981,6 @@ test("rejects missing, duplicate, and non-string required attributes", async (t)
         attribute("skill", { intValue: "5" }),
         stringAttribute("status", "ok"),
       ]),
-    },
-    {
-      name: "missing status",
-      value: point([stringAttribute("skill", allowedAlpha)]),
     },
     {
       name: "duplicate status",
@@ -699,34 +1114,60 @@ test("produces the same presence snapshot for different fixture orderings", asyn
 });
 
 test("rejects malformed JSON and malformed OTLP envelopes", async () => {
-  const malformedBodies = [
-    "not-json",
-    JSON.stringify(null),
-    JSON.stringify({}),
-    JSON.stringify({ resourceMetrics: {} }),
-    JSON.stringify({ resourceMetrics: [{}] }),
-    JSON.stringify({ resourceMetrics: [{ scopeMetrics: [{}] }] }),
-    payload([{}]),
-    payload([{ name: "codex.skill.injected" }]),
-    payload([{ name: "codex.skill.injected", sum: "malformed" }]),
-    payload([
-      { name: "codex.skill.injected", sum: { dataPoints: "malformed" } },
-    ]),
+  const malformedBodies: ReadonlyArray<{
+    readonly body: string;
+    readonly failureCounter: "jsonParseFailures" | "otlpValidationFailures";
+  }> = [
+    { body: "not-json", failureCounter: "jsonParseFailures" },
+    { body: JSON.stringify(null), failureCounter: "otlpValidationFailures" },
+    { body: JSON.stringify({}), failureCounter: "otlpValidationFailures" },
+    {
+      body: JSON.stringify({ resourceMetrics: {} }),
+      failureCounter: "otlpValidationFailures",
+    },
+    {
+      body: JSON.stringify({ resourceMetrics: [{}] }),
+      failureCounter: "otlpValidationFailures",
+    },
+    {
+      body: JSON.stringify({ resourceMetrics: [{ scopeMetrics: [{}] }] }),
+      failureCounter: "otlpValidationFailures",
+    },
+    { body: payload([{}]), failureCounter: "otlpValidationFailures" },
+    {
+      body: payload([{ name: "codex.skill.injected" }]),
+      failureCounter: "otlpValidationFailures",
+    },
+    {
+      body: payload([{ name: "codex.skill.injected", sum: "malformed" }]),
+      failureCounter: "otlpValidationFailures",
+    },
+    {
+      body: payload([
+        { name: "codex.skill.injected", sum: { dataPoints: "malformed" } },
+      ]),
+      failureCounter: "otlpValidationFailures",
+    },
   ];
 
-  for (const body of malformedBodies) {
+  for (const malformed of malformedBodies) {
     const collector = await createCodexSkillEvidenceCollector({
       allowedSkills: [allowedAlpha],
     });
-    const result = await sendRequest(collector.endpoint, body);
+    const result = await sendRequest(collector.endpoint, malformed.body);
     const snapshot = await collector.closeAndSnapshot();
+    const observedDiagnostics = collector.diagnosticsSnapshot();
     assert.equal(result.statusCode, 400);
     assert.equal(result.body, "");
     assert.deepEqual(snapshot.injectedSkills, []);
+    assert.equal(snapshot.unrecognizedSkillObserved, false);
+    assert.equal(observedDiagnostics.successfullyDecodedRequests, 0);
+    assert.equal(observedDiagnostics.decodeFailures, 1);
+    assert.equal(observedDiagnostics[malformed.failureCounter], 1);
   }
 });
 
-test("atomically rejects a malformed request without partial snapshot mutation", async () => {
+test("atomically rejects a malformed request without mutating earlier evidence", async () => {
   const collector = await createCodexSkillEvidenceCollector({
     allowedSkills: [allowedAlpha, allowedBeta],
   });
@@ -739,7 +1180,13 @@ test("atomically rejects a malformed request without partial snapshot mutation",
     payload([
       metric("codex.skill.injected", [
         successfulPoint(allowedBeta),
-        point([stringAttribute("skill", "PRIVATE_PARTIAL_SKILL")]),
+        point(
+          [
+            stringAttribute("skill", "PRIVATE_PARTIAL_SKILL"),
+            stringAttribute("status", "ok"),
+          ],
+          { asInt: "PRIVATE_INVALID_INTEGER" },
+        ),
       ]),
     ]),
   );
@@ -749,13 +1196,16 @@ test("atomically rejects a malformed request without partial snapshot mutation",
   assert.equal(rejected.statusCode, 400);
   assert.deepEqual(snapshot.injectedSkills, [allowedAlpha]);
   assert.equal(snapshot.unrecognizedSkillObserved, false);
+  assert.equal(collector.diagnosticsSnapshot().successfullyDecodedRequests, 1);
+  assert.equal(collector.diagnosticsSnapshot().decodeFailures, 1);
+  assert.equal(collector.diagnosticsSnapshot().otlpValidationFailures, 1);
   assert.equal(
     JSON.stringify(snapshot).includes("PRIVATE_PARTIAL_SKILL"),
     false,
   );
 });
 
-test("atomically rejects a malformed value after an acceptable point", async () => {
+test("malformed value after a valid point atomically rejects the request", async () => {
   const collector = await createCodexSkillEvidenceCollector({
     allowedSkills: [allowedAlpha, allowedBeta],
   });
@@ -769,7 +1219,7 @@ test("atomically rejects a malformed value after an acceptable point", async () 
             stringAttribute("skill", allowedBeta),
             stringAttribute("status", "ok"),
           ],
-          {},
+          { asInt: "PRIVATE_INVALID_INTEGER" },
         ),
       ]),
     ]),
@@ -779,6 +1229,17 @@ test("atomically rejects a malformed value after an acceptable point", async () 
   assert.equal(result.statusCode, 400);
   assert.deepEqual(snapshot.injectedSkills, []);
   assert.equal(snapshot.unrecognizedSkillObserved, false);
+  assert.equal(collector.diagnosticsSnapshot().successfullyDecodedRequests, 0);
+  assert.equal(collector.diagnosticsSnapshot().decodeFailures, 1);
+  assert.equal(collector.diagnosticsSnapshot().otlpValidationFailures, 1);
+  assert.equal(
+    collector.diagnosticsSnapshot().targetDataPointsWithInvalidIntValue,
+    1,
+  );
+  assert.equal(
+    collector.diagnosticsSnapshot().acceptedAllowlistedSkillDataPoints,
+    0,
+  );
 });
 
 test("enforces the fixed two-MiB request limit", async () => {
@@ -903,6 +1364,7 @@ test("returns idempotent immutable defensive snapshots", async () => {
 
 test("serialized snapshots exclude content, paths, credentials, IDs, values, hashes, and encodings", async () => {
   const unknownSkill = "PRIVATE_UNKNOWN_SKILL_6F42D8";
+  const privateNumericMagnitude = "734529314";
   const privateValues = [
     "PRIVATE_PROMPT",
     "PRIVATE_RESPONSE",
@@ -922,6 +1384,7 @@ test("serialized snapshots exclude content, paths, credentials, IDs, values, has
     "PRIVATE_CREDENTIAL",
     "/PRIVATE/REPOSITORY/PATH",
     "PRIVATE_NICKNAME",
+    privateNumericMagnitude,
     unknownSkill,
     Buffer.from(unknownSkill, "utf8").toString("base64"),
     Buffer.from(unknownSkill, "utf8").toString("hex"),
@@ -934,16 +1397,26 @@ test("serialized snapshots exclude content, paths, credentials, IDs, values, has
     collector.endpoint,
     payload([
       metric("codex.skill.injected", [
-        successfulPoint(unknownSkill, "ok", [
-          stringAttribute("nickname", "PRIVATE_NICKNAME"),
-        ]),
+        point(
+          [
+            stringAttribute("skill", unknownSkill),
+            stringAttribute("status", "ok"),
+            stringAttribute("nickname", "PRIVATE_NICKNAME"),
+          ],
+          { asInt: privateNumericMagnitude },
+        ),
       ]),
       metric("PRIVATE_NON_TARGET_METRIC", [successfulPoint("PRIVATE_VALUE")]),
     ]),
   );
   const snapshot = await collector.closeAndSnapshot();
+  const observedDiagnostics = collector.diagnosticsSnapshot();
   const serializedSnapshot = JSON.stringify(snapshot);
-  const serializedOutputs = JSON.stringify({ snapshot, httpResult: result });
+  const serializedOutputs = JSON.stringify({
+    snapshot,
+    diagnostics: observedDiagnostics,
+    httpResult: result,
+  });
 
   assert.equal(snapshot.unrecognizedSkillObserved, true);
   for (const privateValue of privateValues) {

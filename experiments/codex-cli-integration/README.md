@@ -19,13 +19,23 @@ The Skill layout and explicit invocation syntax follow the current Codex documen
 
 ## Run
 
+Classify the direct pipeline before spending model usage on any other scenario:
+
+```sh
+npm run test:integration:codex -- --allow-codex-analytics --direct-only
+```
+
+This installs only the direct synthetic Skill and launches exactly one real Codex task process for the direct single-Skill baseline; no custom-agent fixture is installed. It writes the Codex version, command category, separate diagnostics snapshot, six-stage classification, public presence result, and limitations to stderr. Stdout remains only the existing public `CodexSkillPresenceSnapshot`; diagnostics are never nested into that evidence result. Every task process has a three-minute timeout, and the Codex prerequisite probes have ten-second timeouts.
+
+Only after the direct pipeline has been classified, the pre-existing full scenario set can be run explicitly without `--direct-only`:
+
 ```sh
 npm run test:integration:codex -- --allow-codex-analytics
 ```
 
-When multi-agent support is available, this launches five real Codex task processes and can consume normal Codex or API usage: one direct run, two independent repeated runs, one nested run, and one subagent run. Every task process has a three-minute timeout; the Codex prerequisite probes have ten-second timeouts. The normal `npm test`, `npm run check`, package installation, and GitHub Actions workflow do not invoke this command because it requires explicit analytics consent, local authentication, external model access, and usage that deterministic CI must not assume.
+When multi-agent support is available, the full command launches five real Codex task processes and can consume normal Codex or API usage: one direct run, two independent repeated runs, one nested run, and one subagent run. The normal `npm test`, `npm run check`, package installation, and GitHub Actions workflow do not invoke either command because they require explicit analytics consent, local authentication, external model access, and usage that deterministic CI must not assume.
 
-The human-readable summary is written to stderr. Stdout is one machine-readable JSON document containing only the provider, exact exported metric name, detected Codex version, `codexAnalyticsExplicitlyAllowed: true`, public collector semantics, finite scenario statuses, exact synthetic allowlisted identifiers, an unknown-label boolean, and explicit false limitation claims. The repeated result contains two separately reported runs.
+For the full command, the human-readable evidence summary followed by a separate diagnostics snapshot and classification for every collector lifetime is written to stderr. Stdout is one machine-readable JSON document containing only the provider, exact exported metric name, detected Codex version, `codexAnalyticsExplicitlyAllowed: true`, public collector semantics, finite scenario statuses, exact synthetic allowlisted identifiers, an unknown-label boolean, and explicit false limitation claims. The repeated result contains two separately reported runs. Diagnostic counters never appear in that public report.
 
 No report is written by default. To create one, choose a new destination explicitly:
 
@@ -33,7 +43,7 @@ No report is written by default. To create one, choose a new destination explici
 npm run test:integration:codex -- --allow-codex-analytics --output /tmp/codex-integration-result.json
 ```
 
-The two flags may appear in either order. The harness refuses to overwrite an existing output file.
+The flags may appear in any order. With `--direct-only`, the destination receives only the public direct evidence snapshot. The harness refuses to overwrite an existing output file.
 
 ## Scenarios
 
@@ -57,6 +67,62 @@ Within-collector deduplication remains covered by deterministic fixture and unit
 
 A missing command, incompatible version, missing login, unavailable required invocation configuration, timeout, or failed direct/repeated baseline is never reported as a passing test.
 
+## Pipeline diagnostic classification
+
+The diagnostics snapshot is a separate immutable receiver result containing only saturating unsigned 32-bit counters and a saturation boolean. It exposes no raw strings or identifiers. The classifier applies these stages in order:
+
+1. `no-otlp-request`: no `POST /v1/metrics` reached the receiver. Investigate the effective child-process exporter configuration and shutdown flushing.
+2. `request-decode-failure`: a request arrived, but none decoded successfully. Fixed counters further distinguish request-read, body-size, JSON-syntax, and OTLP-validation failures without retaining input.
+3. `decoded-without-metric-datapoints`: valid OTLP metrics arrived, but no metric datapoints were present. This also covers an observed target metric with an empty datapoint list.
+4. `non-target-metric-datapoints-only`: ordinary datapoints arrived, but no `codex.skill.injected` datapoints did. This means only that the tested Codex version and Skill-loading path did not emit the target metric; it is not proof that the Skill was not used.
+5. `target-datapoints-rejected`: target datapoints arrived, but none met all current status, recorded-positive-value, and allowlisted-label evidence rules. Only bounded status, value-shape, numeric-sign, and unknown-or-missing-label counts are shown.
+6. `accepted-skill-evidence`: at least one target datapoint satisfied every current evidence rule.
+
+Diagnostic datapoint counts are transport counts, not provider event counts. Cumulative exports can repeat the same counter state.
+
+## Direct pipeline result (2026-08-07)
+
+The authenticated direct-only baseline ran with `codex-cli 0.146.0`. Its command category was `direct single-Skill baseline`; the temporary repository contained only the direct synthetic Skill, and no repeated, nested, or subagent task was run.
+
+```json
+{
+  "schemaVersion": 1,
+  "otlpMetricsRequestsReceived": 1,
+  "successfullyDecodedRequests": 1,
+  "decodeFailures": 0,
+  "requestReadFailures": 0,
+  "requestBodyTooLargeFailures": 0,
+  "jsonParseFailures": 0,
+  "otlpValidationFailures": 0,
+  "resourceMetricsEntriesInspected": 1,
+  "scopeMetricsEntriesInspected": 1,
+  "metricsInspected": 46,
+  "metricDataPointsInspected": 131,
+  "targetMetricsObserved": 1,
+  "targetDataPointsObserved": 1,
+  "targetDataPointsWithStatusOk": 1,
+  "targetDataPointsWithStatusError": 0,
+  "targetDataPointsWithOtherOrMissingStatus": 0,
+  "positiveTargetDataPoints": 1,
+  "zeroTargetDataPoints": 0,
+  "negativeTargetDataPoints": 0,
+  "targetDataPointsWithNoRecordedValue": 0,
+  "targetDataPointsWithCanonicalIntValue": 0,
+  "targetDataPointsWithJsonNumberIntValue": 1,
+  "targetDataPointsWithDoubleValue": 0,
+  "targetDataPointsWithMissingValue": 0,
+  "targetDataPointsWithConflictingValues": 0,
+  "targetDataPointsWithInvalidIntValue": 0,
+  "targetDataPointsWithInvalidDoubleValue": 0,
+  "targetDataPointsWithInvalidFlags": 0,
+  "acceptedAllowlistedSkillDataPoints": 1,
+  "unknownOrMissingSkillLabelDataPoints": 0,
+  "counterSaturationObserved": false
+}
+```
+
+Classification: `accepted-skill-evidence` (stage 6). A bounded diagnostic run first established that the target metric arrived with exact `status=ok`, an allowlisted Skill label, and `asInt` encoded as a positive safe JSON number. The final run applied the explicit Codex provider-compatibility rule for that exact shape and returned the direct synthetic Skill in the public presence snapshot. Fractional, unsafe, conflicting, or otherwise malformed numeric forms still fail the whole request. This result does not justify an execution, occurrence-count, ordering, session, nesting-edge, agent-attribution, causality, instruction-compliance, or task-success claim. No numeric magnitude, raw value, payload, arbitrary metric or attribute data, identifier, prompt, response, transcript, or tool data was retained.
+
 ## Privacy, traffic, and evidence boundary
 
 The invocation has several distinct data paths:
@@ -69,7 +135,7 @@ The invocation has several distinct data paths:
 
 For every run, the local evidence collector is configured with only that scenario's exact synthetic Skill identifiers. It discards all non-allowlisted content before producing its public result and never exposes raw OTLP. Task stdout and stderr are discarded, and `--ephemeral` prevents session rollout persistence. The harness never records Codex prompts, responses, reasoning, transcripts, source content, tool inputs, tool outputs, full configuration, credentials, raw telemetry, analytics events, or temporary/user paths.
 
-The command intentionally reuses the caller's normal Codex authentication location because authentication is a prerequisite, but `--ignore-user-config` prevents the invocation from loading the user's `config.toml`. All telemetry changes are invocation-scoped. The temporary git repository is the only mutated repository and is removed after the run.
+The command intentionally reuses the caller's normal Codex authentication location because authentication is a prerequisite, but `--ignore-user-config` prevents the invocation from loading the user's `config.toml`. It never modifies `~/.codex/config.toml`. All telemetry changes are invocation-scoped. For the spawned child only, the experiment temporarily selects the runtime-evidence loopback endpoint as the effective metrics exporter; this may replace another effective metrics exporter for that process. No relay or fan-out behavior is implemented. The temporary git repository is the only mutated repository and is removed after the run.
 
 The only supported evidence is collector-lifetime presence of an exact allowlisted Skill label from a valid, recorded, strictly positive `codex.skill.injected` datapoint with `status=ok`. The experiment does not claim Skill execution, occurrence counts, ordering, session or turn attribution, nesting edges, agent attribution, instruction compliance, task success, or causality.
 
@@ -80,16 +146,15 @@ Do not commit locally generated reports. A review note can use this bounded temp
 ```text
 Date:
 Codex version:
-Command: npm run test:integration:codex -- --allow-codex-analytics
+Command category: direct single-Skill baseline
 Codex analytics explicitly allowed: true
 Collector semantics: presence
 direct: supported | failed; observed Skill IDs:
-repeated run 1: supported | failed; observed Skill IDs:
-repeated run 2: supported | failed; observed Skill IDs:
-repeated overall: supported | failed
-nested: supported | inconclusive | failed; observed Skill IDs:
-subagent: supported | inconclusive | unsupported; observed Skill IDs:
-Compatibility limitation:
+diagnostics snapshot:
+pipeline classification: no-otlp-request | request-decode-failure |
+  decoded-without-metric-datapoints | non-target-metric-datapoints-only |
+  target-datapoints-rejected | accepted-skill-evidence
+Compatibility or execution limitation:
 
 No execution, count, ordering, session, nesting-edge, agent-attribution,
 instruction-compliance, or task-success claim is made.

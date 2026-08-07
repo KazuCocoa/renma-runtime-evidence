@@ -11,9 +11,12 @@ import {
 import {
   buildCodexExecArguments,
   buildIntegrationReport,
+  buildScenarioResult,
   FIXTURE_AGENT_ROLE,
   FIXTURE_SKILL_IDS,
   formatConsoleSummary,
+  formatDiagnosticsSummary,
+  formatDirectBaselineSummary,
   observeIndependentCollectorRuns,
   parseRunnerArguments,
   reportRequiresFailure,
@@ -53,7 +56,7 @@ const SAFE_ERROR_PREFIXES = [
   "A synthetic Skill fixture",
   "The synthetic custom-agent fixture",
   "Unable to initialize the temporary fixture repository",
-  "Unable to write the explicitly requested report destination",
+  "Unable to write the explicitly requested output destination",
 ] as const;
 
 interface BoundedProcessResult {
@@ -66,7 +69,7 @@ interface BoundedProcessResult {
 
 interface FixtureContents {
   readonly skills: ReadonlyMap<string, string>;
-  readonly agent: string;
+  readonly agent?: string;
 }
 
 interface TemporaryFixtureRepository {
@@ -298,9 +301,14 @@ const fixtureRoot = join(
   "experiments/codex-cli-integration/fixtures",
 );
 
-async function readFixtureContents(): Promise<FixtureContents> {
+async function readFixtureContents(
+  directOnly: boolean,
+): Promise<FixtureContents> {
+  const requestedSkillIds = directOnly
+    ? [FIXTURE_SKILL_IDS.direct]
+    : Object.values(FIXTURE_SKILL_IDS);
   const skillEntries = await Promise.all(
-    Object.values(FIXTURE_SKILL_IDS).map(async (skillId) => {
+    requestedSkillIds.map(async (skillId) => {
       const contents = await readFile(
         join(fixtureRoot, "skills", skillId, "SKILL.md"),
         "utf8",
@@ -311,6 +319,9 @@ async function readFixtureContents(): Promise<FixtureContents> {
       return [skillId, contents] as const;
     }),
   );
+  if (directOnly) {
+    return { skills: new Map(skillEntries) };
+  }
   const agent = await readFile(
     join(fixtureRoot, "agents", `${FIXTURE_AGENT_ROLE}.toml`),
     "utf8",
@@ -361,13 +372,15 @@ async function createTemporaryFixtureRepository(
     }),
   );
 
-  const agentDirectory = join(repositoryDirectory, ".codex/agents");
-  await mkdir(agentDirectory, { recursive: true, mode: 0o700 });
-  await writeFile(
-    join(agentDirectory, `${FIXTURE_AGENT_ROLE}.toml`),
-    fixtures.agent,
-    { encoding: "utf8", mode: 0o600 },
-  );
+  if (fixtures.agent !== undefined) {
+    const agentDirectory = join(repositoryDirectory, ".codex/agents");
+    await mkdir(agentDirectory, { recursive: true, mode: 0o700 });
+    await writeFile(
+      join(agentDirectory, `${FIXTURE_AGENT_ROLE}.toml`),
+      fixtures.agent,
+      { encoding: "utf8", mode: 0o600 },
+    );
+  }
 
   return { rootDirectory, repositoryDirectory };
 }
@@ -409,6 +422,7 @@ async function observeScenario(
       activeCollectors.add(collector);
       return {
         endpoint: collector.endpoint,
+        diagnosticsSnapshot: () => collector.diagnosticsSnapshot(),
         closeAndSnapshot: async () => {
           try {
             return await collector.closeAndSnapshot();
@@ -464,31 +478,30 @@ function requireRepeatedObservations(
   return [first, second];
 }
 
-async function writeRequestedReport(
+async function writeRequestedOutput(
   outputPath: string,
-  serializedReport: string,
+  serializedOutput: string,
 ): Promise<void> {
   try {
-    await writeFile(resolve(outputPath), serializedReport, {
+    await writeFile(resolve(outputPath), serializedOutput, {
       encoding: "utf8",
       flag: "wx",
       mode: 0o600,
     });
   } catch {
     throw new Error(
-      "Unable to write the explicitly requested report destination; its parent must exist and the file must be new",
+      "Unable to write the explicitly requested output destination; its parent must exist and the file must be new",
     );
   }
 }
 
 async function main(): Promise<void> {
   installSignalCleanup();
-  const { outputPath, codexAnalyticsExplicitlyAllowed } = parseRunnerArguments(
-    process.argv.slice(2),
-  );
+  const { outputPath, codexAnalyticsExplicitlyAllowed, directOnly } =
+    parseRunnerArguments(process.argv.slice(2));
   const [{ codexVersion, multiAgentAvailable }, fixtures] = await Promise.all([
     inspectCodexPrerequisites(),
-    readFixtureContents(),
+    readFixtureContents(directOnly),
   ]);
   const temporaryFixture = await createTemporaryFixtureRepository(fixtures);
 
@@ -496,7 +509,56 @@ async function main(): Promise<void> {
     ScenarioDefinition["id"],
     ScenarioObservation[]
   >();
-  for (const definition of SCENARIO_DEFINITIONS) {
+  const directDefinition = SCENARIO_DEFINITIONS.find(
+    (definition) => definition.id === "direct",
+  );
+  if (!directDefinition) {
+    throw new Error(
+      "Scenario configuration error: direct scenario is required",
+    );
+  }
+  scenarioObservations.set(
+    "direct",
+    await observeScenario(
+      directDefinition,
+      temporaryFixture.repositoryDirectory,
+      multiAgentAvailable,
+      codexAnalyticsExplicitlyAllowed,
+    ),
+  );
+  const directObservation = requireSingleObservation(
+    "direct",
+    scenarioObservations.get("direct") ?? [],
+  );
+
+  if (directOnly) {
+    if (!directObservation.snapshot) {
+      throw new Error("Collector returned no public evidence snapshot");
+    }
+    const serializedSnapshot = `${JSON.stringify(
+      directObservation.snapshot,
+      null,
+      2,
+    )}\n`;
+    process.stderr.write(
+      `${formatDirectBaselineSummary({ codexVersion, observation: directObservation })}\n`,
+    );
+    process.stdout.write(serializedSnapshot);
+    if (outputPath) {
+      await writeRequestedOutput(outputPath, serializedSnapshot);
+      process.stderr.write(
+        "Public evidence snapshot written to the explicitly requested destination.\n",
+      );
+    }
+    if (buildScenarioResult("direct", directObservation).status === "failed") {
+      process.exitCode = 1;
+    }
+    return;
+  }
+
+  for (const definition of SCENARIO_DEFINITIONS.filter(
+    (candidate) => candidate.id !== "direct",
+  )) {
     scenarioObservations.set(
       definition.id,
       await observeScenario(
@@ -509,10 +571,7 @@ async function main(): Promise<void> {
   }
 
   const observations: IntegrationObservations = {
-    direct: requireSingleObservation(
-      "direct",
-      scenarioObservations.get("direct") ?? [],
-    ),
+    direct: directObservation,
     repeated: requireRepeatedObservations(
       scenarioObservations.get("repeated") ?? [],
     ),
@@ -531,10 +590,12 @@ async function main(): Promise<void> {
     observations,
   });
   const serializedReport = `${JSON.stringify(report, null, 2)}\n`;
-  process.stderr.write(`${formatConsoleSummary(report)}\n`);
+  process.stderr.write(
+    `${formatConsoleSummary(report)}\n\n${formatDiagnosticsSummary(observations)}\n`,
+  );
   process.stdout.write(serializedReport);
   if (outputPath) {
-    await writeRequestedReport(outputPath, serializedReport);
+    await writeRequestedOutput(outputPath, serializedReport);
     process.stderr.write(
       "Machine-readable report written to the explicitly requested destination.\n",
     );

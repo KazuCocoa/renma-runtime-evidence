@@ -4,15 +4,21 @@ import { dirname, join, resolve } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
-import type { CodexSkillPresenceSnapshot } from "../../../src/index.js";
+import type {
+  CodexSkillEvidenceDiagnosticsSnapshot,
+  CodexSkillPresenceSnapshot,
+} from "../../../src/index.js";
 import {
   buildCodexExecArguments,
   buildIntegrationReport,
   buildRepeatedScenarioResult,
   buildScenarioResult,
+  classifyPipelineDiagnostics,
   FIXTURE_AGENT_ROLE,
   FIXTURE_SKILL_IDS,
   formatConsoleSummary,
+  formatDiagnosticsSummary,
+  formatDirectBaselineSummary,
   observeIndependentCollectorRuns,
   parseRunnerArguments,
   reportRequiresFailure,
@@ -22,6 +28,46 @@ import {
   type IntegrationObservations,
   type ScenarioObservation,
 } from "../src/integration-config.js";
+
+function diagnostics(
+  overrides: Partial<CodexSkillEvidenceDiagnosticsSnapshot> = {},
+): CodexSkillEvidenceDiagnosticsSnapshot {
+  return {
+    schemaVersion: 1,
+    otlpMetricsRequestsReceived: 0,
+    successfullyDecodedRequests: 0,
+    decodeFailures: 0,
+    requestReadFailures: 0,
+    requestBodyTooLargeFailures: 0,
+    jsonParseFailures: 0,
+    otlpValidationFailures: 0,
+    resourceMetricsEntriesInspected: 0,
+    scopeMetricsEntriesInspected: 0,
+    metricsInspected: 0,
+    metricDataPointsInspected: 0,
+    targetMetricsObserved: 0,
+    targetDataPointsObserved: 0,
+    targetDataPointsWithStatusOk: 0,
+    targetDataPointsWithStatusError: 0,
+    targetDataPointsWithOtherOrMissingStatus: 0,
+    positiveTargetDataPoints: 0,
+    zeroTargetDataPoints: 0,
+    negativeTargetDataPoints: 0,
+    targetDataPointsWithNoRecordedValue: 0,
+    targetDataPointsWithCanonicalIntValue: 0,
+    targetDataPointsWithJsonNumberIntValue: 0,
+    targetDataPointsWithDoubleValue: 0,
+    targetDataPointsWithMissingValue: 0,
+    targetDataPointsWithConflictingValues: 0,
+    targetDataPointsWithInvalidIntValue: 0,
+    targetDataPointsWithInvalidDoubleValue: 0,
+    targetDataPointsWithInvalidFlags: 0,
+    acceptedAllowlistedSkillDataPoints: 0,
+    unknownOrMissingSkillLabelDataPoints: 0,
+    counterSaturationObserved: false,
+    ...overrides,
+  };
+}
 
 function snapshot(
   injectedSkills: readonly string[],
@@ -84,6 +130,7 @@ test("requires explicit analytics consent and accepts an optional output destina
   );
   assert.deepEqual(parseRunnerArguments(["--allow-codex-analytics"]), {
     codexAnalyticsExplicitlyAllowed: true,
+    directOnly: false,
   });
   assert.deepEqual(
     parseRunnerArguments([
@@ -93,6 +140,7 @@ test("requires explicit analytics consent and accepts an optional output destina
     ]),
     {
       codexAnalyticsExplicitlyAllowed: true,
+      directOnly: false,
       outputPath: "/tmp/report.json",
     },
   );
@@ -104,6 +152,7 @@ test("requires explicit analytics consent and accepts an optional output destina
     ]),
     {
       codexAnalyticsExplicitlyAllowed: true,
+      directOnly: false,
       outputPath: "/tmp/report.json",
     },
   );
@@ -137,6 +186,73 @@ test("requires explicit analytics consent and accepts an optional output destina
   assert.throws(
     () => parseRunnerArguments(["--allow-codex-analytics", "--runs"]),
     /unknown option/,
+  );
+  assert.deepEqual(
+    parseRunnerArguments(["--allow-codex-analytics", "--direct-only"]),
+    { codexAnalyticsExplicitlyAllowed: true, directOnly: true },
+  );
+  assert.throws(
+    () =>
+      parseRunnerArguments([
+        "--allow-codex-analytics",
+        "--direct-only",
+        "--direct-only",
+      ]),
+    /duplicate --direct-only/,
+  );
+});
+
+test("classifies the six bounded pipeline stages in order", () => {
+  assert.equal(classifyPipelineDiagnostics(diagnostics()), "no-otlp-request");
+  assert.equal(
+    classifyPipelineDiagnostics(
+      diagnostics({ otlpMetricsRequestsReceived: 1, decodeFailures: 1 }),
+    ),
+    "request-decode-failure",
+  );
+  assert.equal(
+    classifyPipelineDiagnostics(
+      diagnostics({
+        otlpMetricsRequestsReceived: 1,
+        successfullyDecodedRequests: 1,
+        metricsInspected: 2,
+      }),
+    ),
+    "decoded-without-metric-datapoints",
+  );
+  assert.equal(
+    classifyPipelineDiagnostics(
+      diagnostics({
+        otlpMetricsRequestsReceived: 1,
+        successfullyDecodedRequests: 1,
+        metricDataPointsInspected: 3,
+      }),
+    ),
+    "non-target-metric-datapoints-only",
+  );
+  assert.equal(
+    classifyPipelineDiagnostics(
+      diagnostics({
+        otlpMetricsRequestsReceived: 1,
+        successfullyDecodedRequests: 1,
+        metricDataPointsInspected: 1,
+        targetDataPointsObserved: 1,
+        targetDataPointsWithStatusError: 1,
+      }),
+    ),
+    "target-datapoints-rejected",
+  );
+  assert.equal(
+    classifyPipelineDiagnostics(
+      diagnostics({
+        otlpMetricsRequestsReceived: 1,
+        successfullyDecodedRequests: 1,
+        metricDataPointsInspected: 1,
+        targetDataPointsObserved: 1,
+        acceptedAllowlistedSkillDataPoints: 1,
+      }),
+    ),
+    "accepted-skill-evidence",
   );
 });
 
@@ -381,6 +497,11 @@ test("uses a fresh collector lifetime for each repeated run", async () => {
       events.push(`create:${current}`);
       return {
         endpoint,
+        diagnosticsSnapshot: () =>
+          diagnostics({
+            otlpMetricsRequestsReceived: 1,
+            successfullyDecodedRequests: 1,
+          }),
         closeAndSnapshot: async () => {
           if (!closed) {
             closed = true;
@@ -417,6 +538,53 @@ test("uses a fresh collector lifetime for each repeated run", async () => {
     observations.map(({ diagnostic }) => diagnostic),
     ["process-exit-nonzero", undefined],
   );
+  assert.deepEqual(
+    observations.map(
+      ({ diagnostics: observedDiagnostics }) =>
+        observedDiagnostics?.otlpMetricsRequestsReceived,
+    ),
+    [1, 1],
+  );
+});
+
+test("prints separate diagnostics while keeping them out of serialized public results", () => {
+  const observations = supportedObservations();
+  const directDiagnostics = diagnostics({
+    otlpMetricsRequestsReceived: 2,
+    successfullyDecodedRequests: 2,
+    metricDataPointsInspected: 4,
+    targetDataPointsObserved: 1,
+    acceptedAllowlistedSkillDataPoints: 1,
+  });
+  const observationsWithDiagnostics: IntegrationObservations = {
+    ...observations,
+    direct: {
+      ...observations.direct,
+      diagnostics: directDiagnostics,
+    },
+  };
+  const report = buildIntegrationReport({
+    codexVersion: "codex-cli 0.146.0",
+    codexAnalyticsExplicitlyAllowed: true,
+    observations: observationsWithDiagnostics,
+  });
+  const serializedPublicReport = JSON.stringify(report);
+  const diagnosticSummary = formatDiagnosticsSummary(
+    observationsWithDiagnostics,
+  );
+  const directSummary = formatDirectBaselineSummary({
+    codexVersion: "codex-cli 0.146.0",
+    observation: observationsWithDiagnostics.direct,
+  });
+
+  assert.equal(serializedPublicReport.includes("otlpMetricsRequests"), false);
+  assert.equal(serializedPublicReport.includes("pipeline"), false);
+  assert.match(diagnosticSummary, /not public Skill evidence/);
+  assert.match(diagnosticSummary, /accepted-skill-evidence/);
+  assert.match(diagnosticSummary, /nested: unavailable/);
+  assert.match(directSummary, /Command category: direct single-Skill baseline/);
+  assert.match(directSummary, /accepted-skill-evidence/);
+  assert.match(directSummary, /no execution, count, ordering/);
 });
 
 test("reports only approved fields and fails the required baseline", () => {
