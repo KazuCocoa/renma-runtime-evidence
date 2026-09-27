@@ -104,3 +104,6 @@ timing, and fixture bodies, so this comparison does **not** isolate a cache
 invalidation mechanism or establish a TTL. No stale listing was observed in this
 run. The B artifacts show bounded behavior after replacement; the provider read
 or injection path remains unsupported.
+
+An optional [runtime-fed OTLP record](RUNTIME-OTEL.md) projects the actual barrier
+collector snapshot with a pre-bound, separately attributed wrapper deployment.

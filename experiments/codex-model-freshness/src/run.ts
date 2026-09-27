@@ -43,6 +43,8 @@ import {
   type BarrierRouting,
 } from "./barrier.js";
 
+import { bindRuntimeOtelProjection } from "./runtime-otel.js";
+
 type Mode = "between-turn" | "direct-tool" | "skill-midturn";
 
 const RPC_TIMEOUT = 15_000;
@@ -66,7 +68,7 @@ function signal(child: ChildProcess, value: NodeJS.Signals): void {
   }
 }
 
-async function run(mode: Mode) {
+async function run(mode: Mode, emitRuntimeOtel = false) {
   stage = "setup";
   const directories = await createCharacterizationIsolatedDirectories();
   let child: ChildProcess | undefined;
@@ -190,6 +192,9 @@ async function run(mode: Mode) {
       return snapshotFor(revision);
     };
     const snapshotA = await writeRevision("a");
+    const runtimeProjection = emitRuntimeOtel
+      ? bindRuntimeOtelProjection(snapshotA, "real-cli")
+      : undefined;
     collector = await createCodexSkillEvidenceCollector({
       allowedSkills: [LISTING_FIXTURE_NAME],
     });
@@ -423,6 +428,15 @@ async function run(mode: Mode) {
     };
     const observations = [];
     const initialListing = await listing(false);
+    if (
+      emitRuntimeOtel &&
+      (initialListing.fixtureEntries !== "one" ||
+        !initialListing.expectedPathMatched ||
+        initialListing.listingErrorsObserved)
+    )
+      throw new Error(
+        "Runtime projection requires one confirmed fixture listing",
+      );
     const originalThread = await startThread();
     if (mode !== "between-turn") {
       const modelTurn = await turn(originalThread);
@@ -434,6 +448,9 @@ async function run(mode: Mode) {
       const diagnostics = collector.diagnosticsSnapshot();
       return {
         schemaVersion: "renma.codex-barrier-row.v1",
+        ...(runtimeProjection
+          ? { runtimeOtel: runtimeProjection.project(snapshot) }
+          : {}),
         codexVersion: version,
         scenario: mode,
         authentication: "chatgpt-file-linked",
@@ -538,14 +555,22 @@ async function run(mode: Mode) {
 async function main() {
   const args = process.argv.slice(2);
   const barrierMode = args.includes("--midturn-capability");
+  const emitRuntimeOtel = args.includes("--emit-runtime-otel");
+  if (emitRuntimeOtel && !barrierMode)
+    throw new Error("Runtime OTLP requires barrier mode");
+  if (args.filter((arg) => arg === "--emit-runtime-otel").length > 1)
+    throw new Error("Duplicate projection option");
+  const consentArgs = args.filter((arg) => arg !== "--emit-runtime-otel");
   requireOptIn(
-    barrierMode ? args.filter((arg) => arg !== "--midturn-capability") : args,
+    barrierMode
+      ? consentArgs.filter((arg) => arg !== "--midturn-capability")
+      : consentArgs,
   );
   if (args.filter((arg) => arg === "--midturn-capability").length > 1)
     throw new Error("Duplicate mode");
   if (!barrierMode) return run("between-turn");
-  const direct = await run("direct-tool");
-  const skill = await run("skill-midturn");
+  const direct = await run("direct-tool", emitRuntimeOtel);
+  const skill = await run("skill-midturn", emitRuntimeOtel);
   return {
     schemaVersion: "renma.codex-midturn-capability.v1",
     evidenceClass: "real-cli-app-server-model-turns",

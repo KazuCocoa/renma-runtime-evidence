@@ -10,7 +10,7 @@ only when its stated evidence exists; fixtures cannot satisfy runtime criteria.
 | Two-Skill characterization | Three isolated real CLI rows with usable pipeline and finite result                                         | CLI 0.157.1 ChatGPT file login: three completed rows, usable OTLP, requested-skill-only                                                                  |
 | Identity manifest          | Inspect actual Renma identity and test immutable deployment mapping, collisions, modifications, missing IDs | Local fixture implemented; experimental, not a public runtime contract                                                                                   |
 | Lifecycle/freshness        | Real host listing/read/direct invocation and bounded A/B updates; unsupported states explicit               | Local Git, listing-only, and four real model turns after A/B replacement measured; mid-turn barrier/direct capability measured; remote behavior untested |
-| Provenance/OTel            | Minimal allowlisted transport with provider and deployment provenance separate                              | Synthetic OTLP v2 single-record projection and pinned protobuf decoder tested; no runtime/backend claim                                                  |
+| Provenance/OTel            | Minimal allowlisted transport with provider and deployment provenance separate                              | Synthetic v2 plus separate live-input OTLP record tested with pinned decoder; backend interoperability untested                                          |
 | Consumer boundary          | Document and version only demonstrated semantics                                                            | Existing provider-specific presence API retained; experimental field contract documented separately                                                      |
 
 Baseline: remote/main `3d237e85dc61419bda92a720e8bdbd1b5710dd33`, no open PR,
@@ -144,3 +144,16 @@ from observed behavior without claiming the provider injected A or that the
 Skill caused the tool call. Frozen wrapper snapshots remain separate from
 provider evidence. Tests: 164 passed, 1 skipped. Explicit body reads, remote
 manifest freshness/TTL, and deployed OTel backend behavior are still unmeasured.
+
+## Runtime-fed OTLP projection
+
+The [live-input OTLP experiment](../experiments/codex-model-freshness/RUNTIME-OTEL.md)
+connects a pre-bound known fixture snapshot directly to a dedicated real Codex
+collector. Its new two-condition CLI 0.157.1 run preserves wrapper A in the
+projected record despite the later B replacement. Provider fields carry only
+presence; injected revision remains unsupported. The absent-presence condition
+omits the candidate digest/revision. Synthetic test input, real provider input
+on synthetic fixtures, and replayed real records are labeled distinctly.
+Pinned protobuf decoding validates both synthetic packets and the saved real
+records. This closes the live-input projection gap; deployed backend behavior,
+arbitrary Renma adapters, and remote-host read/cache/TTL semantics are not proven.

@@ -149,3 +149,11 @@ disk before a tool returned, while the later artifact matched A. Its provider
 metric still identified only the Skill name. That result does not validate an
 injected revision or turn the synthetic OTLP projection here into runtime or
 backend evidence. Never attach the final checkout's digest as a provider fact.
+
+A separate [runtime-fed projection](../codex-model-freshness/RUNTIME-OTEL.md)
+now binds the known barrier fixture before its real CLI collector starts and
+projects the collector's actual reduced snapshot. It has its own experimental
+schema and does not change this synthetic-only v2 fixture. Live provider input,
+synthetic Skill content, wrapper provenance, and saved-record schema validation
+are explicitly distinguished. Neither experiment establishes deployed-backend
+interoperability or promotes the projection to the public package API.
