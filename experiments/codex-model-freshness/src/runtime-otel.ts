@@ -1,5 +1,6 @@
 import { LISTING_FIXTURE_NAME } from "../../codex-listing-freshness/src/listing.js";
 import { barrierDeployment } from "./barrier.js";
+import type { FixtureGitEvidence } from "./fixture-git.js";
 import { object } from "./contract.js";
 
 type Attribute = {
@@ -22,6 +23,7 @@ export type InputEvidence = "real-cli" | "synthetic-test";
 export function bindRuntimeOtelProjection(
   inputDeployment: unknown,
   inputEvidence: InputEvidence,
+  inputGit?: FixtureGitEvidence,
 ) {
   const candidate = object(inputDeployment);
   if (
@@ -37,6 +39,18 @@ export function bindRuntimeOtelProjection(
     candidate.digest !== bound.digest
   )
     throw new Error("Invalid runtime projection deployment");
+  if (
+    inputGit &&
+    (inputGit.provenance !== "fixture-git-verifier" ||
+      inputGit.verificationScope !== "one-known-skill-file-at-commit" ||
+      !/^[a-f0-9]{40}$/u.test(inputGit.commit) ||
+      inputGit.contentDigest !== bound.digest)
+  )
+    throw new Error("Invalid fixture Git provenance");
+  const commit = inputGit?.commit;
+  const schema = commit
+    ? "renma.experimental-codex-runtime-presence.v2"
+    : RUNTIME_OTEL_SCHEMA;
   // Reconstructed from known primitives; never retain the caller's mutable object.
   return Object.freeze({
     project(input: unknown) {
@@ -58,7 +72,7 @@ export function bindRuntimeOtelProjection(
         value.unrecognizedSkillObserved ||
         value.injectedSkills.some((label) => label !== LISTING_FIXTURE_NAME);
       const common = [
-        text("renma.experiment.schema", RUNTIME_OTEL_SCHEMA),
+        text("renma.experiment.schema", schema),
         text(
           "renma.evidence.class",
           inputEvidence === "real-cli"
@@ -97,6 +111,15 @@ export function bindRuntimeOtelProjection(
           text("renma.deployment.digest_scope", bound.scope),
           text("renma.deployment.fixture_revision", bound.revision),
         );
+      if (observed && commit)
+        deployment.push(
+          text("renma.deployment.commit", commit),
+          text("renma.deployment.commit_provenance", "fixture-git-verifier"),
+          text(
+            "renma.deployment.commit_verification_scope",
+            "one-known-skill-file-at-commit",
+          ),
+        );
       return {
         resourceLogs: [
           {
@@ -104,7 +127,7 @@ export function bindRuntimeOtelProjection(
               {
                 scope: {
                   name: "renma.experiment.codex-runtime-presence",
-                  version: "1",
+                  version: commit ? "2" : "1",
                 },
                 logRecords: [
                   {

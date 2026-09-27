@@ -157,3 +157,10 @@ schema and does not change this synthetic-only v2 fixture. Live provider input,
 synthetic Skill content, wrapper provenance, and saved-record schema validation
 are explicitly distinguished. Neither experiment establishes deployed-backend
 interoperability or promotes the projection to the public package API.
+
+The [Git-backed live transport experiment](../codex-model-freshness/GIT-TRANSPORT.md)
+subsequently sent a real reduced Codex observation with the actual pre-bound
+synthetic Git commit/digest to an owned loopback receiver, preserving A after a
+mid-turn B commit. This closes that bounded end-to-end prototype gap. It remains
+an experimental wrapper association, with injected revision unsupported and no
+production backend or general Renma adapter claim.

@@ -1,5 +1,10 @@
 # Continuation experiment ledger
 
+Current completion audit: [five-track conclusion](experiment-conclusion.md).
+The local bounded program now has real Git + Codex + OTLP transport evidence.
+Earlier blocked/incomplete entries below describe intermediate states; remote
+host and production integration questions remain explicitly unmeasured.
+
 Scope: [Issue #10](https://github.com/KazuCocoa/renma-runtime-evidence/issues/10)
 and the static/runtime boundary in
 [Renma #174](https://github.com/KazuCocoa/renma/issues/174). A phase is complete
@@ -10,7 +15,7 @@ only when its stated evidence exists; fixtures cannot satisfy runtime criteria.
 | Two-Skill characterization | Three isolated real CLI rows with usable pipeline and finite result                                         | CLI 0.157.1 ChatGPT file login: three completed rows, usable OTLP, requested-skill-only                                                                  |
 | Identity manifest          | Inspect actual Renma identity and test immutable deployment mapping, collisions, modifications, missing IDs | Local fixture implemented; experimental, not a public runtime contract                                                                                   |
 | Lifecycle/freshness        | Real host listing/read/direct invocation and bounded A/B updates; unsupported states explicit               | Local Git, listing-only, and four real model turns after A/B replacement measured; mid-turn barrier/direct capability measured; remote behavior untested |
-| Provenance/OTel            | Minimal allowlisted transport with provider and deployment provenance separate                              | Synthetic v2 plus separate live-input OTLP record tested with pinned decoder; backend interoperability untested                                          |
+| Provenance/OTel            | Minimal allowlisted transport with provider and deployment provenance separate                              | Real Git + live Codex reduction + local HTTP OTLP delivery; pinned decoder checked; production backend untested                                          |
 | Consumer boundary          | Document and version only demonstrated semantics                                                            | Existing provider-specific presence API retained; experimental field contract documented separately                                                      |
 
 Baseline: remote/main `3d237e85dc61419bda92a720e8bdbd1b5710dd33`, no open PR,
@@ -45,10 +50,10 @@ Codex's separate OpenAI analytics path is not controlled by the loopback exporte
 Secrets must remain in the execution environment or Codex credential storage,
 never pasted into a report or committed. Authentication failures must not trigger unchanged retries.
 
-## Remaining external boundary
+## Earlier external boundary (superseded by the completed local sequence)
 
 The independent filesystem, Git, and synthetic transport steps are complete as
-fixtures. The overall experiment is **not complete**. The real CLI 0.157.1 listing experiment measured cached versus forced
+fixtures. At that intermediate stage, the overall experiment was **not complete**. The real CLI 0.157.1 listing experiment measured cached versus forced
 refresh and a body-only update with unchanged listing metadata. The two-Skill
 selection matrix has now completed using ChatGPT authentication. A local mid-turn barrier and direct-capability comparison are now measured;
 body-read/injection attribution and remote-host cache behavior remain unmeasured. Between-turn local A/B replacement
@@ -101,8 +106,9 @@ final real-runtime repetitions and 151 passing deterministic tests, 1 skipped.
   and deployed OTel backend compatibility remain untested and must not be inferred
   from local listing or protobuf-schema success.
 
-The overall goal remains unfinished. Continue the pending real experiments; do not turn fixture results into model-run evidence
-or expand the private package API to fill unsupported fields.
+That audit preceded the model and transport runs below. Its evidence rule still
+applies: do not turn fixture results into model-run evidence or expand the
+private package API to fill unsupported fields.
 
 ## ChatGPT-authenticated two-Skill matrix
 
@@ -157,3 +163,14 @@ on synthetic fixtures, and replayed real records are labeled distinctly.
 Pinned protobuf decoding validates both synthetic packets and the saved real
 records. This closes the live-input projection gap; deployed backend behavior,
 arbitrary Renma adapters, and remote-host read/cache/TTL semantics are not proven.
+
+## Integrated Git/runtime/OTLP transport
+
+The [final integrated prototype](../experiments/codex-model-freshness/GIT-TRANSPORT.md)
+uses actual temporary Git A/B commits and the live CLI collector in the same
+run, then sends the reduced v2 record to an owned local HTTP receiver. Both
+conditions received exact reduced records. The Skill condition's latest Git
+state became B, while its transmitted wrapper candidate retained A; the direct
+condition omitted the candidate hash. Provider fields contain no wrapper hash.
+The [completion audit](experiment-conclusion.md) maps each planned track to its
+proof and keeps broader unsupported/future work distinct.
