@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import {
   mkdtemp,
+  readlink,
   readFile,
   rm,
   stat,
@@ -28,6 +29,7 @@ import {
   createCharacterizationIsolatedDirectories,
   fixedArtifactMatches,
   loadCharacterizationFixtureContents,
+  linkCharacterizationChatgptLogin,
   parseCharacterizationRunnerArguments,
   preflightCharacterizationIsolation,
   type CharacterizationProcessStatus,
@@ -542,4 +544,101 @@ test("fixture files contain only their own fixed behavior", async () => {
     assert.equal(contents.includes("subagent"), false);
     assert.equal(contents.includes("nested"), false);
   }
+});
+
+test("ChatGPT mode links only authorized file auth and preserves caller state during cleanup", async () => {
+  const caller = await mkdtemp(join(tmpdir(), "renma-caller-auth-fixture-"));
+  const directories = await createCharacterizationIsolatedDirectories();
+  const fakeAuth = "SYNTHETIC_AUTH_SENTINEL";
+  try {
+    await writeFile(join(caller, "auth.json"), fakeAuth);
+    await writeFile(join(caller, "config.toml"), "SYNTHETIC_CONFIG_SENTINEL");
+    const env = buildCharacterizationChildEnvironment(
+      {
+        PATH: "/synthetic/bin",
+        CODEX_API_KEY: "DO_NOT_FORWARD",
+        OPENAI_API_KEY: "DO_NOT_FORWARD",
+        HOME: caller,
+        CODEX_HOME: caller,
+      },
+      directories,
+      "chatgpt-file-linked",
+    );
+    assert.equal(env.CODEX_API_KEY, undefined);
+    assert.equal(env.OPENAI_API_KEY, undefined);
+    assert.equal(env.HOME, directories.homeDirectory);
+    assert.equal(env.CODEX_HOME, directories.codexHomeDirectory);
+    await preflightCharacterizationIsolation(
+      env,
+      directories,
+      "chatgpt-file-linked",
+    );
+    await linkCharacterizationChatgptLogin(directories, caller);
+    assert.equal(
+      await readlink(join(directories.codexHomeDirectory, "auth.json")),
+      join(caller, "auth.json"),
+    );
+    await assert.rejects(
+      stat(join(directories.codexHomeDirectory, "config.toml")),
+      { code: "ENOENT" },
+    );
+    await assert.rejects(
+      linkCharacterizationChatgptLogin(directories, caller),
+      /unavailable/,
+    );
+    await cleanupCharacterizationIsolatedDirectories(directories);
+    assert.equal(await readFile(join(caller, "auth.json"), "utf8"), fakeAuth);
+  } finally {
+    await cleanupCharacterizationIsolatedDirectories(directories);
+    await rm(caller, { recursive: true, force: true });
+  }
+});
+
+test("ChatGPT login requires explicit opt-in and unavailable file auth cannot fall back", async () => {
+  assert.deepEqual(
+    parseCharacterizationRunnerArguments([
+      "--allow-codex-analytics",
+      "--use-chatgpt-login",
+    ]),
+    { codexAnalyticsExplicitlyAllowed: true, useChatgptLogin: true },
+  );
+  assert.throws(
+    () => parseCharacterizationRunnerArguments(["--use-chatgpt-login"]),
+    /analytics consent/,
+  );
+  assert.throws(
+    () =>
+      parseCharacterizationRunnerArguments([
+        "--allow-codex-analytics",
+        "--use-chatgpt-login",
+        "--use-chatgpt-login",
+      ]),
+    /duplicate/,
+  );
+  const directories = await createCharacterizationIsolatedDirectories();
+  try {
+    await assert.rejects(
+      linkCharacterizationChatgptLogin(directories, directories.homeDirectory),
+      /unavailable/,
+    );
+  } finally {
+    await cleanupCharacterizationIsolatedDirectories(directories);
+  }
+});
+
+test("reports ChatGPT authentication provenance without changing evidence classification", () => {
+  const options = {
+    codexVersion: "codex-cli 0.157.1",
+    codexAnalyticsExplicitlyAllowed: true as const,
+    observations: observationsForPattern("requested"),
+  };
+  const api = buildSkillInjectedCharacterizationReport(options);
+  const chatgpt = buildSkillInjectedCharacterizationReport({
+    ...options,
+    authenticationIsolationMode: "chatgpt-file-linked",
+  });
+  assert.equal(api.authenticationIsolationMode, "api-key");
+  assert.equal(chatgpt.authenticationIsolationMode, "chatgpt-file-linked");
+  assert.deepEqual(chatgpt.scenarios, api.scenarios);
+  assert.equal(chatgpt.classification, api.classification);
 });

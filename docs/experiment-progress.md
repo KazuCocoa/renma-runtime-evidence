@@ -7,7 +7,7 @@ only when its stated evidence exists; fixtures cannot satisfy runtime criteria.
 
 | Phase                      | Completion criterion                                                                                        | 2026-09-27 status                                                                                                      |
 | -------------------------- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| Two-Skill characterization | Three isolated real CLI rows with usable pipeline and finite result                                         | Blocked before launch: this process has no `CODEX_API_KEY`; separate analytics acknowledgement pending                 |
+| Two-Skill characterization | Three isolated real CLI rows with usable pipeline and finite result                                         | CLI 0.157.1 ChatGPT file login: three completed rows, usable OTLP, requested-skill-only                                |
 | Identity manifest          | Inspect actual Renma identity and test immutable deployment mapping, collisions, modifications, missing IDs | Local fixture implemented; experimental, not a public runtime contract                                                 |
 | Lifecycle/freshness        | Real host listing/read/direct invocation and bounded A/B updates; unsupported states explicit               | Local Git and real CLI 0.157.1 listing refresh/body-only boundary tested; model-turn and remote-cache behavior not run |
 | Provenance/OTel            | Minimal allowlisted transport with provider and deployment provenance separate                              | Synthetic OTLP v2 single-record projection and pinned protobuf decoder tested; no runtime/backend claim                |
@@ -18,9 +18,9 @@ clean checkout, installed CLI `0.157.1`. Baseline checks: 131 passed, 1 skipped.
 The restricted shell initially prevented loopback binding and npm packing;
 the same checks passed with required local permissions and a temporary npm cache.
 
-Previous CLI `0.146.0` quota/rate-limit results remain historical. No 0.157.1 two-Skill injection
-matrix was launched, no saved credentials were read or copied, and no inference
-about 0.157.1 metric semantics follows from a missing API key.
+Previous CLI `0.146.0` quota/rate-limit results remain historical. The earlier missing-key block was a runner isolation prerequisite, not a CLI requirement.
+The new 0.157.1 matrix uses explicitly authorized ChatGPT file login; the runner
+links authentication without reading or copying credentials.
 
 See the [deployment experiment](../experiments/deployment-snapshot/README.md).
 The immutable snapshot experiment was merged in
@@ -36,25 +36,26 @@ The [OTLP projection and consumer boundary](../experiments/deployment-snapshot/O
 are tracked in [PR #13](https://github.com/KazuCocoa/renma-runtime-evidence/pull/13),
 merged after both Node 22/24 CI jobs passed (143 local tests passed, 1 skipped).
 A follow-up v2 experiment preserves both provenance groups within one record and
-validates fixture messages using the pinned official schema and a protobuf decoder. All new OTLP transport input is synthetic. A separate no-model-turn app-server
+validates fixture messages using the pinned official schema and a protobuf decoder. The deployment-projection OTLP input is synthetic. A separate no-model-turn app-server
 experiment now provides real listing evidence; it does not provide injection
 or capability-invocation evidence.
-Independent local work proceeds while the external prerequisites are unresolved.
+The current run has explicit separate-analytics consent.
 The existing characterization runner requires explicit analytics consent because
 Codex's separate OpenAI analytics path is not controlled by the loopback exporter.
-Secrets must be configured in the execution environment, never pasted into a
-report or committed. Authentication failures must not trigger unchanged retries.
+Secrets must remain in the execution environment or Codex credential storage,
+never pasted into a report or committed. Authentication failures must not trigger unchanged retries.
 
 ## Remaining external boundary
 
 The independent filesystem, Git, and synthetic transport steps are complete as
 fixtures. The overall experiment is **not complete**. The real CLI 0.157.1 listing experiment measured cached versus forced
-refresh and a body-only update with unchanged listing metadata. No two-Skill
-selection matrix, mid-model-turn update, direct capability/Skill comparison,
-body-read/injection attribution, or remote-host cache behavior has been measured. The API key and analytics question remain open.
+refresh and a body-only update with unchanged listing metadata. The two-Skill
+selection matrix has now completed using ChatGPT authentication. Mid-model-turn
+updates, direct capability/Skill comparison, body-read/injection attribution,
+and remote-host cache behavior remain unmeasured.
 
-Resume the isolated two-Skill runner only after both prerequisites are supplied.
-If it reports authentication/quota failure, retain only the fixed category and
+The API-key and explicit ChatGPT-login modes remain separate opt-in choices.
+If a runner reports authentication/quota failure, retain only the fixed category and
 stop unchanged retries. If usable runtime evidence arrives, characterize only
 what it exposes; lack of revision/listing/read fields must remain unsupported.
 A runtime or host exposing the required listing/read signals must be identified
@@ -92,14 +93,26 @@ final real-runtime repetitions and 151 passing deterministic tests, 1 skipped.
   from listing behavior. The measured listing predicates and name-only presence
   cannot supply these semantics. This is a limit of the tested evidence surfaces,
   not a claim that no runtime could ever expose another suitable signal.
-- **External prerequisites pending:** a usable execution-environment API key and
-  explicit separate-analytics acknowledgement for the existing two-Skill metric
-  runner and subsequent model-turn experiments. A runtime/host with explicit
+- **Authentication resolved:** explicitly authorized ChatGPT file login and
+  separate-analytics consent enabled the real three-row matrix. No API key was
+  required in that mode. A runtime/host with explicit
   read/load and direct-invocation evidence is still needed for those distinctions;
   the current listing-only protocol does not supply them. Remote MCP freshness
   and deployed OTel backend compatibility remain untested and must not be inferred
   from local listing or protobuf-schema success.
 
-The overall goal remains unfinished. Resume the pending real experiments when
-those prerequisites exist; do not turn fixture results into model-run evidence
+The overall goal remains unfinished. Continue the pending real experiments; do not turn fixture results into model-run evidence
 or expand the private package API to fill unsupported fields.
+
+## ChatGPT-authenticated two-Skill matrix
+
+The [real CLI 0.157.1 report](../experiments/codex-cli-integration/results/20260927-cli-0.157.1-chatgpt.json)
+contains three completed processes with usable OTLP. Neither-requested produced
+no target/control evidence or artifacts; each explicit request produced only its
+own evidence and matching artifact. The fixed classifier returns
+`requested-skill-only`. This single matrix does not prove a general execution,
+selection, read, or revision contract. Authentication uses a temporary link to
+caller-authorized file credentials; workspace and configuration homes remain
+fresh, and API-key variables are not forwarded. The deterministic suite passes
+154 tests with 1 skipped. The remaining lifecycle and remote-host questions are
+not resolved by this result.

@@ -1,5 +1,6 @@
 import { spawn, type ChildProcess } from "node:child_process";
 import { mkdir, writeFile } from "node:fs/promises";
+import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -23,6 +24,8 @@ import {
   createCharacterizationIsolatedDirectories,
   fixedArtifactMatches,
   loadCharacterizationFixtureContents,
+  linkCharacterizationChatgptLogin,
+  type CharacterizationAuthenticationMode,
   parseCharacterizationRunnerArguments,
   preflightCharacterizationIsolation,
   processStatusFromDiagnostic,
@@ -95,6 +98,7 @@ function runBoundedProcess(
     readonly cwd?: string;
     readonly environment: NodeJS.ProcessEnv;
     readonly captureStdout?: boolean;
+    readonly captureStderr?: boolean;
     readonly timeoutMs: number;
   },
 ): Promise<BoundedProcessResult> {
@@ -103,7 +107,11 @@ function runBoundedProcess(
       cwd: options.cwd,
       env: options.environment,
       detached: process.platform !== "win32",
-      stdio: ["ignore", options.captureStdout ? "pipe" : "ignore", "ignore"],
+      stdio: [
+        "ignore",
+        options.captureStdout ? "pipe" : "ignore",
+        options.captureStderr ? "pipe" : "ignore",
+      ],
     });
     activeChildren.add(child);
 
@@ -114,7 +122,8 @@ function runBoundedProcess(
     let captureLimitExceeded = false;
     let forceKillTimer: NodeJS.Timeout | undefined;
 
-    child.stdout?.on("data", (chunk: Buffer) => {
+    const capture = (chunk: Buffer): void => {
+      if (captureLimitExceeded) return;
       capturedBytes += chunk.length;
       if (capturedBytes > MAX_CAPTURED_STDOUT_BYTES) {
         captureLimitExceeded = true;
@@ -123,7 +132,9 @@ function runBoundedProcess(
         return;
       }
       stdout += chunk.toString("utf8");
-    });
+    };
+    child.stdout?.on("data", capture);
+    child.stderr?.on("data", capture);
     child.once("error", () => {
       spawnFailed = true;
     });
@@ -227,8 +238,10 @@ function requireSuccessfulPreflight(
   }
 }
 
-async function inspectCodexPrerequisites(): Promise<string> {
-  if (!process.env.CODEX_API_KEY) {
+async function inspectCodexPrerequisites(
+  authenticationMode: CharacterizationAuthenticationMode,
+): Promise<string> {
+  if (authenticationMode === "api-key" && !process.env.CODEX_API_KEY) {
     throw new Error(
       "The isolated characterization requires CODEX_API_KEY and never reuses caller HOME or CODEX_HOME",
     );
@@ -326,6 +339,7 @@ async function observeScenario(
   definition: CharacterizationScenarioDefinition,
   fixtures: CharacterizationFixtureContents,
   codexAnalyticsExplicitlyAllowed: true,
+  authenticationMode: CharacterizationAuthenticationMode,
 ): Promise<CharacterizationScenarioObservation> {
   const directories = await createCharacterizationIsolatedDirectories();
   activeIsolatedDirectories.add(directories);
@@ -334,8 +348,35 @@ async function observeScenario(
     const childEnvironment = buildCharacterizationChildEnvironment(
       process.env,
       directories,
+      authenticationMode,
     );
-    await preflightCharacterizationIsolation(childEnvironment, directories);
+    await preflightCharacterizationIsolation(
+      childEnvironment,
+      directories,
+      authenticationMode,
+    );
+    if (authenticationMode === "chatgpt-file-linked") {
+      await linkCharacterizationChatgptLogin(
+        directories,
+        process.env.CODEX_HOME || join(homedir(), ".codex"),
+      );
+      const login = await runBoundedProcess(
+        "codex",
+        ["-c", 'cli_auth_credentials_store="file"', "login", "status"],
+        {
+          cwd: directories.workspaceDirectory,
+          environment: childEnvironment,
+          captureStdout: true,
+          captureStderr: true,
+          timeoutMs: PREFLIGHT_TIMEOUT_MS,
+        },
+      );
+      requireSuccessfulPreflight(login, "ChatGPT login");
+      if (!/^Logged in using ChatGPT\s*$/im.test(login.stdout))
+        throw new Error(
+          "Characterization prerequisite failed: linked login is not confirmed as ChatGPT",
+        );
+    }
     await installScenarioFixtures(
       directories,
       fixtures,
@@ -348,14 +389,21 @@ async function observeScenario(
     activeCollectors.add(collector);
     const processResult = await runBoundedProcess(
       "codex",
-      buildCodexExecArguments({
-        collectorEndpoint: collector.endpoint,
-        prompt: definition.prompt,
-        temporaryRepository: directories.workspaceDirectory,
-        enableMultiAgent: false,
-        sandboxMode: "workspace-write",
-        codexAnalyticsExplicitlyAllowed,
-      }),
+      [
+        ...buildCodexExecArguments({
+          collectorEndpoint: collector.endpoint,
+          prompt: definition.prompt,
+          temporaryRepository: directories.workspaceDirectory,
+          enableMultiAgent: false,
+          sandboxMode: "workspace-write",
+          codexAnalyticsExplicitlyAllowed,
+        }).slice(0, -1),
+        "-c",
+        'cli_auth_credentials_store="file"',
+        "-c",
+        'history.persistence="none"',
+        definition.prompt,
+      ],
       {
         cwd: directories.workspaceDirectory,
         environment: childEnvironment,
@@ -395,7 +443,7 @@ function formatBoundedSummary(
   return [
     `Codex version: ${report.codexVersion}`,
     `Experiment: ${report.experiment}`,
-    "Authentication isolation: api-key with fresh HOME and CODEX_HOME per scenario",
+    `Authentication isolation: ${report.authenticationIsolationMode} with fresh HOME and CODEX_HOME per scenario`,
     "Collector semantics: skill-injection-presence",
     ...report.scenarios.flatMap((scenario) => [
       "",
@@ -434,10 +482,13 @@ async function writeRequestedOutput(
 
 async function main(): Promise<void> {
   installSignalCleanup();
-  const { codexAnalyticsExplicitlyAllowed, outputPath } =
+  const { codexAnalyticsExplicitlyAllowed, outputPath, useChatgptLogin } =
     parseCharacterizationRunnerArguments(process.argv.slice(2));
+  const authenticationMode: CharacterizationAuthenticationMode = useChatgptLogin
+    ? "chatgpt-file-linked"
+    : "api-key";
   const [codexVersion, fixtures] = await Promise.all([
-    inspectCodexPrerequisites(),
+    inspectCodexPrerequisites(authenticationMode),
     loadCharacterizationFixtureContents(fixtureRoot),
   ]);
   const observations: CharacterizationScenarioObservation[] = [];
@@ -447,6 +498,7 @@ async function main(): Promise<void> {
         definition,
         fixtures,
         codexAnalyticsExplicitlyAllowed,
+        authenticationMode,
       ),
     );
   }
@@ -454,6 +506,7 @@ async function main(): Promise<void> {
     codexVersion,
     codexAnalyticsExplicitlyAllowed,
     observations,
+    authenticationIsolationMode: authenticationMode,
   });
   const serializedReport = `${JSON.stringify(report, null, 2)}\n`;
   process.stderr.write(`${formatBoundedSummary(report)}\n`);
