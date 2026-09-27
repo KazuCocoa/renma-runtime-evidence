@@ -10,7 +10,7 @@ only when its stated evidence exists; fixtures cannot satisfy runtime criteria.
 | Two-Skill characterization | Three isolated real CLI rows with usable pipeline and finite result                                         | Blocked before launch: this process has no `CODEX_API_KEY`; separate analytics acknowledgement pending                                  |
 | Identity manifest          | Inspect actual Renma identity and test immutable deployment mapping, collisions, modifications, missing IDs | Local fixture implemented; experimental, not a public runtime contract                                                                  |
 | Lifecycle/freshness        | Real host listing/read/direct invocation and bounded A/B updates; unsupported states explicit               | Local A/B replacement plus actual synthetic Git commits/fetch/checkout/dirty mismatch tested; agent-run updates and host caches not run |
-| Provenance/OTel            | Minimal allowlisted transport with provider and deployment provenance separate                              | Synthetic collector-to-OTLP loopback projection tested; no runtime/backend compatibility claim                                          |
+| Provenance/OTel            | Minimal allowlisted transport with provider and deployment provenance separate                              | Synthetic OTLP v2 single-record projection and pinned protobuf decoder tested; no runtime/backend claim                                 |
 | Consumer boundary          | Document and version only demonstrated semantics                                                            | Existing provider-specific presence API retained; experimental field contract documented separately                                     |
 
 Baseline: remote/main `3d237e85dc61419bda92a720e8bdbd1b5710dd33`, no open PR,
@@ -34,7 +34,9 @@ The actual Git synchronization experiment was merged in
 Node 22/24 CI jobs passing (139 local tests passed, 1 skipped).
 The [OTLP projection and consumer boundary](../experiments/deployment-snapshot/OTEL.md)
 are tracked in [PR #13](https://github.com/KazuCocoa/renma-runtime-evidence/pull/13),
-with 143 local tests passed and 1 skipped. Runtime-derived evidence has
+merged after both Node 22/24 CI jobs passed (143 local tests passed, 1 skipped).
+A follow-up v2 experiment preserves both provenance groups within one record and
+validates fixture messages using the pinned official schema and a protobuf decoder. Runtime-derived evidence has
 not been generated in this continuation; all new transport input is synthetic.
 Independent local work proceeds while the external prerequisites are unresolved.
 The existing characterization runner requires explicit analytics consent because

@@ -19,7 +19,7 @@ const boolAttribute = (key: string, value: boolean): Attribute => ({
   key,
   value: { boolValue: value },
 });
-const EXPERIMENT_VERSION = "renma.experimental-presence-deployment-otlp.v1";
+const EXPERIMENT_VERSION = "renma.experimental-presence-deployment-otlp.v2";
 
 function reducedPresence(input: unknown) {
   if (typeof input !== "object" || input === null || Array.isArray(input)) {
@@ -143,26 +143,30 @@ export function bindFixtureOtelProjection(
             scopeLogs: [
               {
                 scope: {
-                  name: "renma.experiment.provider-presence",
-                  version: "1",
+                  name: "renma.experiment.presence-deployment",
+                  version: "2",
                 },
                 logRecords: [
                   {
+                    attributes: common(),
                     body: {
-                      stringValue: "Synthetic provider presence snapshot",
+                      kvlistValue: {
+                        values: [
+                          {
+                            key: "provider",
+                            value: {
+                              kvlistValue: { values: providerAttributes },
+                            },
+                          },
+                          {
+                            key: "deployment",
+                            value: {
+                              kvlistValue: { values: wrapperAttributes },
+                            },
+                          },
+                        ],
+                      },
                     },
-                    attributes: providerAttributes,
-                  },
-                ],
-              },
-              {
-                scope: { name: "renma.experiment.deployment", version: "1" },
-                logRecords: [
-                  {
-                    body: {
-                      stringValue: "Bound deployment candidate snapshot",
-                    },
-                    attributes: wrapperAttributes,
                   },
                 ],
               },

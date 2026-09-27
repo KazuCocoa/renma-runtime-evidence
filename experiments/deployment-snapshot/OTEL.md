@@ -1,15 +1,17 @@
 # Experimental OTLP projection and consumer boundary
 
-This experiment validates a minimized projection and loopback transport using
-**synthetic provider input**. It cannot be switched into a production/runtime
-mode. Its version is `renma.experimental-presence-deployment-otlp.v1`; it is not
-an OpenTelemetry semantic convention or a public package export.
+This experiment validates a minimized projection, loopback transport, and
+protobuf schema compatibility using **synthetic provider input**. It cannot be
+switched into a production/runtime mode. Its version is
+`renma.experimental-presence-deployment-otlp.v2`; it is not an OpenTelemetry
+semantic convention or a public package export.
 
 Run its deterministic checks after building:
 
 ```sh
 npm run build
-node --test .build/experiments/deployment-snapshot/test/otel-projection.test.js
+node --test .build/experiments/deployment-snapshot/test/otel-projection.test.js \
+  .build/experiments/deployment-snapshot/test/otlp-decoder.test.js
 ```
 
 The test binds deployment A before creating a dedicated Codex presence collector.
@@ -18,44 +20,66 @@ through the actual collector, drains it, and projects the reduced snapshot.
 A second loopback listener compares received bytes against that explicit
 projection without retaining incoming request bodies. The exported deployment
 remains A, including the actual non-null Git commit and digest from the isolated
-Git fixture; the later B commit is not exported and neither commit appears in
-the provider record. Other tests cover collisions, missing rows, missing presence, unknown
-labels, malformed provider semantics, extra caller properties, and later input
-or output mutation. No authentication or analytics is required.
+Git fixture. Neither commit appears in the provider group. Other tests cover
+collisions, missing rows/presence, unknown labels, malformed provider semantics,
+extra properties, and later input or output mutation. No authentication or
+analytics is required.
 
 ## Transport and meaning
 
 The projection uses OTLP/HTTP JSON `ExportLogsServiceRequest`, sent by the test
 as `POST /v1/logs` with `Content-Type: application/json`, following the
 [OTLP specification](https://opentelemetry.io/docs/specs/otlp/) and
-[Logs protobuf structure](https://github.com/open-telemetry/opentelemetry-proto/blob/main/opentelemetry/proto/logs/v1/logs.proto).
-It represents a pair of reduced snapshots, **not a synthesized Skill lifecycle
-event**. This is a custom loopback wire test, not validation against a deployed
-OpenTelemetry Collector, backend, or protobuf decoder. No backend compatibility
-claim, retrying exporter, relay, persistent queue, or arbitrary endpoint API is
-provided. The test bounds requests and send time; it retains only a comparison
-boolean at the receiver.
+[pinned Logs protobuf structure](https://github.com/open-telemetry/opentelemetry-proto/blob/700dafd2e89ad6266049000c616a589d884523d4/opentelemetry/proto/logs/v1/logs.proto).
+It represents one reduced snapshot, **not a synthesized Skill lifecycle event**.
 
-The projection deliberately has no trace/span/session ID, occurrence count,
-resource identifying a user/host, timestamp, run label, arbitrary log body,
-path, or original metric magnitude. Ordering of the two records has no runtime
-ordering meaning. There is no correlation ID: a backend that splits batches or
-reorders records cannot reconstruct the relationship between these records.
-The HTTP request comparison does not test backend correlation. A future design
-would need a separately reviewed correlation mechanism or a single snapshot
-record with explicitly separate provenance fields. No identifier is added here
-to imply that this problem has been solved. The sender emits no Codex OTel logs; these are wrapper-created
-snapshot records, and the existing Codex runners still disable runtime logs.
+Version 1 in [PR #13](https://github.com/KazuCocoa/renma-runtime-evidence/pull/13)
+used two separate records without a correlation ID. Their relationship would be
+lost if a backend split or reordered the batch. Version 2 puts both provenance
+groups inside the same record's structured `body.kvlistValue`, under the keys
+`provider` and `deployment`. Record splitting/reordering therefore cannot by
+itself separate those two groups. No new identifier is required, and the groups
+retain their distinct source and meaning. This does not prove that an arbitrary
+backend retains or indexes structured log bodies correctly.
+
+The output has no trace/span/session ID, occurrence count, identifying host/user
+resource, timestamp, run label, arbitrary log body, path, or original metric
+magnitude. The sender emits no Codex OTel logs; it creates a minimized snapshot
+record, and existing Codex runners still disable runtime logs.
+
+## Independent schema validation
+
+The four official proto files needed for Logs requests and their Apache-2.0
+license are vendored without edits from commit
+`700dafd2e89ad6266049000c616a589d884523d4`. `vendor/opentelemetry-proto/UPSTREAM.json`
+records per-file SHA-256 checksums, checked by the test. Schema imports resolve
+only against these fixed local files. Tests and CI need no network schema fetch.
+
+The exact development dependency `protobufjs@8.8.0` validates the generated JSON,
+encodes it to protobuf, decodes it, and verifies exact object equality after
+conversion back. This also catches fields silently dropped due to misspellings.
+A malformed boolean confirms the independent verifier rejects an invalid type.
+Two synthetic snapshots with actual A/B Git commits are split/reordered at the
+record boundary and decoded; each retains its own provider facts and deployment
+commit/digest. The ordinary loopback test also runs with the v2 record shape.
+
+This establishes compatibility of these fixture messages with the pinned
+protobuf schema, not full OTLP conformance or deployed-backend interoperability.
+The loopback receiver is still only a byte comparator. There is no production
+exporter, retry queue, relay, arbitrary endpoint API, or backend persistence test.
+The decoder and vendored schemas are test-only and excluded from the runtime
+package surface.
 
 ## Versioned experiment field contract
 
-Each record has the same three fixed attributes:
+The instrumentation scope is `renma.experiment.presence-deployment`, version `2`.
+The record and both nested groups have these fixed attributes:
 
-- `renma.experiment.schema = renma.experimental-presence-deployment-otlp.v1`
+- `renma.experiment.schema = renma.experimental-presence-deployment-otlp.v2`
 - `renma.evidence.class = synthetic-fixture`
 - `renma.record.meaning = snapshot-not-lifecycle-event`
 
-The `renma.experiment.provider-presence` instrumentation scope has one record:
+The structured `provider` group has:
 
 | Attribute                                    | Allowed meaning/value                          |
 | -------------------------------------------- | ---------------------------------------------- |
@@ -67,7 +91,7 @@ The `renma.experiment.provider-presence` instrumentation scope has one record:
 | `renma.provider.presence_observed`           | Boolean; false is not proof of runtime absence |
 | `renma.provider.unrecognized_label_observed` | Boolean only; unknown labels are discarded     |
 
-The `renma.experiment.deployment` scope has one separate record:
+The separate structured `deployment` group has:
 
 | Attribute                               | Allowed meaning/value                                                             |
 | --------------------------------------- | --------------------------------------------------------------------------------- |
@@ -83,37 +107,36 @@ The `renma.experiment.deployment` scope has one separate record:
 | `renma.deployment.commit_verification`  | `caller-supplied-unverified`; only for that candidate                             |
 | `renma.deployment.commit`               | Optional validated pre-bound Git commit; only for that candidate                  |
 
-Provider records never acquire wrapper commit/digest fields. Wrapper records
-never acquire provider-presence fields. No chosen identity, digest, or commit is
-exported for ambiguous, missing, or unobserved candidates. Each call reconstructs
-new output from validated primitives; caller objects are never serialized.
+Provider facts never acquire wrapper commit/digest fields. Wrapper facts never
+acquire provider-presence fields. No chosen identity, digest, or commit is
+exported for ambiguous, missing, or unobserved candidates. Every call rebuilds
+output from validated primitives; caller objects are never serialized.
 
 ## Consumption and next decision
 
 The only supported private package API remains
 `createCodexSkillEvidenceCollector`, with the existing
-`CodexSkillPresenceSnapshot` schema version 1. Consumers can use that API today
-for provider-specific collector-lifetime presence. They must not use the
+`CodexSkillPresenceSnapshot` schema version 1. Consumers can use that API for
+provider-specific collector-lifetime presence. They must not use this
 experiment-only projection as a supported Renma integration or runtime binding.
-The experimental source is deliberately excluded from the packed package.
+Its source is deliberately excluded from the packed package.
 
-A possible future integration sequence, not a released contract:
+A possible future sequence, not a released contract:
 
-1. A plugin syncs a reviewed repository revision and verifies exact file content.
+1. A plugin syncs a reviewed revision and verifies exact file content.
 2. Before launching one isolated runtime and its dedicated collector, a wrapper
    resolves only explicit allowed Renma IDs/names and freezes deployment state.
 3. The collector reduces provider input using its separate allowlist.
-4. The wrapper may report deployment candidates alongside provider facts. It
-   cannot claim injected bytes from name-only evidence, even with one candidate.
+4. The wrapper reports deployment candidates alongside provider facts, without
+   claiming injected bytes from a name-only signal.
 
-The current fixture tests the projection with explicit wiring; it does not
-verify that an arbitrary consumer pairs the correct collector and manifest.
-No session ID or heuristic attribution is introduced to hide that limitation.
-Actual identity adaptation, run ownership, multiple simultaneous runs, support
-file digests, exporter/backend interoperability, and remote-host lifecycle/cache
-signals require separate characterization before a production API decision.
+The fixture uses explicit wiring; it does not verify that arbitrary consumers
+pair the correct collector and manifest. Run ownership, concurrent runs,
+actual Renma adapters, support-file digests, backend interoperability, and
+remote-host lifecycle/cache signals need separate characterization before a
+production API decision. A preserved record is not proof of correct attribution.
 
 Renma retains static identities and contracts. A future plugin may own sync.
-This repository owns provider reduction and the evidence boundary. Neither
-fixture adds task evaluation, threat detection, orchestration, or a universal
-lifecycle schema. The runtime phases of Issue #10 remain open.
+This repository owns provider reduction and the evidence boundary. No fixture
+adds task evaluation, threat detection, orchestration, or a universal lifecycle
+schema. The runtime phases of Issue #10 remain open.

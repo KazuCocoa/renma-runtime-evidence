@@ -1,0 +1,11 @@
+{
+  "repository": "open-telemetry/opentelemetry-proto",
+  "commit": "700dafd2e89ad6266049000c616a589d884523d4",
+  "sha256": {
+    "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "opentelemetry/proto/common/v1/common.proto": "0429795169e29089cc53490b541a0ae89fa7c80492ac58ed2b3c4171cce4ecee",
+    "opentelemetry/proto/resource/v1/resource.proto": "34fe1c26b8959f09d97656348ae03b105d15a5f07ada0f8f1614ef5dff7d1569",
+    "opentelemetry/proto/logs/v1/logs.proto": "0c9d0c45eea723d38ef28ee13135ff61c037387f41cacc476ccac3485d6c138a",
+    "opentelemetry/proto/collector/logs/v1/logs_service.proto": "0252687fc8f59d139ced709d383e83678e9bd4957bdbe76077242f1c32363fa5"
+  }
+}
