@@ -79,7 +79,9 @@ The runner fixes three isolated parent invocations per scenario with `codex-cli 
 ## Development
 
 The [continuation ledger](docs/experiment-progress.md) tracks the unfinished
-two-Skill runtime characterization and the
+two-Skill runtime characterization, the
+[real app-server listing experiment](experiments/codex-listing-freshness/README.md),
+and the
 [local deployment/freshness fixture](experiments/deployment-snapshot/README.md).
 Deployment digests and immutable wrapper snapshots do not establish which
 revision a runtime injected. These experiment-only types are not package exports.
