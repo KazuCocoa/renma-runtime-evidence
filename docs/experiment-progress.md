@@ -5,13 +5,13 @@ and the static/runtime boundary in
 [Renma #174](https://github.com/KazuCocoa/renma/issues/174). A phase is complete
 only when its stated evidence exists; fixtures cannot satisfy runtime criteria.
 
-| Phase                      | Completion criterion                                                                                        | 2026-09-27 status                                                                                                      |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| Two-Skill characterization | Three isolated real CLI rows with usable pipeline and finite result                                         | CLI 0.157.1 ChatGPT file login: three completed rows, usable OTLP, requested-skill-only                                |
-| Identity manifest          | Inspect actual Renma identity and test immutable deployment mapping, collisions, modifications, missing IDs | Local fixture implemented; experimental, not a public runtime contract                                                 |
-| Lifecycle/freshness        | Real host listing/read/direct invocation and bounded A/B updates; unsupported states explicit               | Local Git and real CLI 0.157.1 listing refresh/body-only boundary tested; model-turn and remote-cache behavior not run |
-| Provenance/OTel            | Minimal allowlisted transport with provider and deployment provenance separate                              | Synthetic OTLP v2 single-record projection and pinned protobuf decoder tested; no runtime/backend claim                |
-| Consumer boundary          | Document and version only demonstrated semantics                                                            | Existing provider-specific presence API retained; experimental field contract documented separately                    |
+| Phase                      | Completion criterion                                                                                        | 2026-09-27 status                                                                                                    |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Two-Skill characterization | Three isolated real CLI rows with usable pipeline and finite result                                         | CLI 0.157.1 ChatGPT file login: three completed rows, usable OTLP, requested-skill-only                              |
+| Identity manifest          | Inspect actual Renma identity and test immutable deployment mapping, collisions, modifications, missing IDs | Local fixture implemented; experimental, not a public runtime contract                                               |
+| Lifecycle/freshness        | Real host listing/read/direct invocation and bounded A/B updates; unsupported states explicit               | Local Git, listing-only, and four real model turns after A/B replacement measured; mid-turn/remote behavior untested |
+| Provenance/OTel            | Minimal allowlisted transport with provider and deployment provenance separate                              | Synthetic OTLP v2 single-record projection and pinned protobuf decoder tested; no runtime/backend claim              |
+| Consumer boundary          | Document and version only demonstrated semantics                                                            | Existing provider-specific presence API retained; experimental field contract documented separately                  |
 
 Baseline: remote/main `3d237e85dc61419bda92a720e8bdbd1b5710dd33`, no open PR,
 clean checkout, installed CLI `0.157.1`. Baseline checks: 131 passed, 1 skipped.
@@ -52,7 +52,8 @@ fixtures. The overall experiment is **not complete**. The real CLI 0.157.1 listi
 refresh and a body-only update with unchanged listing metadata. The two-Skill
 selection matrix has now completed using ChatGPT authentication. Mid-model-turn
 updates, direct capability/Skill comparison, body-read/injection attribution,
-and remote-host cache behavior remain unmeasured.
+and remote-host cache behavior remain unmeasured. Between-turn local A/B replacement
+is now measured separately in the model-thread sequence.
 
 The API-key and explicit ChatGPT-login modes remain separate opt-in choices.
 If a runner reports authentication/quota failure, retain only the fixed category and
@@ -116,3 +117,17 @@ caller-authorized file credentials; workspace and configuration homes remain
 fresh, and API-key variables are not forwarded. The deterministic suite passes
 154 tests with 1 skipped. The remaining lifecycle and remote-host questions are
 not resolved by this result.
+
+## Between-turn model freshness
+
+The [CLI 0.157.1 model freshness experiment](../experiments/codex-model-freshness/README.md)
+ran four real model turns in one server: initial A; B in the original thread;
+B in a fresh thread; B after forced listing refresh in the original thread.
+All completed, with artifact predicates A/B/B/B and listing metadata A/B/B/B.
+The collector observed fixture presence across the whole server lifetime; no
+per-turn or revision attribution is claimed. The default B listings differ from
+the earlier listing-only cached-A result. Those sequences do not isolate why,
+and neither result establishes a producer TTL. Deployment hashes and artifacts
+remain wrapper evidence. Mid-turn replacement, explicit content-read evidence,
+direct-capability comparison, remote freshness, and deployed OTel integration
+remain incomplete.
