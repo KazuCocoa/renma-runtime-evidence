@@ -139,45 +139,63 @@ test("pinned protobuf schema preserves the paired experimental runtime projectio
 });
 
 test("committed real reduced records decode without replacing bound A with the later B state", () => {
-  const report = JSON.parse(
-    readFileSync(
-      resolve(
-        "experiments/codex-model-freshness/results/20260927-cli-0.157.1-runtime-otel.json",
+  for (const filename of [
+    "20260927-cli-0.157.1-runtime-otel.json",
+    "20260927-cli-0.157.1-git-transport.json",
+  ]) {
+    const report = JSON.parse(
+      readFileSync(
+        resolve(`experiments/codex-model-freshness/results/${filename}`),
+        "utf8",
       ),
-      "utf8",
-    ),
-  );
-  const request = requestType();
-  assert.equal(report.rows.length, 2);
-  for (const row of report.rows) {
-    const packet: Packet = row.runtimeOtel;
-    assert.equal(request.verify(packet), null);
-    assert.deepEqual(
-      request.toObject(
-        request.decode(request.encode(request.fromObject(packet)).finish()),
-        { longs: String, defaults: false },
-      ),
-      packet,
     );
-    const provider = attributes(packet, 0);
-    const wrapper = attributes(packet, 1);
-    assert.equal(provider["renma.provenance"], "provider-runtime-reduction");
-    assert.equal(wrapper["renma.deployment.injected_revision"], "unsupported");
-    assert.equal(row.modelTurn.status, "completed");
-    if (row.scenario === "direct-tool") {
-      assert.equal(provider["renma.provider.presence_observed"], false);
-      assert.equal(wrapper["renma.deployment.content_digest"], undefined);
-    } else {
-      assert.equal(row.scenario, "skill-midturn");
-      assert.equal(row.finalDeployment.revision, "b");
-      assert.equal(row.wrapperBarrier.replacementVerifiedBeforeReply, true);
-      assert.equal(provider["renma.provider.presence_observed"], true);
-      assert.equal(
-        wrapper["renma.deployment.content_digest"],
-        barrierDeployment("a").digest,
+    const request = requestType();
+    assert.equal(report.rows.length, 2);
+    for (const row of report.rows) {
+      const packet: Packet = row.runtimeOtel;
+      assert.equal(request.verify(packet), null);
+      assert.deepEqual(
+        request.toObject(
+          request.decode(request.encode(request.fromObject(packet)).finish()),
+          { longs: String, defaults: false },
+        ),
+        packet,
       );
-      assert.equal(wrapper["renma.deployment.fixture_revision"], "a");
-      assert.equal(provider["renma.deployment.content_digest"], undefined);
+      const provider = attributes(packet, 0);
+      const wrapper = attributes(packet, 1);
+      assert.equal(provider["renma.provenance"], "provider-runtime-reduction");
+      assert.equal(
+        wrapper["renma.deployment.injected_revision"],
+        "unsupported",
+      );
+      assert.equal(row.modelTurn.status, "completed");
+      if (row.scenario === "direct-tool") {
+        assert.equal(provider["renma.provider.presence_observed"], false);
+        assert.equal(wrapper["renma.deployment.content_digest"], undefined);
+      } else {
+        assert.equal(row.scenario, "skill-midturn");
+        assert.equal(row.finalDeployment.revision, "b");
+        assert.equal(row.wrapperBarrier.replacementVerifiedBeforeReply, true);
+        assert.equal(provider["renma.provider.presence_observed"], true);
+        assert.equal(
+          wrapper["renma.deployment.content_digest"],
+          barrierDeployment("a").digest,
+        );
+        assert.equal(wrapper["renma.deployment.fixture_revision"], "a");
+        assert.equal(provider["renma.deployment.content_digest"], undefined);
+        if (row.fixtureGit) {
+          assert.notEqual(
+            row.fixtureGit.initial.commit,
+            row.fixtureGit.latest.commit,
+          );
+          assert.equal(
+            wrapper["renma.deployment.commit"],
+            row.fixtureGit.initial.commit,
+          );
+          assert.equal(provider["renma.deployment.commit"], undefined);
+          assert.equal(row.transport.exactReducedPacketReceived, true);
+        }
+      }
     }
   }
 });

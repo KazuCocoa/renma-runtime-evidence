@@ -93,3 +93,8 @@ protobuf schema. Those tests are **record replay/format validation**, not anothe
 model run or an actual backend deployment. Both the live observation and the
 synthetic unit tests preserve unsupported injected revision and separate source
 labels. No claim is made about remote backend ingestion or indexing.
+
+The optional [Git-backed local transport mode](GIT-TRANSPORT.md) now combines
+actual synthetic Git commits, live provider reduction, and local HTTP delivery.
+It uses the separately versioned v2 record when verified Git evidence is bound.
+The command documented above retains its record-generation-only v1 behavior.

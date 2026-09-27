@@ -1,0 +1,482 @@
+{
+  "schemaVersion": "renma.codex-midturn-capability.v1",
+  "evidenceClass": "real-cli-app-server-model-turns",
+  "rows": [
+    {
+      "schemaVersion": "renma.codex-barrier-row.v1",
+      "runtimeOtel": {
+        "resourceLogs": [
+          {
+            "scopeLogs": [
+              {
+                "scope": {
+                  "name": "renma.experiment.codex-runtime-presence",
+                  "version": "2"
+                },
+                "logRecords": [
+                  {
+                    "attributes": [
+                      {
+                        "key": "renma.experiment.schema",
+                        "value": {
+                          "stringValue": "renma.experimental-codex-runtime-presence.v2"
+                        }
+                      },
+                      {
+                        "key": "renma.evidence.class",
+                        "value": {
+                          "stringValue": "real-runtime-reduced-snapshot"
+                        }
+                      },
+                      {
+                        "key": "renma.record.meaning",
+                        "value": {
+                          "stringValue": "snapshot-not-lifecycle-event"
+                        }
+                      },
+                      {
+                        "key": "renma.fixture.synthetic_content",
+                        "value": {
+                          "boolValue": true
+                        }
+                      }
+                    ],
+                    "body": {
+                      "kvlistValue": {
+                        "values": [
+                          {
+                            "key": "provider",
+                            "value": {
+                              "kvlistValue": {
+                                "values": [
+                                  {
+                                    "key": "renma.provenance",
+                                    "value": {
+                                      "stringValue": "provider-runtime-reduction"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.provider",
+                                    "value": {
+                                      "stringValue": "codex"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.provider.signal",
+                                    "value": {
+                                      "stringValue": "skill-injected"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.provider.scope",
+                                    "value": {
+                                      "stringValue": "collector-lifetime"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.provider.skill_name",
+                                    "value": {
+                                      "stringValue": "renma-listing-freshness-fixture"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.provider.presence_observed",
+                                    "value": {
+                                      "boolValue": false
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.provider.unrecognized_label_observed",
+                                    "value": {
+                                      "boolValue": false
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "key": "deployment",
+                            "value": {
+                              "kvlistValue": {
+                                "values": [
+                                  {
+                                    "key": "renma.provenance",
+                                    "value": {
+                                      "stringValue": "experiment-wrapper"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.deployment.binding",
+                                    "value": {
+                                      "stringValue": "before-collector-start"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.deployment.candidate_resolution",
+                                    "value": {
+                                      "stringValue": "no-provider-presence"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.deployment.injected_revision",
+                                    "value": {
+                                      "stringValue": "unsupported"
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "transport": {
+        "transport": "otlp-http-json",
+        "receiver": "owned-loopback-byte-comparator",
+        "exactReducedPacketReceived": true,
+        "backendInteroperabilityClaimed": false
+      },
+      "fixtureGit": {
+        "initial": {
+          "provenance": "fixture-git-verifier",
+          "verificationScope": "one-known-skill-file-at-commit",
+          "commit": "1f60efc74ee4c8e5847447f4c442f6679f9c4cfa",
+          "contentDigest": "sha256:33679faf5623ddfe1a7b8e7294207b6738b9e41587b8eae9d249a8dd8ab4fd73"
+        },
+        "latest": {
+          "provenance": "fixture-git-verifier",
+          "verificationScope": "one-known-skill-file-at-commit",
+          "commit": "1f60efc74ee4c8e5847447f4c442f6679f9c4cfa",
+          "contentDigest": "sha256:33679faf5623ddfe1a7b8e7294207b6738b9e41587b8eae9d249a8dd8ab4fd73"
+        }
+      },
+      "codexVersion": "codex-cli 0.157.1",
+      "scenario": "direct-tool",
+      "authentication": "chatgpt-file-linked",
+      "codexAnalyticsExplicitlyAllowed": true,
+      "initialDeployment": {
+        "provenance": "experiment-wrapper",
+        "revision": "a",
+        "scope": "exact-known-barrier-fixture-bytes",
+        "digest": "sha256:33679faf5623ddfe1a7b8e7294207b6738b9e41587b8eae9d249a8dd8ab4fd73"
+      },
+      "finalDeployment": {
+        "provenance": "experiment-wrapper",
+        "revision": "a",
+        "scope": "exact-known-barrier-fixture-bytes",
+        "digest": "sha256:33679faf5623ddfe1a7b8e7294207b6738b9e41587b8eae9d249a8dd8ab4fd73"
+      },
+      "initialListing": {
+        "fixtureEntries": "one",
+        "expectedPathMatched": true,
+        "metadataRevision": "a",
+        "enabled": "true",
+        "otherSkillsObserved": true,
+        "listingErrorsObserved": false,
+        "bodyRead": "unsupported",
+        "injectedRevision": "unsupported",
+        "producerTtl": "unsupported"
+      },
+      "finalListing": {
+        "fixtureEntries": "one",
+        "expectedPathMatched": true,
+        "metadataRevision": "a",
+        "enabled": "true",
+        "otherSkillsObserved": true,
+        "listingErrorsObserved": false,
+        "bodyRead": "unsupported",
+        "injectedRevision": "unsupported",
+        "producerTtl": "unsupported"
+      },
+      "modelTurn": {
+        "status": "completed",
+        "artifactRevision": "absent"
+      },
+      "providerTool": {
+        "requestObserved": true,
+        "completion": "success"
+      },
+      "wrapperBarrier": {
+        "handled": true,
+        "replacementVerifiedBeforeReply": false
+      },
+      "providerPresence": {
+        "scope": "collector-lifetime-one-model-turn",
+        "knownFixtureObserved": false,
+        "unknownSkillObserved": false,
+        "pipeline": "non-target-metric-datapoints-only"
+      },
+      "limitations": {
+        "skillCausedToolCall": "unsupported",
+        "injectedRevision": "unsupported",
+        "artifactProvenance": "experiment-wrapper",
+        "remoteCacheBehavior": "not-tested",
+        "generalExecutionGuarantee": false
+      }
+    },
+    {
+      "schemaVersion": "renma.codex-barrier-row.v1",
+      "runtimeOtel": {
+        "resourceLogs": [
+          {
+            "scopeLogs": [
+              {
+                "scope": {
+                  "name": "renma.experiment.codex-runtime-presence",
+                  "version": "2"
+                },
+                "logRecords": [
+                  {
+                    "attributes": [
+                      {
+                        "key": "renma.experiment.schema",
+                        "value": {
+                          "stringValue": "renma.experimental-codex-runtime-presence.v2"
+                        }
+                      },
+                      {
+                        "key": "renma.evidence.class",
+                        "value": {
+                          "stringValue": "real-runtime-reduced-snapshot"
+                        }
+                      },
+                      {
+                        "key": "renma.record.meaning",
+                        "value": {
+                          "stringValue": "snapshot-not-lifecycle-event"
+                        }
+                      },
+                      {
+                        "key": "renma.fixture.synthetic_content",
+                        "value": {
+                          "boolValue": true
+                        }
+                      }
+                    ],
+                    "body": {
+                      "kvlistValue": {
+                        "values": [
+                          {
+                            "key": "provider",
+                            "value": {
+                              "kvlistValue": {
+                                "values": [
+                                  {
+                                    "key": "renma.provenance",
+                                    "value": {
+                                      "stringValue": "provider-runtime-reduction"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.provider",
+                                    "value": {
+                                      "stringValue": "codex"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.provider.signal",
+                                    "value": {
+                                      "stringValue": "skill-injected"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.provider.scope",
+                                    "value": {
+                                      "stringValue": "collector-lifetime"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.provider.skill_name",
+                                    "value": {
+                                      "stringValue": "renma-listing-freshness-fixture"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.provider.presence_observed",
+                                    "value": {
+                                      "boolValue": true
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.provider.unrecognized_label_observed",
+                                    "value": {
+                                      "boolValue": false
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "key": "deployment",
+                            "value": {
+                              "kvlistValue": {
+                                "values": [
+                                  {
+                                    "key": "renma.provenance",
+                                    "value": {
+                                      "stringValue": "experiment-wrapper"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.deployment.binding",
+                                    "value": {
+                                      "stringValue": "before-collector-start"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.deployment.candidate_resolution",
+                                    "value": {
+                                      "stringValue": "unique-known-fixture-candidate"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.deployment.injected_revision",
+                                    "value": {
+                                      "stringValue": "unsupported"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.deployment.content_digest",
+                                    "value": {
+                                      "stringValue": "sha256:33679faf5623ddfe1a7b8e7294207b6738b9e41587b8eae9d249a8dd8ab4fd73"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.deployment.digest_scope",
+                                    "value": {
+                                      "stringValue": "exact-known-barrier-fixture-bytes"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.deployment.fixture_revision",
+                                    "value": {
+                                      "stringValue": "a"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.deployment.commit",
+                                    "value": {
+                                      "stringValue": "1f60efc74ee4c8e5847447f4c442f6679f9c4cfa"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.deployment.commit_provenance",
+                                    "value": {
+                                      "stringValue": "fixture-git-verifier"
+                                    }
+                                  },
+                                  {
+                                    "key": "renma.deployment.commit_verification_scope",
+                                    "value": {
+                                      "stringValue": "one-known-skill-file-at-commit"
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "transport": {
+        "transport": "otlp-http-json",
+        "receiver": "owned-loopback-byte-comparator",
+        "exactReducedPacketReceived": true,
+        "backendInteroperabilityClaimed": false
+      },
+      "fixtureGit": {
+        "initial": {
+          "provenance": "fixture-git-verifier",
+          "verificationScope": "one-known-skill-file-at-commit",
+          "commit": "1f60efc74ee4c8e5847447f4c442f6679f9c4cfa",
+          "contentDigest": "sha256:33679faf5623ddfe1a7b8e7294207b6738b9e41587b8eae9d249a8dd8ab4fd73"
+        },
+        "latest": {
+          "provenance": "fixture-git-verifier",
+          "verificationScope": "one-known-skill-file-at-commit",
+          "commit": "77f7f7395b2d60d40c9d0d28bb9a76d67770e2ac",
+          "contentDigest": "sha256:d93039619157baa0a1160ddf50802fc2ed9304f81dfbc2b3e06890f649515b7f"
+        }
+      },
+      "codexVersion": "codex-cli 0.157.1",
+      "scenario": "skill-midturn",
+      "authentication": "chatgpt-file-linked",
+      "codexAnalyticsExplicitlyAllowed": true,
+      "initialDeployment": {
+        "provenance": "experiment-wrapper",
+        "revision": "a",
+        "scope": "exact-known-barrier-fixture-bytes",
+        "digest": "sha256:33679faf5623ddfe1a7b8e7294207b6738b9e41587b8eae9d249a8dd8ab4fd73"
+      },
+      "finalDeployment": {
+        "provenance": "experiment-wrapper",
+        "revision": "b",
+        "scope": "exact-known-barrier-fixture-bytes",
+        "digest": "sha256:d93039619157baa0a1160ddf50802fc2ed9304f81dfbc2b3e06890f649515b7f"
+      },
+      "initialListing": {
+        "fixtureEntries": "one",
+        "expectedPathMatched": true,
+        "metadataRevision": "a",
+        "enabled": "true",
+        "otherSkillsObserved": true,
+        "listingErrorsObserved": false,
+        "bodyRead": "unsupported",
+        "injectedRevision": "unsupported",
+        "producerTtl": "unsupported"
+      },
+      "finalListing": {
+        "fixtureEntries": "one",
+        "expectedPathMatched": true,
+        "metadataRevision": "b",
+        "enabled": "true",
+        "otherSkillsObserved": true,
+        "listingErrorsObserved": false,
+        "bodyRead": "unsupported",
+        "injectedRevision": "unsupported",
+        "producerTtl": "unsupported"
+      },
+      "modelTurn": {
+        "status": "completed",
+        "artifactRevision": "a"
+      },
+      "providerTool": {
+        "requestObserved": true,
+        "completion": "success"
+      },
+      "wrapperBarrier": {
+        "handled": true,
+        "replacementVerifiedBeforeReply": true
+      },
+      "providerPresence": {
+        "scope": "collector-lifetime-one-model-turn",
+        "knownFixtureObserved": true,
+        "unknownSkillObserved": false,
+        "pipeline": "accepted-skill-evidence"
+      },
+      "limitations": {
+        "skillCausedToolCall": "unsupported",
+        "injectedRevision": "unsupported",
+        "artifactProvenance": "experiment-wrapper",
+        "remoteCacheBehavior": "not-tested",
+        "generalExecutionGuarantee": false
+      }
+    }
+  ]
+}

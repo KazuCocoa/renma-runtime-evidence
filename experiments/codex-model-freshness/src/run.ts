@@ -45,6 +45,9 @@ import {
 
 import { bindRuntimeOtelProjection } from "./runtime-otel.js";
 
+import { createFixtureGit, type FixtureGitEvidence } from "./fixture-git.js";
+import { exportToFixtureReceiver } from "./loopback-export.js";
+
 type Mode = "between-turn" | "direct-tool" | "skill-midturn";
 
 const RPC_TIMEOUT = 15_000;
@@ -68,7 +71,7 @@ function signal(child: ChildProcess, value: NodeJS.Signals): void {
   }
 }
 
-async function run(mode: Mode, emitRuntimeOtel = false) {
+async function run(mode: Mode, emitRuntimeOtel = false, gitTransport = false) {
   stage = "setup";
   const directories = await createCharacterizationIsolatedDirectories();
   let child: ChildProcess | undefined;
@@ -192,8 +195,17 @@ async function run(mode: Mode, emitRuntimeOtel = false) {
       return snapshotFor(revision);
     };
     const snapshotA = await writeRevision("a");
+    const gitFixture = gitTransport
+      ? await createFixtureGit(
+          workspace,
+          directories.homeDirectory,
+          environment,
+        )
+      : undefined;
+    const initialGit = await gitFixture?.commit("a");
+    let latestGit: FixtureGitEvidence | undefined = initialGit;
     const runtimeProjection = emitRuntimeOtel
-      ? bindRuntimeOtelProjection(snapshotA, "real-cli")
+      ? bindRuntimeOtelProjection(snapshotA, "real-cli", initialGit)
       : undefined;
     collector = await createCodexSkillEvidenceCollector({
       allowedSkills: [LISTING_FIXTURE_NAME],
@@ -234,6 +246,7 @@ async function run(mode: Mode, emitRuntimeOtel = false) {
       barrierOperation = (async () => {
         if (mode === "skill-midturn") {
           await writeRevision("b");
+          if (gitFixture) latestGit = await gitFixture.commit("b");
           mutationVerified = true;
         }
         if (aborted) return;
@@ -446,10 +459,19 @@ async function run(mode: Mode, emitRuntimeOtel = false) {
       await shutdown();
       const snapshot = await collector.closeAndSnapshot();
       const diagnostics = collector.diagnosticsSnapshot();
+      const runtimeOtel = runtimeProjection?.project(snapshot);
+      const transport =
+        gitTransport && runtimeOtel
+          ? await exportToFixtureReceiver(runtimeOtel)
+          : undefined;
       return {
         schemaVersion: "renma.codex-barrier-row.v1",
-        ...(runtimeProjection
-          ? { runtimeOtel: runtimeProjection.project(snapshot) }
+        ...(runtimeOtel ? { runtimeOtel } : {}),
+        ...(transport
+          ? {
+              transport,
+              fixtureGit: { initial: initialGit, latest: latestGit },
+            }
           : {}),
         codexVersion: version,
         scenario: mode,
@@ -556,11 +578,18 @@ async function main() {
   const args = process.argv.slice(2);
   const barrierMode = args.includes("--midturn-capability");
   const emitRuntimeOtel = args.includes("--emit-runtime-otel");
+  const gitTransport = args.includes("--with-git-transport");
+  if (gitTransport && !emitRuntimeOtel)
+    throw new Error("Git transport requires runtime OTLP");
+  if (args.filter((arg) => arg === "--with-git-transport").length > 1)
+    throw new Error("Duplicate Git transport option");
   if (emitRuntimeOtel && !barrierMode)
     throw new Error("Runtime OTLP requires barrier mode");
   if (args.filter((arg) => arg === "--emit-runtime-otel").length > 1)
     throw new Error("Duplicate projection option");
-  const consentArgs = args.filter((arg) => arg !== "--emit-runtime-otel");
+  const consentArgs = args.filter(
+    (arg) => arg !== "--emit-runtime-otel" && arg !== "--with-git-transport",
+  );
   requireOptIn(
     barrierMode
       ? consentArgs.filter((arg) => arg !== "--midturn-capability")
@@ -569,8 +598,8 @@ async function main() {
   if (args.filter((arg) => arg === "--midturn-capability").length > 1)
     throw new Error("Duplicate mode");
   if (!barrierMode) return run("between-turn");
-  const direct = await run("direct-tool", emitRuntimeOtel);
-  const skill = await run("skill-midturn", emitRuntimeOtel);
+  const direct = await run("direct-tool", emitRuntimeOtel, gitTransport);
+  const skill = await run("skill-midturn", emitRuntimeOtel, gitTransport);
   return {
     schemaVersion: "renma.codex-midturn-capability.v1",
     evidenceClass: "real-cli-app-server-model-turns",
