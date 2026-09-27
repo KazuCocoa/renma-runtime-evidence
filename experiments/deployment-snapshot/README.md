@@ -90,3 +90,51 @@ synthetic provider-presence fixture through loopback OTLP. Such a transport test
 must label its evidence as synthetic and keep wrapper provenance separate. A
 real Codex/MCP-host result is still required before any runtime lifecycle or
 injected-revision API is justified. No exports in the private package change.
+
+## Actual local Git synchronization experiment
+
+The first runner assigns the same repository HEAD as unverified provenance to
+both fixtures. It does **not** test deployment from different Git commits. The
+second runner closes that local Git gap:
+
+```sh
+npm run build
+node .build/experiments/deployment-snapshot/src/run-git-fixture.js
+```
+
+It creates a synthetic-only temporary Git repository with real A and B commits,
+clones it locally, and uses detached checkouts. Git runs with a fresh HOME,
+disabled global/system configuration, empty templates/hooks, synthetic author
+identity, fixed dates, no signing, no inherited Git overrides, bounded output,
+and ten-second command timeouts. No network remote or credential is used.
+Only validated commit identifiers, hashes of the two known fixtures, booleans,
+and finite classifications leave the harness. Temporary repositories and homes
+are removed on normal completion or exceptions. Abrupt process termination can
+leave synthetic temporary data; no credentials or runtime content are present.
+
+Observed on 2026-09-27, with no agent runtime involved:
+
+1. Commit A was checked out and the exact deployed file matched the recognized
+   bytes read from its Git object. The wrapper bound snapshot A.
+2. Commit B was created in the source repository and fetched by the deployment.
+   `origin/main` moved to B, while the detached HEAD and deployed bytes stayed A.
+   Attaching the moving latest commit would therefore mislabel that deployment.
+3. Explicitly checking out B produced a new matching deployment and snapshot B.
+   Snapshot A retained its earlier commit and digest.
+4. Replacing the B checkout's file with known A bytes produced an actual Git
+   dirty result and content mismatch, while HEAD remained B.
+5. Replacing it with an unrecognized synthetic token produced only
+   `unrecognized-content`; the token was neither exported nor hashed.
+
+`verifiedA` and `verifiedB` carry separate `fixture-git-verifier` provenance,
+with scope `one-skill-md-at-verification-time`. They do not change the existing
+manifest's `caller-supplied-unverified` source-revision field: that field is
+still merely supplied to the manifest constructor. The verifier checks just the
+named file against recognized Git-object bytes, not the complete repository,
+Skill support files, a persistent guarantee, or any runtime-loaded content.
+
+This supports pinning deployment state before collection and keeping it separate
+from a moving sync reference. It does not implement a production sync plugin,
+test a host cache, or establish revision injection. The detached checkout is
+replaced only in this synthetic experiment; a future wrapper must protect its
+run's files from concurrent mutation or report that content binding is unknown.
