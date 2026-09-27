@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "renma.codex-model-freshness.v1",
+  "codexVersion": "codex-cli 0.157.1",
+  "evidenceClass": "real-cli-app-server-model-turns",
+  "authentication": "chatgpt-file-linked",
+  "codexAnalyticsExplicitlyAllowed": true,
+  "observations": [
+    {
+      "scenario": "initial-a",
+      "deployment": {
+        "provenance": "experiment-wrapper",
+        "revision": "a",
+        "scope": "exact-known-fixture-bytes",
+        "digest": "sha256:9a8e493253609b0f8ae77ea91c005ef49d26c63b418d4ce681997702489b65b9"
+      },
+      "listing": {
+        "fixtureEntries": "one",
+        "expectedPathMatched": true,
+        "metadataRevision": "a",
+        "enabled": "true",
+        "otherSkillsObserved": true,
+        "listingErrorsObserved": false,
+        "bodyRead": "unsupported",
+        "injectedRevision": "unsupported",
+        "producerTtl": "unsupported"
+      },
+      "modelTurn": {
+        "status": "completed",
+        "artifactRevision": "a"
+      }
+    },
+    {
+      "scenario": "same-thread-b-cached",
+      "deployment": {
+        "provenance": "experiment-wrapper",
+        "revision": "b",
+        "scope": "exact-known-fixture-bytes",
+        "digest": "sha256:2a367505f0f59b1912bec068172c97399a76350370bc04c41232597d03187c23"
+      },
+      "listing": {
+        "fixtureEntries": "one",
+        "expectedPathMatched": true,
+        "metadataRevision": "b",
+        "enabled": "true",
+        "otherSkillsObserved": true,
+        "listingErrorsObserved": false,
+        "bodyRead": "unsupported",
+        "injectedRevision": "unsupported",
+        "producerTtl": "unsupported"
+      },
+      "modelTurn": {
+        "status": "completed",
+        "artifactRevision": "b"
+      }
+    },
+    {
+      "scenario": "new-thread-b-cached",
+      "deployment": {
+        "provenance": "experiment-wrapper",
+        "revision": "b",
+        "scope": "exact-known-fixture-bytes",
+        "digest": "sha256:2a367505f0f59b1912bec068172c97399a76350370bc04c41232597d03187c23"
+      },
+      "listing": {
+        "fixtureEntries": "one",
+        "expectedPathMatched": true,
+        "metadataRevision": "b",
+        "enabled": "true",
+        "otherSkillsObserved": true,
+        "listingErrorsObserved": false,
+        "bodyRead": "unsupported",
+        "injectedRevision": "unsupported",
+        "producerTtl": "unsupported"
+      },
+      "modelTurn": {
+        "status": "completed",
+        "artifactRevision": "b"
+      }
+    },
+    {
+      "scenario": "same-thread-b-forced",
+      "deployment": {
+        "provenance": "experiment-wrapper",
+        "revision": "b",
+        "scope": "exact-known-fixture-bytes",
+        "digest": "sha256:2a367505f0f59b1912bec068172c97399a76350370bc04c41232597d03187c23"
+      },
+      "listing": {
+        "fixtureEntries": "one",
+        "expectedPathMatched": true,
+        "metadataRevision": "b",
+        "enabled": "true",
+        "otherSkillsObserved": true,
+        "listingErrorsObserved": false,
+        "bodyRead": "unsupported",
+        "injectedRevision": "unsupported",
+        "producerTtl": "unsupported"
+      },
+      "modelTurn": {
+        "status": "completed",
+        "artifactRevision": "b"
+      }
+    }
+  ],
+  "providerPresence": {
+    "scope": "collector-lifetime-across-all-four-turns",
+    "knownFixtureObserved": true,
+    "unknownSkillObserved": false,
+    "pipeline": "accepted-skill-evidence"
+  },
+  "limitations": {
+    "artifactProvenance": "experiment-wrapper",
+    "artifactDoesNotProveInjectedRevision": true,
+    "perTurnMetricAttribution": "unsupported",
+    "injectedRevision": "unsupported",
+    "midTurnMutation": "not-tested",
+    "remoteCacheBehavior": "not-tested",
+    "producerTtl": "unsupported",
+    "generalExecutionGuarantee": false
+  }
+}
