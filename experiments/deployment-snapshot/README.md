@@ -85,9 +85,9 @@ that A/B replacement changes the deployment digest while the earlier snapshot
 retains A; collision, unknown-content, and missing-identity cases remain bounded.
 No result from CLI 0.146.0 is reused as evidence for CLI 0.157.1.
 
-The next experiment can send only these reduced deployment facts beside a
-synthetic provider-presence fixture through loopback OTLP. Such a transport test
-must label its evidence as synthetic and keep wrapper provenance separate. A
+The [OTLP projection experiment](OTEL.md) now sends only these reduced
+deployment facts beside a synthetic provider-presence fixture through loopback
+OTLP. It labels its evidence as synthetic and keeps wrapper provenance separate. A
 real Codex/MCP-host result is still required before any runtime lifecycle or
 injected-revision API is justified. No exports in the private package change.
 

@@ -10,8 +10,8 @@ only when its stated evidence exists; fixtures cannot satisfy runtime criteria.
 | Two-Skill characterization | Three isolated real CLI rows with usable pipeline and finite result                                         | Blocked before launch: this process has no `CODEX_API_KEY`; separate analytics acknowledgement pending                                  |
 | Identity manifest          | Inspect actual Renma identity and test immutable deployment mapping, collisions, modifications, missing IDs | Local fixture implemented; experimental, not a public runtime contract                                                                  |
 | Lifecycle/freshness        | Real host listing/read/direct invocation and bounded A/B updates; unsupported states explicit               | Local A/B replacement plus actual synthetic Git commits/fetch/checkout/dirty mismatch tested; agent-run updates and host caches not run |
-| Provenance/OTel            | Minimal allowlisted transport with provider and deployment provenance separate                              | Next independent fixture experiment                                                                                                     |
-| Consumer boundary          | Document and version only demonstrated semantics                                                            | Existing provider-specific presence API retained; no universal lifecycle schema                                                         |
+| Provenance/OTel            | Minimal allowlisted transport with provider and deployment provenance separate                              | Synthetic collector-to-OTLP loopback projection tested; no runtime/backend compatibility claim                                          |
+| Consumer boundary          | Document and version only demonstrated semantics                                                            | Existing provider-specific presence API retained; experimental field contract documented separately                                     |
 
 Baseline: remote/main `3d237e85dc61419bda92a720e8bdbd1b5710dd33`, no open PR,
 clean checkout, installed CLI `0.157.1`. Baseline checks: 131 passed, 1 skipped.
@@ -29,6 +29,12 @@ Node 22/24 CI jobs passing (138 local tests passed, 1 skipped).
 The subsequent local Git experiment distinguishes moving `origin/main` from a
 pinned deployment and records point-in-time file verification under separate
 wrapper provenance. Neither experiment satisfies the real-host phase.
+The actual Git synchronization experiment was merged in
+[PR #12](https://github.com/KazuCocoa/renma-runtime-evidence/pull/12), with both
+Node 22/24 CI jobs passing (139 local tests passed, 1 skipped).
+The [OTLP projection and consumer boundary](../experiments/deployment-snapshot/OTEL.md)
+now exercise the next independent fixture step. Runtime-derived evidence has
+not been generated in this continuation; all new transport input is synthetic.
 Independent local work proceeds while the external prerequisites are unresolved.
 The existing characterization runner requires explicit analytics consent because
 Codex's separate OpenAI analytics path is not controlled by the loopback exporter.
