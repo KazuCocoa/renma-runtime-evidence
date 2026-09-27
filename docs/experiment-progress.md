@@ -33,10 +33,27 @@ The actual Git synchronization experiment was merged in
 [PR #12](https://github.com/KazuCocoa/renma-runtime-evidence/pull/12), with both
 Node 22/24 CI jobs passing (139 local tests passed, 1 skipped).
 The [OTLP projection and consumer boundary](../experiments/deployment-snapshot/OTEL.md)
-now exercise the next independent fixture step. Runtime-derived evidence has
+are tracked in [PR #13](https://github.com/KazuCocoa/renma-runtime-evidence/pull/13),
+with 143 local tests passed and 1 skipped. Runtime-derived evidence has
 not been generated in this continuation; all new transport input is synthetic.
 Independent local work proceeds while the external prerequisites are unresolved.
 The existing characterization runner requires explicit analytics consent because
 Codex's separate OpenAI analytics path is not controlled by the loopback exporter.
 Secrets must be configured in the execution environment, never pasted into a
 report or committed. Authentication failures must not trigger unchanged retries.
+
+## Remaining external boundary
+
+The independent filesystem, Git, and synthetic transport steps are complete as
+fixtures. The overall experiment is **not complete**. No real CLI 0.157.1
+selection matrix, mid-execution revision replacement, direct capability/Skill
+comparison, host listing/read distinction, or host cache behavior has been
+observed in this continuation. The API key and analytics question remain open.
+
+Resume the isolated two-Skill runner only after both prerequisites are supplied.
+If it reports authentication/quota failure, retain only the fixed category and
+stop unchanged retries. If usable runtime evidence arrives, characterize only
+what it exposes; lack of revision/listing/read fields must remain unsupported.
+A runtime or host exposing the required listing/read signals must be identified
+before any claim about remote TTL, cache scope, freshness, or invocation is made.
+Keep Issue #10 open and the public provider-presence API unchanged until then.
