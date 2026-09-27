@@ -75,3 +75,31 @@ removal; forced reload reflected both changes. Body-only replacement changed
 the wrapper's known digest but left the selected listing metadata unchanged,
 even with forced reload. These are real local listing observations, separate
 from the synthetic transport tests and historical injection metrics.
+
+## Remaining-work audit after the listing experiment
+
+The listing work is tracked in
+[PR #15](https://github.com/KazuCocoa/renma-runtime-evidence/pull/15), with three
+final real-runtime repetitions and 151 passing deterministic tests, 1 skipped.
+
+- **Independent work completed:** inspected Renma identity, immutable manifest
+  candidate rules, actual synthetic Git A/B synchronization, dirty/mismatch
+  checks, provenance-separated OTLP v2 with independent schema decoding, and
+  real no-model-turn local listing/cache/body-only characterization. Further
+  repetitions of the same local fixtures would not resolve the remaining gaps.
+- **Unsupported by the current evidence contract:** actual loaded/injected body
+  revision, selection/execution guarantees, lifecycle ordering, and a TTL inferred
+  from listing behavior. The measured listing predicates and name-only presence
+  cannot supply these semantics. This is a limit of the tested evidence surfaces,
+  not a claim that no runtime could ever expose another suitable signal.
+- **External prerequisites pending:** a usable execution-environment API key and
+  explicit separate-analytics acknowledgement for the existing two-Skill metric
+  runner and subsequent model-turn experiments. A runtime/host with explicit
+  read/load and direct-invocation evidence is still needed for those distinctions;
+  the current listing-only protocol does not supply them. Remote MCP freshness
+  and deployed OTel backend compatibility remain untested and must not be inferred
+  from local listing or protobuf-schema success.
+
+The overall goal remains unfinished. Resume the pending real experiments when
+those prerequisites exist; do not turn fixture results into model-run evidence
+or expand the private package API to fill unsupported fields.
