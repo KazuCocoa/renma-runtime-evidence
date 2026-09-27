@@ -47,12 +47,12 @@ function attributes(
   index: number,
 ) {
   return Object.fromEntries(
-    packet.resourceLogs[0]!.scopeLogs[index]!.logRecords[0]!.attributes.map(
-      ({ key, value }) => [
-        key,
-        "stringValue" in value ? value.stringValue : value.boolValue,
-      ],
-    ),
+    packet.resourceLogs[0]!.scopeLogs[0]!.logRecords[0]!.body.kvlistValue.values[
+      index
+    ]!.value.kvlistValue.values.map(({ key, value }) => [
+      key,
+      "stringValue" in value ? value.stringValue : value.boolValue,
+    ]),
   );
 }
 
