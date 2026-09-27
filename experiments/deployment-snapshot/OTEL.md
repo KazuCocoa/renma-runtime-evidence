@@ -140,3 +140,12 @@ Renma retains static identities and contracts. A future plugin may own sync.
 This repository owns provider reduction and the evidence boundary. No fixture
 adds task evaluation, threat detection, orchestration, or a universal lifecycle
 schema. The runtime phases of Issue #10 remain open.
+
+## Related real-runtime boundary
+
+The [CLI mid-turn experiment](../codex-model-freshness/MIDTURN.md) now provides a
+real example of why the wrapper snapshot must stay frozen: the fixture was B on
+disk before a tool returned, while the later artifact matched A. Its provider
+metric still identified only the Skill name. That result does not validate an
+injected revision or turn the synthetic OTLP projection here into runtime or
+backend evidence. Never attach the final checkout's digest as a provider fact.
