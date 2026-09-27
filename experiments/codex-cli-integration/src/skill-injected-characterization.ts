@@ -6,6 +6,7 @@ import {
   readdir,
   rm,
   stat,
+  symlink,
 } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { basename, isAbsolute, join, relative, resolve, sep } from "node:path";
@@ -99,7 +100,11 @@ export const CHARACTERIZATION_EXECUTION_ENVIRONMENT_VARIABLES = [
   "LC_CTYPE",
 ] as const;
 
+export type CharacterizationAuthenticationMode =
+  "api-key" | "chatgpt-file-linked";
+
 export interface CharacterizationRunnerArguments {
+  readonly useChatgptLogin?: true;
   readonly codexAnalyticsExplicitlyAllowed: true;
   readonly outputPath?: string;
 }
@@ -145,7 +150,7 @@ export interface SkillInjectedCharacterizationReport {
   readonly experiment: typeof CHARACTERIZATION_EXPERIMENT_ID;
   readonly codexVersion: string;
   readonly exportedMetric: "codex.skill.injected";
-  readonly authenticationIsolationMode: "api-key";
+  readonly authenticationIsolationMode: CharacterizationAuthenticationMode;
   readonly codexAnalyticsExplicitlyAllowed: true;
   readonly collectorSemantics: "skill-injection-presence";
   readonly scenarios: readonly CharacterizationScenarioResult[];
@@ -221,6 +226,7 @@ export function parseCharacterizationRunnerArguments(
 ): CharacterizationRunnerArguments {
   let codexAnalyticsExplicitlyAllowed = false;
   let outputPath: string | undefined;
+  let useChatgptLogin = false;
 
   for (let index = 0; index < args.length; index += 1) {
     const argument = args[index];
@@ -231,6 +237,12 @@ export function parseCharacterizationRunnerArguments(
         );
       }
       codexAnalyticsExplicitlyAllowed = true;
+    } else if (argument === "--use-chatgpt-login") {
+      if (useChatgptLogin)
+        throw new Error(
+          "Characterization argument error: duplicate --use-chatgpt-login",
+        );
+      useChatgptLogin = true;
     } else if (argument === "--output") {
       if (outputPath !== undefined) {
         throw new Error("Characterization argument error: duplicate --output");
@@ -255,7 +267,9 @@ export function parseCharacterizationRunnerArguments(
   const result: {
     codexAnalyticsExplicitlyAllowed: true;
     outputPath?: string;
+    useChatgptLogin?: true;
   } = { codexAnalyticsExplicitlyAllowed: true };
+  if (useChatgptLogin) result.useChatgptLogin = true;
   if (outputPath !== undefined) {
     result.outputPath = outputPath;
   }
@@ -265,10 +279,11 @@ export function parseCharacterizationRunnerArguments(
 export function buildCharacterizationChildEnvironment(
   sourceEnvironment: Readonly<NodeJS.ProcessEnv>,
   directories: CharacterizationIsolatedDirectories,
+  authenticationMode: CharacterizationAuthenticationMode = "api-key",
 ): NodeJS.ProcessEnv {
   assertIsolatedDirectoryPaths(directories);
   const apiKey = sourceEnvironment.CODEX_API_KEY;
-  if (!apiKey) {
+  if (authenticationMode === "api-key" && !apiKey) {
     throw new Error(
       "The isolated characterization requires CODEX_API_KEY and never reuses caller HOME or CODEX_HOME",
     );
@@ -282,7 +297,7 @@ export function buildCharacterizationChildEnvironment(
   }
   childEnvironment.HOME = directories.homeDirectory;
   childEnvironment.CODEX_HOME = directories.codexHomeDirectory;
-  childEnvironment.CODEX_API_KEY = apiKey;
+  if (authenticationMode === "api-key") childEnvironment.CODEX_API_KEY = apiKey;
   return childEnvironment;
 }
 
@@ -316,11 +331,15 @@ export async function createCharacterizationIsolatedDirectories(
 export async function preflightCharacterizationIsolation(
   childEnvironment: Readonly<NodeJS.ProcessEnv>,
   directories: CharacterizationIsolatedDirectories,
+  authenticationMode: CharacterizationAuthenticationMode = "api-key",
 ): Promise<void> {
   assertIsolatedDirectoryPaths(directories);
-  if (!childEnvironment.PATH || !childEnvironment.CODEX_API_KEY) {
+  if (
+    !childEnvironment.PATH ||
+    (authenticationMode === "api-key" && !childEnvironment.CODEX_API_KEY)
+  ) {
     throw new Error(
-      "The isolated characterization environment requires PATH and CODEX_API_KEY",
+      "The isolated characterization environment requires PATH and the selected authentication prerequisite",
     );
   }
   if (
@@ -354,6 +373,27 @@ export async function preflightCharacterizationIsolation(
     codexHomeEntries.length !== 0
   ) {
     throw new Error("Characterization workspace and homes must start empty");
+  }
+}
+
+/** Link only the caller-authorized credential file; never parse or copy it. */
+export async function linkCharacterizationChatgptLogin(
+  directories: CharacterizationIsolatedDirectories,
+  callerCodexHome: string,
+): Promise<void> {
+  assertIsolatedDirectoryPaths(directories);
+  if (!isAbsolute(callerCodexHome))
+    throw new Error(
+      "Characterization prerequisite failed: authentication directory must be absolute",
+    );
+  const source = join(callerCodexHome, "auth.json");
+  try {
+    if (!(await lstat(source)).isFile()) throw new Error("unsupported");
+    await symlink(source, join(directories.codexHomeDirectory, "auth.json"));
+  } catch {
+    throw new Error(
+      "Characterization prerequisite failed: ChatGPT file login unavailable; keyring-only login is unsupported by this mode",
+    );
   }
 }
 
@@ -576,6 +616,7 @@ export function buildSkillInjectedCharacterizationReport(options: {
   readonly codexVersion: string;
   readonly codexAnalyticsExplicitlyAllowed: true;
   readonly observations: readonly CharacterizationScenarioObservation[];
+  readonly authenticationIsolationMode?: CharacterizationAuthenticationMode;
 }): SkillInjectedCharacterizationReport {
   if (options.codexAnalyticsExplicitlyAllowed !== true) {
     throw new Error(CODEX_ANALYTICS_CONSENT_MESSAGE);
@@ -609,7 +650,8 @@ export function buildSkillInjectedCharacterizationReport(options: {
     experiment: CHARACTERIZATION_EXPERIMENT_ID,
     codexVersion: options.codexVersion,
     exportedMetric: "codex.skill.injected",
-    authenticationIsolationMode: "api-key",
+    authenticationIsolationMode:
+      options.authenticationIsolationMode ?? "api-key",
     codexAnalyticsExplicitlyAllowed: true,
     collectorSemantics: "skill-injection-presence",
     scenarios,

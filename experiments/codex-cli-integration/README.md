@@ -17,7 +17,23 @@ The harness checks `codex --version`, the required `codex exec` flags, and `code
 
 The Skill layout and explicit invocation syntax follow the current Codex documentation: repository Skills are installed under `.agents/skills`, and the prompt uses `$skill-name`. The subagent scenario also installs one project-scoped custom agent under `.codex/agents`. See [Build skills](https://developers.openai.com/codex/skills), [multi-agent behavior](https://developers.openai.com/codex/multi-agent), and [advanced configuration](https://developers.openai.com/codex/config-file/config-advanced).
 
-The two-Skill characterization has a stricter authentication prerequisite: `CODEX_API_KEY` must be present. It creates fresh empty `HOME` and `CODEX_HOME` directories for every scenario and forwards only that API key plus a finite execution-environment allowlist. It never reads, copies, or falls back to the caller's saved-login files or configuration.
+The two-Skill characterization defaults to API-key authentication: `CODEX_API_KEY`
+must be present. This is a runner isolation choice, not a Codex CLI requirement;
+Codex also supports [ChatGPT login](https://learn.chatgpt.com/docs/auth).
+Both modes create fresh empty `HOME` and `CODEX_HOME` directories per scenario
+and forward only a finite execution-environment allowlist.
+
+Explicit `--use-chatgpt-login` instead links the caller's regular
+`$CODEX_HOME/auth.json` (default `~/.codex/auth.json`) into each temporary
+`CODEX_HOME`. The runner does not read, copy, print, or persist credential contents.
+Only Codex accesses the linked credentials, including any normal token refresh.
+No caller settings or Skills are linked. The invocation forces file credential
+storage, verifies `codex login status` reports ChatGPT before launching a model
+turn, and forwards neither `CODEX_API_KEY` nor `OPENAI_API_KEY` in this mode.
+Missing, symlinked, or keyring-only credential sources fail without fallback.
+Cleanup removes the temporary link, not the caller's credential file.
+Reports distinguish `api-key` from `chatgpt-file-linked`; authentication is shared
+in the latter mode even though workspace and configuration homes are fresh.
 
 ## Run
 
@@ -55,6 +71,12 @@ Run the controlled three-scenario matrix explicitly with:
 npm run test:integration:codex:characterize -- --allow-codex-analytics
 ```
 
+To use an existing file-backed ChatGPT login without an API key:
+
+```sh
+npm run test:integration:codex:characterize -- --allow-codex-analytics --use-chatgpt-login
+```
+
 This command installs exactly these two repository-owned synthetic fixtures in every scenario:
 
 - target: `renma-integration-characterization-target-20260807`;
@@ -79,7 +101,31 @@ Each row retains only its fixed scenario/request category, Codex process-status 
 
 The command succeeds for any of the first three internally consistent characterizations. Success does not mean the metric was proved to represent selection or execution. An `--output` destination may be supplied explicitly; the runner creates a new mode-0600 file and refuses to overwrite an existing path. Ordinary tests and GitHub Actions never invoke this command.
 
-### Controlled-run status (2026-08-07)
+### CLI 0.157.1 ChatGPT-login observation (2026-09-27)
+
+The [bounded real-run report](results/20260927-cli-0.157.1-chatgpt.json) records
+one complete three-row run using `--use-chatgpt-login --allow-codex-analytics`.
+All three CLI processes completed. Each collector received and decoded an OTLP
+request, with no decode failures or unknown Skill labels.
+
+| Requested fixture | Target / control evidence | Target / control artifacts |
+| ----------------- | ------------------------- | -------------------------- |
+| Neither           | false / false             | false / false              |
+| Target            | true / false              | true / false               |
+| Control           | false / true              | false / true               |
+
+The matrix is `requested-skill-only` for these synthetic requests on this CLI
+version. The neither-requested row had non-target metric datapoints, so its
+absence is not a missing-transport result. Both explicit rows accepted one
+allowlisted Skill datapoint with JSON-number `intValue`.
+
+This is one measured matrix, not a general selection or execution guarantee.
+Fixed artifacts are separate wrapper observations; they do not turn the metric
+into proof of Skill reading, body revision, or instruction compliance. No
+model-turn freshness, remote-host behavior, or deployed OTel backend was tested.
+The historical API-key/quota results below remain separate observations.
+
+## Controlled-run status (2026-08-07)
 
 The locally installed version was `codex-cli 0.146.0`. `CODEX_API_KEY` was present and was exported only to the experiment process tree. The real command ran all three scenarios with the required fresh isolation. An unchanged retry produced the same bounded result.
 
@@ -185,7 +231,7 @@ The invocation has several distinct data paths:
 
 For every run, the local evidence collector is configured with only that scenario's exact synthetic Skill identifiers. It discards all non-allowlisted content before producing its public result and never exposes raw OTLP. Task stdout and stderr are discarded, and `--ephemeral` prevents session rollout persistence. The harness never records Codex prompts, responses, reasoning, transcripts, source content, tool inputs, tool outputs, full configuration, credentials, raw telemetry, analytics events, or temporary/user paths.
 
-The original command intentionally reuses the caller's normal Codex authentication location because authentication is a prerequisite, but `--ignore-user-config` prevents the invocation from loading the user's `config.toml`. The two-Skill characterization instead requires an API key and gives every scenario fresh `HOME` and `CODEX_HOME` directories. Neither command modifies `~/.codex/config.toml`. All telemetry changes are invocation-scoped. For the spawned child only, the experiment temporarily selects the runtime-evidence loopback endpoint as the effective metrics exporter; this may replace another effective metrics exporter for that process. No relay or fan-out behavior is implemented. Temporary repositories are removed after their runs.
+The original command intentionally reuses the caller's normal Codex authentication location because authentication is a prerequisite, but `--ignore-user-config` prevents the invocation from loading the user's `config.toml`. The two-Skill characterization gives every scenario fresh `HOME` and `CODEX_HOME` directories, using an API key by default or an explicitly opted-in link to saved ChatGPT file authentication. Neither command modifies `~/.codex/config.toml`. All telemetry changes are invocation-scoped. For the spawned child only, the experiment temporarily selects the runtime-evidence loopback endpoint as the effective metrics exporter; this may replace another effective metrics exporter for that process. No relay or fan-out behavior is implemented. Temporary repositories are removed after their runs.
 
 The only supported evidence is collector-lifetime presence of an exact allowlisted Skill label from a valid, recorded, strictly positive `codex.skill.injected` datapoint with `status=ok`. The experiment does not claim Skill execution, occurrence counts, ordering, session or turn attribution, nesting edges, agent attribution, instruction compliance, task success, or causality.
 
