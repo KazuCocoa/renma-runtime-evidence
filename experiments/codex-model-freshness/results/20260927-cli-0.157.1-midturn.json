@@ -1,0 +1,138 @@
+{
+  "schemaVersion": "renma.codex-midturn-capability.v1",
+  "evidenceClass": "real-cli-app-server-model-turns",
+  "rows": [
+    {
+      "schemaVersion": "renma.codex-barrier-row.v1",
+      "codexVersion": "codex-cli 0.157.1",
+      "scenario": "direct-tool",
+      "authentication": "chatgpt-file-linked",
+      "codexAnalyticsExplicitlyAllowed": true,
+      "initialDeployment": {
+        "provenance": "experiment-wrapper",
+        "revision": "a",
+        "scope": "exact-known-barrier-fixture-bytes",
+        "digest": "sha256:33679faf5623ddfe1a7b8e7294207b6738b9e41587b8eae9d249a8dd8ab4fd73"
+      },
+      "finalDeployment": {
+        "provenance": "experiment-wrapper",
+        "revision": "a",
+        "scope": "exact-known-barrier-fixture-bytes",
+        "digest": "sha256:33679faf5623ddfe1a7b8e7294207b6738b9e41587b8eae9d249a8dd8ab4fd73"
+      },
+      "initialListing": {
+        "fixtureEntries": "one",
+        "expectedPathMatched": true,
+        "metadataRevision": "a",
+        "enabled": "true",
+        "otherSkillsObserved": true,
+        "listingErrorsObserved": false,
+        "bodyRead": "unsupported",
+        "injectedRevision": "unsupported",
+        "producerTtl": "unsupported"
+      },
+      "finalListing": {
+        "fixtureEntries": "one",
+        "expectedPathMatched": true,
+        "metadataRevision": "a",
+        "enabled": "true",
+        "otherSkillsObserved": true,
+        "listingErrorsObserved": false,
+        "bodyRead": "unsupported",
+        "injectedRevision": "unsupported",
+        "producerTtl": "unsupported"
+      },
+      "modelTurn": {
+        "status": "completed",
+        "artifactRevision": "absent"
+      },
+      "providerTool": {
+        "requestObserved": true,
+        "completion": "success"
+      },
+      "wrapperBarrier": {
+        "handled": true,
+        "replacementVerifiedBeforeReply": false
+      },
+      "providerPresence": {
+        "scope": "collector-lifetime-one-model-turn",
+        "knownFixtureObserved": false,
+        "unknownSkillObserved": false,
+        "pipeline": "non-target-metric-datapoints-only"
+      },
+      "limitations": {
+        "skillCausedToolCall": "unsupported",
+        "injectedRevision": "unsupported",
+        "artifactProvenance": "experiment-wrapper",
+        "remoteCacheBehavior": "not-tested",
+        "generalExecutionGuarantee": false
+      }
+    },
+    {
+      "schemaVersion": "renma.codex-barrier-row.v1",
+      "codexVersion": "codex-cli 0.157.1",
+      "scenario": "skill-midturn",
+      "authentication": "chatgpt-file-linked",
+      "codexAnalyticsExplicitlyAllowed": true,
+      "initialDeployment": {
+        "provenance": "experiment-wrapper",
+        "revision": "a",
+        "scope": "exact-known-barrier-fixture-bytes",
+        "digest": "sha256:33679faf5623ddfe1a7b8e7294207b6738b9e41587b8eae9d249a8dd8ab4fd73"
+      },
+      "finalDeployment": {
+        "provenance": "experiment-wrapper",
+        "revision": "b",
+        "scope": "exact-known-barrier-fixture-bytes",
+        "digest": "sha256:d93039619157baa0a1160ddf50802fc2ed9304f81dfbc2b3e06890f649515b7f"
+      },
+      "initialListing": {
+        "fixtureEntries": "one",
+        "expectedPathMatched": true,
+        "metadataRevision": "a",
+        "enabled": "true",
+        "otherSkillsObserved": true,
+        "listingErrorsObserved": false,
+        "bodyRead": "unsupported",
+        "injectedRevision": "unsupported",
+        "producerTtl": "unsupported"
+      },
+      "finalListing": {
+        "fixtureEntries": "one",
+        "expectedPathMatched": true,
+        "metadataRevision": "b",
+        "enabled": "true",
+        "otherSkillsObserved": true,
+        "listingErrorsObserved": false,
+        "bodyRead": "unsupported",
+        "injectedRevision": "unsupported",
+        "producerTtl": "unsupported"
+      },
+      "modelTurn": {
+        "status": "completed",
+        "artifactRevision": "a"
+      },
+      "providerTool": {
+        "requestObserved": true,
+        "completion": "success"
+      },
+      "wrapperBarrier": {
+        "handled": true,
+        "replacementVerifiedBeforeReply": true
+      },
+      "providerPresence": {
+        "scope": "collector-lifetime-one-model-turn",
+        "knownFixtureObserved": true,
+        "unknownSkillObserved": false,
+        "pipeline": "accepted-skill-evidence"
+      },
+      "limitations": {
+        "skillCausedToolCall": "unsupported",
+        "injectedRevision": "unsupported",
+        "artifactProvenance": "experiment-wrapper",
+        "remoteCacheBehavior": "not-tested",
+        "generalExecutionGuarantee": false
+      }
+    }
+  ]
+}

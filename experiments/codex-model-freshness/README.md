@@ -5,6 +5,9 @@ model API. It combines the existing exact listing reducer with ephemeral model
 threads and a fixed synthetic artifact predicate. It does not create a new
 public lifecycle or execution-evidence API.
 
+A separate opt-in [mid-turn/capability comparison](MIDTURN.md) adds a fixed
+dynamic-tool barrier; the default four-turn sequence below is unchanged.
+
 ## Run
 
 ```sh
@@ -66,8 +69,9 @@ handles and never appear in the report. Stderr is discarded. No raw payloads are
 written for debugging.
 
 There is a 15-second RPC timeout, a 180-second turn timeout, and bounded stdout
-buffer/total-byte limits. Unexpected server requests or unsupported responses
-fail closed. Process-group termination and temporary-directory cleanup run on
+buffer/total-byte limits. In the default sequence, all server requests fail closed. The barrier mode
+accepts only its exact fixed tool request; all other requests and unsupported
+responses fail closed. Process-group termination and temporary-directory cleanup run on
 success, failure, and handled signals. A failure emits only a fixed stage enum;
 it does not fabricate missing rows or claim an absence of runtime evidence.
 

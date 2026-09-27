@@ -33,6 +33,18 @@ import {
   type TurnStatus,
 } from "./contract.js";
 
+import {
+  BARRIER_TOOL,
+  BARRIER_SPEC,
+  barrierFixture,
+  barrierDeployment,
+  reduceBarrierRequest,
+  reduceBarrierCompletion,
+  type BarrierRouting,
+} from "./barrier.js";
+
+type Mode = "between-turn" | "direct-tool" | "skill-midturn";
+
 const RPC_TIMEOUT = 15_000;
 const TURN_TIMEOUT = 180_000;
 let stage:
@@ -54,14 +66,23 @@ function signal(child: ChildProcess, value: NodeJS.Signals): void {
   }
 }
 
-async function run() {
-  requireOptIn(process.argv.slice(2));
+async function run(mode: Mode) {
+  stage = "setup";
   const directories = await createCharacterizationIsolatedDirectories();
   let child: ChildProcess | undefined;
   let closed: Promise<void> | undefined;
   let collector: CodexSkillEvidenceCollector | undefined;
   let aborted = false;
   let stopped = false;
+  let barrierRouting: BarrierRouting | undefined;
+  let barrierServing = false;
+  let barrierHandled = false;
+  let mutationVerified = false;
+  let toolCompletion: "success" | "failure" | "unsupported" | "not-observed" =
+    "not-observed";
+  let barrierOperation: Promise<void> | undefined;
+  let serviceBarrier: () => void = () => {};
+
   let pending:
     | {
         id: number;
@@ -157,11 +178,16 @@ async function run() {
       )
     )
       throw new Error("ChatGPT login unavailable");
+    const fixtureBytes = mode === "between-turn" ? fixture : barrierFixture;
+    const snapshotFor =
+      mode === "between-turn" ? deployment : barrierDeployment;
     const writeRevision = async (revision: Revision) => {
-      await writeFile(skillPath, fixture(revision), { mode: 0o600 });
-      if (!(await readFile(skillPath)).equals(Buffer.from(fixture(revision))))
+      await writeFile(skillPath, fixtureBytes(revision), { mode: 0o600 });
+      if (
+        !(await readFile(skillPath)).equals(Buffer.from(fixtureBytes(revision)))
+      )
         throw new Error("Fixture deployment failed");
-      return deployment(revision);
+      return snapshotFor(revision);
     };
     const snapshotA = await writeRevision("a");
     collector = await createCodexSkillEvidenceCollector({
@@ -192,6 +218,26 @@ async function run() {
     );
     child.on("error", abort);
     child.stdin!.on("error", abort);
+    serviceBarrier = () => {
+      if (!barrierRouting || !activeTurn?.turnId || barrierServing) return;
+      if (barrierRouting.turnId !== activeTurn.turnId) {
+        abort();
+        return;
+      }
+      barrierServing = true;
+      const routing = barrierRouting;
+      barrierOperation = (async () => {
+        if (mode === "skill-midturn") {
+          await writeRevision("b");
+          mutationVerified = true;
+        }
+        if (aborted) return;
+        barrierHandled = true;
+        child!.stdin!.write(
+          `${JSON.stringify({ id: routing.requestId, result: { contentItems: [{ type: "inputText", text: "Synthetic barrier completed." }], success: true } })}\n`,
+        );
+      })().catch(abort);
+    };
     let buffer = "";
     let bytes = 0;
     child.stdout!.on("data", (chunk: Buffer) => {
@@ -226,8 +272,13 @@ async function run() {
             pending = undefined;
             resolve(reduced);
           } else if (message.id !== undefined && message.method !== undefined) {
-            // No server-initiated requests are needed by this bounded fixture.
-            throw new Error("Unexpected server request");
+            if (mode === "between-turn" || !activeTurn || barrierRouting)
+              throw new Error("Unexpected server request");
+            barrierRouting = reduceBarrierRequest(message, activeTurn.threadId);
+            serviceBarrier();
+          } else if (barrierRouting && message.method === "item/completed") {
+            const completion = reduceBarrierCompletion(message, barrierRouting);
+            if (completion !== undefined) toolCompletion = completion;
           } else if (activeTurn && message.method === "turn/completed") {
             const params = object(message.params);
             const turn = object(params?.turn);
@@ -282,7 +333,12 @@ async function run() {
     stage = "initialize";
     await request(
       "initialize",
-      { clientInfo: { name: "renma_model_freshness_fixture", version: "1" } },
+      {
+        clientInfo: { name: "renma_model_freshness_fixture", version: "1" },
+        ...(mode === "between-turn"
+          ? {}
+          : { capabilities: { experimentalApi: true } }),
+      },
       () => null,
     );
     child.stdin!.write(
@@ -306,6 +362,7 @@ async function run() {
           approvalPolicy: "never",
           sandbox: "workspace-write",
           experimentalRawEvents: false,
+          ...(mode === "between-turn" ? {} : { dynamicTools: [BARRIER_SPEC] }),
         },
         ephemeralThreadId,
       );
@@ -324,18 +381,31 @@ async function run() {
           "turn/start",
           {
             threadId,
-            input: [
-              {
-                type: "text",
-                text: `$${LISTING_FIXTURE_NAME} Follow the synthetic Skill's fixed artifact instruction for this turn.`,
-              },
-              { type: "skill", name: LISTING_FIXTURE_NAME, path: skillPath },
-            ],
+            input:
+              mode === "direct-tool"
+                ? [
+                    {
+                      type: "text",
+                      text: `Call ${BARRIER_TOOL} exactly once with an empty object. Do not use any Skill, read files, or create files. Return a short acknowledgement.`,
+                    },
+                  ]
+                : [
+                    {
+                      type: "text",
+                      text: `$${LISTING_FIXTURE_NAME} Follow the synthetic Skill's fixed artifact instruction for this turn.`,
+                    },
+                    {
+                      type: "skill",
+                      name: LISTING_FIXTURE_NAME,
+                      path: skillPath,
+                    },
+                  ],
           },
           startedTurnId,
         );
         stage = "turn-completion";
         activeTurn.turnId = id;
+        serviceBarrier();
         if (activeTurn.early?.id === id)
           activeTurn.status = activeTurn.early.status;
         if (activeTurn.status === undefined)
@@ -354,6 +424,49 @@ async function run() {
     const observations = [];
     const initialListing = await listing(false);
     const originalThread = await startThread();
+    if (mode !== "between-turn") {
+      const modelTurn = await turn(originalThread);
+      await barrierOperation;
+      const finalListing = await listing(true);
+      stage = "shutdown";
+      await shutdown();
+      const snapshot = await collector.closeAndSnapshot();
+      const diagnostics = collector.diagnosticsSnapshot();
+      return {
+        schemaVersion: "renma.codex-barrier-row.v1",
+        codexVersion: version,
+        scenario: mode,
+        authentication: "chatgpt-file-linked",
+        codexAnalyticsExplicitlyAllowed: true,
+        initialDeployment: snapshotA,
+        finalDeployment: mutationVerified ? barrierDeployment("b") : snapshotA,
+        initialListing,
+        finalListing,
+        modelTurn,
+        providerTool: {
+          requestObserved: barrierRouting !== undefined,
+          completion: toolCompletion,
+        },
+        wrapperBarrier: {
+          handled: barrierHandled,
+          replacementVerifiedBeforeReply: mutationVerified,
+        },
+        providerPresence: {
+          scope: "collector-lifetime-one-model-turn",
+          knownFixtureObserved:
+            snapshot.injectedSkills.includes(LISTING_FIXTURE_NAME),
+          unknownSkillObserved: snapshot.unrecognizedSkillObserved,
+          pipeline: classifyPipelineDiagnostics(diagnostics),
+        },
+        limitations: {
+          skillCausedToolCall: "unsupported",
+          injectedRevision: "unsupported",
+          artifactProvenance: "experiment-wrapper",
+          remoteCacheBehavior: "not-tested",
+          generalExecutionGuarantee: false,
+        },
+      };
+    }
     observations.push({
       scenario: SCENARIOS[0],
       deployment: snapshotA,
@@ -414,6 +527,7 @@ async function run() {
     if (pending) clearTimeout(pending.timer);
     if (activeTurn) clearTimeout(activeTurn.timer);
     await shutdown();
+    await barrierOperation;
     if (collector) await collector.closeAndSnapshot();
     process.removeListener("SIGINT", abort);
     process.removeListener("SIGTERM", abort);
@@ -421,7 +535,25 @@ async function run() {
   }
 }
 
-run().then(
+async function main() {
+  const args = process.argv.slice(2);
+  const barrierMode = args.includes("--midturn-capability");
+  requireOptIn(
+    barrierMode ? args.filter((arg) => arg !== "--midturn-capability") : args,
+  );
+  if (args.filter((arg) => arg === "--midturn-capability").length > 1)
+    throw new Error("Duplicate mode");
+  if (!barrierMode) return run("between-turn");
+  const direct = await run("direct-tool");
+  const skill = await run("skill-midturn");
+  return {
+    schemaVersion: "renma.codex-midturn-capability.v1",
+    evidenceClass: "real-cli-app-server-model-turns",
+    rows: [direct, skill],
+  };
+}
+
+main().then(
   (report) => process.stdout.write(`${JSON.stringify(report, null, 2)}\n`),
   () => {
     process.stderr.write(
