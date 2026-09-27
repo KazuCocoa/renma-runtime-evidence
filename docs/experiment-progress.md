@@ -174,3 +174,19 @@ state became B, while its transmitted wrapper candidate retained A; the direct
 condition omitted the candidate hash. Provider fields contain no wrapper hash.
 The [completion audit](experiment-conclusion.md) maps each planned track to its
 proof and keeps broader unsupported/future work distinct.
+
+## Portfolio usage follow-up
+
+The subsequent dashboard/portfolio-maintenance request adds observation time,
+quantity and plugin packaging to the previous bounded program. See the
+[observation inventory](skill-usage-telemetry.md) and
+[actual plugin experiment](../experiments/codex-plugin-usage/README.md). Two final
+CLI 0.157.1 runs measured UTC receipts and disjoint delta sums of 3 for alpha and
+1 for beta, with the installed dormant Skill unobserved. The plugin launched its
+bundled receiver; host exporter configuration remained wrapper-owned. This
+extension does not reinterpret earlier presence-only records as counts or events.
+
+An additional real lifecycle run preserved the 3/1/no-sample telemetry result but
+found `address-in-use` when a fresh thread started another plugin receiver. MCP
+status also reported a discovery error. The experiment proves receipt-time and
+quantity collection, not a healthy shared multi-thread plugin deployment.
