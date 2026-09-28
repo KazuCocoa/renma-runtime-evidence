@@ -13,9 +13,11 @@ Requested scope: finish the usage-telemetry follow-up experiments, including coe
 | Time-based dashboard limits          | Receipt UTC and monotonic time, batching/delay measurements; clock-skew fixture labeled synthetic                           | Verified locally; synthetic clock-limit tests                                                   |
 | Delivery                             | Documentation, relevant tests, self-review, PR and CI, merge and return to main                                             | [PR #22](https://github.com/KazuCocoa/renma-runtime-evidence/pull/22): CI/merge state on GitHub |
 
-## Architecture being tested
+This follow-up is complete and merged in PR #22; [the summary](experiment-summary.md) is the current entry point. The staged notes below are historical.
 
-The experiment owner starts one receiver before Codex. Plugin MCP processes attach without binding or owning its lifetime. This first step tests thread lifecycle; it is not a zero-setup installed service. Multiple independent Codex producers must not be merged into the existing single-producer summary. A future coexistence runner must preserve producer identity at the receiver boundary before reducing payloads.
+## Architecture tested
+
+The experiment owner starts one receiver before Codex. Plugin MCP processes attach without binding or owning its lifetime. This first step tests thread lifecycle; it is not a zero-setup installed service. Multiple independent Codex producers must not be merged into the existing single-producer summary. The subsequent coexistence runner preserves producer identity at the receiver boundary before reducing payloads.
 
 Existing user configuration and plugins must remain untouched: all installations, exporter configuration, and deliberate failures use owned temporary homes and repositories. Only explicit allowlisted reduced observations may persist. Exact injection time, task success, and prompt/tool content remain outside scope.
 
@@ -27,7 +29,7 @@ Renma 0.39.2 explicitly excludes bundling assets in its README product boundary.
 
 - Actual CLI 0.157.1 shared receiver run: `experiments/codex-plugin-usage/results/20260928-cli-0.157.1-shared.json`. Both thread MCP connections succeeded without tools errors; four Skill increments received; receiver survived Codex shutdown. This completes the sequential multi-thread subcase only.
 - Local process test: two shared MCP clients attach concurrently to the same existing listener and their exit leaves HTTP ingestion working. This is a fixture test, not simultaneous Codex-process evidence.
-- Next: two installed collector plugins and multiple actual CLI producers; preserve source boundaries before summarizing, then deliberate outage/recovery and startup-order variations.
+- At this stage, the next check was two installed collector plugins and multiple actual CLI producers; preserve source boundaries before summarizing, then deliberate outage/recovery and startup-order variations.
 
 ### Two-plugin / multi-CLI results
 
@@ -35,7 +37,7 @@ Renma 0.39.2 explicitly excludes bundling assets in its README product boundary.
 
 A duplicate MCP server-key baseline failed plugin attachment despite successful metric collection. This adds a naming collision to the port/configuration/lifetime coexistence concerns. Another run completed same-thread Skill re-use without a new observed increment; request counts must not be substituted for injection increments.
 
-These complete the concurrent-CLI, cooperative consumer-order, data-distribution, and peer-exit subcases. Actual process restart, receiver outage/recovery, identity evolution, Renma integration, time analysis, and delivery remain open. Unknown third-party collectors are not certified by a cooperative synthetic fixture.
+These complete the concurrent-CLI, cooperative consumer-order, data-distribution, and peer-exit subcases. At that intermediate stage, process restart, receiver outage/recovery, identity evolution, Renma integration, time analysis, and delivery remained open; the later sections record their completion. Unknown third-party collectors are not certified by a cooperative synthetic fixture.
 
 ### Outage, restart, identity and time evidence
 
@@ -43,7 +45,7 @@ These complete the concurrent-CLI, cooperative consumer-order, data-distribution
 - `20260928-receipt-time-analysis.json`: reproducible clock comparisons from actual reports (0–1 ms interval-end/receipt difference), plus explicit synthetic UTC-regression and batch-tie tests. This does not measure injection latency or cross-host synchronization.
 - `experiments/renma-telemetry-identity/results/20260928-renma-0.39.2.json`: actual Renma catalog across two Git repositories and two revisions, canonical ID extraction, rename/move/version/hash mapping and byte-identical wrapper packaging. Nested `metadata.renma.id` YAML objects did not resolve as explicit IDs; the canonical key is `metadata["renma.id"]`.
 
-The changed-bundle/live-label check subsequently passed; remaining delivery gates are final self-review/checks/PR/CI/merge. Baseline and failed runs remain retained.
+The changed-bundle/live-label check subsequently passed; the subsequent delivery gates also passed. Baseline and failed runs remain retained.
 
 ### Live identity completion
 
@@ -62,7 +64,7 @@ The changed-bundle/live-label check subsequently passed; remaining delivery gate
 | UTC timeline / aggregation / clock behavior        | Derived actual receipt-time report and separate clock-regression/batch tests                         | Observation times usable; individual injection time/order and cross-host clock accuracy remain unsupported.                                                    |
 | Privacy and provenance                             | Reducer/HTTP tests, raw-vs-normalized label tests, saved report inspection                           | Explicit allowlists, separate failed/accepted exports, no runtime content persistence, wrapper identity distinguished from provider labels.                    |
 
-Self-review inspected the new receiver, observer lifecycle, fixture installers, report reducers, identity joins and saved evidence. It added rejection of the same asset ID claimed by different repositories within one deployment. The public package API is unchanged. Final local validation: 200 passed, one historical skip; the subsequent manifest guard also passed targeted tests. PR/CI/merge are the remaining delivery gates.
+Self-review inspected the new receiver, observer lifecycle, fixture installers, report reducers, identity joins and saved evidence. It added rejection of the same asset ID claimed by different repositories within one deployment. The public package API is unchanged. Final local validation: 200 passed, one historical skip; the subsequent manifest guard also passed targeted tests. The subsequent PR and merged-main CI passed on Node 22/24, and PR #22 was merged.
 
 ## Delivery tracking
 

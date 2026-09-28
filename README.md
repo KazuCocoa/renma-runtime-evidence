@@ -40,6 +40,10 @@ npm install "github:KazuCocoa/renma-runtime-evidence#<commit-or-tag>"
 
 The `prepare` lifecycle builds the TypeScript sources when npm installs the Git dependency. The resulting dependency includes only the runtime JavaScript, TypeScript declarations, snapshot schema, README, and npm package metadata. Tests, experiment output, local evidence, environment files, and credentials are excluded. npm-registry publication is unsupported and prohibited by `"private": true`.
 
+## Experiment summary
+
+Start with the [completed experiment summary](docs/experiment-summary.md) for conclusions, PR history, evidence links and the next operational checks.
+
 ## First experiment: Codex Skill injection
 
 The first provider under investigation is Codex. On 2026-08-04, the experiment tested whether `codex-cli 0.146.0` could export the documented `skill.injected` counter to a user-controlled, loopback-only OpenTelemetry collector.
@@ -78,7 +82,7 @@ The runner fixes three isolated parent invocations per scenario with `codex-cli 
 
 ## Development
 
-The [continuation ledger](docs/experiment-progress.md) tracks the unfinished
+The [chronological ledger](docs/experiment-progress.md) records the
 two-Skill runtime characterization, the
 [real app-server listing experiment](experiments/codex-listing-freshness/README.md),
 and the
