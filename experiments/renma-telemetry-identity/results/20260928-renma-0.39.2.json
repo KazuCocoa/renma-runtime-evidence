@@ -1,0 +1,139 @@
+{
+  "schemaVersion": "renma.identity-evolution-experiment.v1",
+  "evidenceClass": "real-renma-catalog-and-git-on-authored-fixtures",
+  "renmaVersion": "0.39.2",
+  "cliEntryDigest": "sha256:f0aacb4c2d48310c9fc9b44229819771166a562394ee887f35bc89bdb9c8498b",
+  "nestedIdRecognized": false,
+  "canonicalMetadataKey": "metadata[renma.id]",
+  "observations": [
+    {
+      "deployment": "before",
+      "repository": "repository-a",
+      "explicitIdRecognized": true,
+      "sourcePathMatched": true,
+      "contentHashMatched": true,
+      "catalogExit": 0,
+      "gitCommit": "73341c9ae36eecb8f1ea199e7251790d1780ccd4",
+      "packagedBytesMatch": true
+    },
+    {
+      "deployment": "before",
+      "repository": "repository-b",
+      "explicitIdRecognized": true,
+      "sourcePathMatched": true,
+      "contentHashMatched": true,
+      "catalogExit": 0,
+      "gitCommit": "be4b3ee7c1b1f05cbf5aaca9e0a877bd1f720b07",
+      "packagedBytesMatch": true
+    },
+    {
+      "deployment": "after",
+      "repository": "repository-a",
+      "explicitIdRecognized": true,
+      "sourcePathMatched": true,
+      "contentHashMatched": true,
+      "catalogExit": 0,
+      "gitCommit": "21ad67ba550af1c75b9ba0d9aa44becfb69fd9b3",
+      "packagedBytesMatch": true
+    },
+    {
+      "deployment": "after",
+      "repository": "repository-b",
+      "explicitIdRecognized": true,
+      "sourcePathMatched": true,
+      "contentHashMatched": true,
+      "catalogExit": 0,
+      "gitCommit": "5b99367f09ec2f52fcb9a71d4953dc6bf761fb37",
+      "packagedBytesMatch": true
+    }
+  ],
+  "manifest": [
+    {
+      "deployment": "before",
+      "repository": "repository-a",
+      "assetId": "skill.fixture-alpha",
+      "plugin": "renma-bundle",
+      "name": "renma-usage-alpha",
+      "version": "1.0.0",
+      "digest": "sha256:73eefb24ff46cb8fd42258466745ed00ddab308915cd594b1af7cfa82ad1834b",
+      "providerLabelCandidate": "renma-bundle_renma-usage-alpha"
+    },
+    {
+      "deployment": "before",
+      "repository": "repository-b",
+      "assetId": "skill.fixture-beta",
+      "plugin": "renma-bundle",
+      "name": "renma-usage-beta",
+      "version": "1.0.0",
+      "digest": "sha256:63dc6165c66b554e636ec7be585e57af05ccc95621d0884d16cc726f8b4aae35",
+      "providerLabelCandidate": "renma-bundle_renma-usage-beta"
+    },
+    {
+      "deployment": "after",
+      "repository": "repository-a",
+      "assetId": "skill.fixture-alpha",
+      "plugin": "renma-moved-bundle",
+      "name": "renma-renamed-alpha",
+      "version": "2.0.0",
+      "digest": "sha256:c3ff09618b1c61f8a0252c88972ab98b5500b731ff9633a8febee0b214c8c5af",
+      "providerLabelCandidate": "renma-moved-bundle_renma-renamed-alpha"
+    },
+    {
+      "deployment": "after",
+      "repository": "repository-b",
+      "assetId": "skill.fixture-beta",
+      "plugin": "renma-bundle",
+      "name": "renma-usage-beta",
+      "version": "2.0.0",
+      "digest": "sha256:b1760d1f66f57561a27711a685e9c3310d164bd41f31d42add3b53974180fd47",
+      "providerLabelCandidate": "renma-bundle_renma-usage-beta"
+    }
+  ],
+  "resolution": [
+    {
+      "deployment": "before",
+      "label": "renma-bundle_renma-usage-alpha",
+      "resolved": {
+        "assetId": "skill.fixture-alpha",
+        "repository": "repository-a",
+        "provenance": "packaging-manifest",
+        "injectedRevision": "unsupported"
+      }
+    },
+    {
+      "deployment": "before",
+      "label": "renma-bundle_renma-usage-beta",
+      "resolved": {
+        "assetId": "skill.fixture-beta",
+        "repository": "repository-b",
+        "provenance": "packaging-manifest",
+        "injectedRevision": "unsupported"
+      }
+    },
+    {
+      "deployment": "after",
+      "label": "renma-moved-bundle_renma-renamed-alpha",
+      "resolved": {
+        "assetId": "skill.fixture-alpha",
+        "repository": "repository-a",
+        "provenance": "packaging-manifest",
+        "injectedRevision": "unsupported"
+      }
+    },
+    {
+      "deployment": "after",
+      "label": "renma-bundle_renma-usage-beta",
+      "resolved": {
+        "assetId": "skill.fixture-beta",
+        "repository": "repository-b",
+        "provenance": "packaging-manifest",
+        "injectedRevision": "unsupported"
+      }
+    }
+  ],
+  "duplicateNameRejected": true,
+  "crossDeploymentLabelRejected": true,
+  "liveCodexRenamedLabel": "not-tested",
+  "injectedRevision": "unsupported",
+  "packagingOwner": "experiment-wrapper-not-renma"
+}

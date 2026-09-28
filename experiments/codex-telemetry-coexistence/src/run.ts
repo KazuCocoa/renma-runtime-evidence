@@ -35,9 +35,10 @@ let stage = "consent";
 async function run() {
   const args = process.argv.slice(2);
   const reverse = args.includes("--beta-first");
-  requireOptIn(args.filter((a) => a !== "--beta-first"));
+  const faults = args.includes("--faults");
+  requireOptIn(args.filter((a) => a !== "--beta-first" && a !== "--faults"));
   const first: Consumer = reverse ? "beta" : "alpha";
-  const hub = await createHub(first);
+  let hub = await createHub(first);
   const owned: {
     dirs: Awaited<ReturnType<typeof createCharacterizationIsolatedDirectories>>;
     rpc?: FixtureRpc;
@@ -311,6 +312,76 @@ async function run() {
       if (hub.snapshot().producers[1]!.acknowledged.alpha >= 2) break;
       await delay(1000);
     }
+    const receiverEpochs: ReturnType<typeof hub.snapshot>[] = [];
+    const faultObservations: {
+      phase: string;
+      observedAt: string;
+      acceptedSamples: number;
+      failedExportRequests: number;
+    }[] = [];
+    let tcpOutage: { startedAt: string; recoveredAt: string } | null = null;
+    const checkpoint = (phase: string) => {
+      const s = hub.snapshot();
+      faultObservations.push({
+        phase,
+        observedAt: new Date().toISOString(),
+        acceptedSamples: s.producers[1]!.samples.length,
+        failedExportRequests: s.failedExports.length,
+      });
+    };
+    if (faults) {
+      stage = "http-503";
+      checkpoint("before-http-503");
+      hub.setAccepting(false);
+      await turn(
+        b,
+        await b.rpc.startThread(b.cwd),
+        "beta",
+        "http-503-new-thread",
+      );
+      await delay(5000);
+      checkpoint("before-http-recovery");
+      hub.setAccepting(true);
+      await delay(15000);
+      checkpoint("after-http-recovery-without-new-turn");
+      stage = "tcp-outage";
+      receiverEpochs.push(hub.snapshot());
+      const port = Number(new URL(hub.base).port);
+      await hub.close();
+      const startedAt = new Date().toISOString();
+      await turn(
+        b,
+        await b.rpc.startThread(b.cwd),
+        "beta",
+        "tcp-unavailable-new-thread",
+      );
+      await delay(3000);
+      hub = await createHub(first, port);
+      tcpOutage = { startedAt, recoveredAt: new Date().toISOString() };
+      await delay(15000);
+      checkpoint("after-tcp-recovery-without-new-turn");
+      stage = "post-recovery-turn";
+      await turn(
+        b,
+        await b.rpc.startThread(b.cwd),
+        "alpha",
+        "receiver-restarted-new-thread",
+      );
+      await delay(2500);
+      checkpoint("after-post-recovery-turn");
+      stage = "replacement-cli";
+      const replacement = await setup("restarted");
+      await replacement.rpc.initialize();
+      await turn(
+        replacement,
+        await replacement.rpc.startThread(replacement.cwd),
+        "alpha",
+        "replacement-cli-fresh-home",
+      );
+      await delay(2500);
+      await replacement.rpc.close();
+      delete replacement.owner.rpc;
+    }
     await b.rpc.close();
     delete b.owner.rpc;
     const exporterEndpointTextPreserved =
@@ -336,6 +407,12 @@ async function run() {
       turns,
       hubSurvivedFirstExit,
       telemetry: hub.snapshot(),
+      receiverEpochs,
+      faultObservations,
+      tcpOutage,
+      replacementProcessScope: faults
+        ? "new-cli-process-fresh-home-not-conversation-resumption"
+        : "not-tested",
       scope: "owned-loopback-fixture-not-authenticated-production-collector",
     };
   } finally {

@@ -90,3 +90,56 @@ test("failed duplicate-key run stays a failure despite successful model turns an
     beta: 0,
   });
 });
+
+test("real 503 and TCP outage report distinguishes failed export, acceptance, epochs, and recovery", async () => {
+  const r = JSON.parse(
+    await readFile(
+      "experiments/codex-telemetry-coexistence/results/20260928-outage-recovery.json",
+      "utf8",
+    ),
+  );
+  assert.equal(r.turns.length, 9);
+  assert.ok(r.turns.every((t: { status: string }) => t.status === "completed"));
+  assert.equal(r.receiverEpochs.length, 1);
+  const old = r.receiverEpochs[0];
+  const failed = old.failedExports.flatMap(
+    (e: { samples: unknown[] }) => e.samples,
+  );
+  assert.equal(failed.length, 1);
+  assert.equal(failed[0].skill, "renma-usage-beta");
+  assert.equal(failed[0].value, 1);
+  assert.equal(
+    r.faultObservations[0].acceptedSamples,
+    r.faultObservations[2].acceptedSamples,
+  );
+  assert.ok(r.faultObservations[1].failedExportRequests > 0);
+  assert.ok(
+    Date.parse(r.faultObservations[2].observedAt) -
+      Date.parse(r.faultObservations[1].observedAt) >=
+      15000,
+  );
+  assert.equal(r.faultObservations[3].acceptedSamples, 0);
+  assert.equal(r.faultObservations[4].acceptedSamples, 1);
+  assert.ok(
+    Date.parse(r.tcpOutage.recoveredAt) > Date.parse(r.tcpOutage.startedAt),
+  );
+  for (const epoch of [old, r.telemetry])
+    for (const p of epoch.producers)
+      assert.deepEqual(summarize(p.samples), p.skills);
+  assert.equal(r.telemetry.producers[2].skills[0].providerCounterTotal, 1);
+  assert.equal(
+    r.replacementProcessScope,
+    "new-cli-process-fresh-home-not-conversation-resumption",
+  );
+  const allAccepted = [...old.producers, ...r.telemetry.producers].flatMap(
+    (p) => p.samples,
+  );
+  assert.ok(
+    !allAccepted.some(
+      (s) =>
+        s.skill === failed[0].skill &&
+        s.startTimeUnixNano === failed[0].startTimeUnixNano &&
+        s.timeUnixNano === failed[0].timeUnixNano,
+    ),
+  );
+});

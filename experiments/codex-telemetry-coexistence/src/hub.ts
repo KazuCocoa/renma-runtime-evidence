@@ -12,13 +12,20 @@ export type Producer = (typeof PRODUCERS)[number];
 export type Consumer = (typeof CONSUMERS)[number];
 
 /** Owned loopback fixture only. Route identity is wrapper provenance, not a provider field. */
-export async function createHub(firstConsumer: Consumer) {
+export async function createHub(firstConsumer: Consumer, port = 0) {
   const started = performance.now();
   const samples: Record<Producer, Sample[]> = {
     first: [],
     second: [],
     restarted: [],
   };
+  const failedExports: {
+    producer: Producer;
+    samples: Sample[];
+    observedAt: string;
+  }[] = [];
+  const availability: { accepting: boolean; observedAt: string }[] = [];
+  let accepting = true;
   const acknowledged = Object.fromEntries(
     PRODUCERS.map((p) => [p, { alpha: 0, beta: 0 }]),
   ) as Record<Producer, Record<Consumer, number>>;
@@ -72,6 +79,16 @@ export async function createHub(firstConsumer: Consumer) {
             at,
             elapsed,
           );
+          if (!accepting) {
+            if (failedExports.length >= 128) throw new Error("Limit");
+            failedExports.push({
+              producer: p,
+              samples: reduced.samples,
+              observedAt: at,
+            });
+            send(503);
+            return;
+          }
           if (samples[p].length + reduced.samples.length > 256)
             throw new Error("Limit");
           samples[p].push(...reduced.samples);
@@ -139,13 +156,18 @@ export async function createHub(firstConsumer: Consumer) {
     }
   });
   server.requestTimeout = 5000;
-  server.listen(0, "127.0.0.1");
+  server.listen(port, "127.0.0.1");
   await once(server, "listening");
   const address = server.address();
   if (!address || typeof address === "string")
     throw new Error("Listener unavailable");
   return {
     base: `http://127.0.0.1:${address.port}`,
+    setAccepting: (value: boolean) => {
+      if (availability.length >= 16) throw new Error("Transition limit");
+      accepting = value;
+      availability.push({ accepting, observedAt: new Date().toISOString() });
+    },
     snapshot: () =>
       structuredClone({
         evidenceClass: "wrapper-reduced-actual-http",
@@ -154,6 +176,8 @@ export async function createHub(firstConsumer: Consumer) {
         rejected,
         unknownSkillObserved,
         events,
+        availability,
+        failedExports,
         producers: PRODUCERS.map((producer) => ({
           producer,
           samples: samples[producer],

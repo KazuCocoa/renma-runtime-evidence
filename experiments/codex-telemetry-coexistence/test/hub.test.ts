@@ -126,3 +126,32 @@ test("synthetic replay deduplication does not silently turn uncertain series int
     await hub.close();
   }
 });
+
+test("deliberate 503 keeps reduced failure evidence outside accepted usage, then permits recovery", async () => {
+  const hub = await createHub("alpha");
+  try {
+    hub.setAccepting(false);
+    const fail = await fetch(hub.base + "/metrics/first", {
+      method: "POST",
+      body: JSON.stringify(packet()),
+    });
+    await fail.body?.cancel();
+    assert.equal(fail.status, 503);
+    assert.equal(hub.snapshot().producers[0]!.samples.length, 0);
+    assert.equal(hub.snapshot().failedExports[0]!.samples.length, 1);
+    assert.ok(!JSON.stringify(hub.snapshot()).includes("NEVER_RETAIN"));
+    hub.setAccepting(true);
+    const success = await fetch(hub.base + "/metrics/first", {
+      method: "POST",
+      body: JSON.stringify(packet()),
+    });
+    await success.body?.cancel();
+    assert.equal(success.status, 200);
+    assert.equal(
+      hub.snapshot().producers[0]!.skills[0]!.providerCounterTotal,
+      1,
+    );
+  } finally {
+    await hub.close();
+  }
+});
