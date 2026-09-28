@@ -2,16 +2,16 @@
 
 Requested scope: finish the usage-telemetry follow-up experiments, including coexistence with other OpenTelemetry plugins. A passing fixture test is not proof of Codex runtime behavior. No production readiness claim follows from a successful bounded experiment.
 
-| Requirement                          | Evidence required                                                                                                           | Status                                        |
-| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| Concurrent threads and CLI processes | Actual Codex processes, independent producer boundaries, no bind collision, shutdown/restart observations                   | Verified within fixture scope                 |
-| Plugin installation and bootstrap    | Fresh isolated install, explicit consent/configuration, existing exporter preserved                                         | Verified: explicit setup, existing endpoint   |
-| Other collector plugins              | Two installed synthetic collectors, both start orders, existing listener, ownership and shutdown, reduced data distribution | Verified: cooperative synthetic plugins       |
-| Loss, retry and restart              | Actual exporter outage/recovery plus separately labeled replay fixtures; no silent zero or double count                     | Verified: bounded failure/recovery windows    |
-| Rename, move and version updates     | Stable asset ID mapping across changed labels/plugin/version; collision detection                                           | Verified: actual changed-bundle labels        |
-| Actual Renma packaging path          | Actual Renma scans owned Git repositories; wrapper bundles their assets; identity manifest and updates verified             | Verified: Renma → package → actual Codex      |
-| Time-based dashboard limits          | Receipt UTC and monotonic time, batching/delay measurements; clock-skew fixture labeled synthetic                           | Verified locally; synthetic clock-limit tests |
-| Delivery                             | Documentation, relevant tests, self-review, PR and CI, merge and return to main                                             | Pending                                       |
+| Requirement                          | Evidence required                                                                                                           | Status                                                                                          |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Concurrent threads and CLI processes | Actual Codex processes, independent producer boundaries, no bind collision, shutdown/restart observations                   | Verified within fixture scope                                                                   |
+| Plugin installation and bootstrap    | Fresh isolated install, explicit consent/configuration, existing exporter preserved                                         | Verified: explicit setup, existing endpoint                                                     |
+| Other collector plugins              | Two installed synthetic collectors, both start orders, existing listener, ownership and shutdown, reduced data distribution | Verified: cooperative synthetic plugins                                                         |
+| Loss, retry and restart              | Actual exporter outage/recovery plus separately labeled replay fixtures; no silent zero or double count                     | Verified: bounded failure/recovery windows                                                      |
+| Rename, move and version updates     | Stable asset ID mapping across changed labels/plugin/version; collision detection                                           | Verified: actual changed-bundle labels                                                          |
+| Actual Renma packaging path          | Actual Renma scans owned Git repositories; wrapper bundles their assets; identity manifest and updates verified             | Verified: Renma → package → actual Codex                                                        |
+| Time-based dashboard limits          | Receipt UTC and monotonic time, batching/delay measurements; clock-skew fixture labeled synthetic                           | Verified locally; synthetic clock-limit tests                                                   |
+| Delivery                             | Documentation, relevant tests, self-review, PR and CI, merge and return to main                                             | [PR #22](https://github.com/KazuCocoa/renma-runtime-evidence/pull/22): CI/merge state on GitHub |
 
 ## Architecture being tested
 
@@ -63,3 +63,7 @@ The changed-bundle/live-label check subsequently passed; remaining delivery gate
 | Privacy and provenance                             | Reducer/HTTP tests, raw-vs-normalized label tests, saved report inspection                           | Explicit allowlists, separate failed/accepted exports, no runtime content persistence, wrapper identity distinguished from provider labels.                    |
 
 Self-review inspected the new receiver, observer lifecycle, fixture installers, report reducers, identity joins and saved evidence. It added rejection of the same asset ID claimed by different repositories within one deployment. The public package API is unchanged. Final local validation: 200 passed, one historical skip; the subsequent manifest guard also passed targeted tests. PR/CI/merge are the remaining delivery gates.
+
+## Delivery tracking
+
+[PR #22](https://github.com/KazuCocoa/renma-runtime-evidence/pull/22) contains the complete follow-up experiments and evidence. GitHub records the authoritative CI and merge outcome. The preceding completion audit documents the pre-submission verification; it is not a claim that the experiment is a production telemetry service.
