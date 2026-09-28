@@ -1,0 +1,233 @@
+{
+  "schemaVersion": "renma.local-delivery-evidence.v1",
+  "evidenceClass": "synthetic-records-real-http-disk-and-docker",
+  "events": [
+    {
+      "phase": "http-503-queued",
+      "observedAt": "2026-09-28T06:37:57.419Z",
+      "queued": 1,
+      "backendRecords": 0,
+      "duplicates": 0,
+      "state": "retry"
+    },
+    {
+      "phase": "stored-acknowledgement-lost",
+      "observedAt": "2026-09-28T06:37:57.425Z",
+      "queued": 1,
+      "backendRecords": 1,
+      "duplicates": 0,
+      "state": "retry"
+    },
+    {
+      "phase": "tcp-down-retained",
+      "observedAt": "2026-09-28T06:37:57.549Z",
+      "queued": 1,
+      "backendRecords": 1,
+      "duplicates": 0,
+      "state": "retry"
+    },
+    {
+      "phase": "backend-restarted-deduplicated",
+      "observedAt": "2026-09-28T06:37:57.790Z",
+      "queued": 0,
+      "backendRecords": 1,
+      "duplicates": 1,
+      "state": "ready"
+    },
+    {
+      "phase": "auth-blocked",
+      "observedAt": "2026-09-28T06:37:57.797Z",
+      "queued": 1,
+      "backendRecords": 1,
+      "duplicates": 1,
+      "state": "blocked-auth"
+    },
+    {
+      "phase": "auth-recovered",
+      "observedAt": "2026-09-28T06:37:57.808Z",
+      "queued": 0,
+      "backendRecords": 2,
+      "duplicates": 1,
+      "state": "ready"
+    }
+  ],
+  "collector": {
+    "version": "0.161.0",
+    "imageDigest": "otel/opentelemetry-collector@sha256:b6d2b9a85b1029d05b5ad913150c1f014eed4ae99be81a1813ca5ade4a191913",
+    "firstStatus": 200,
+    "baselineReceived": true,
+    "outageStatus": 200,
+    "duringOutage": 3,
+    "recovered": true,
+    "beforeKillStatus": 200,
+    "afterCollectorRestart": 4,
+    "newTrafficStatus": 200,
+    "finalBackendRecords": 5,
+    "queuePersistence": "memory-only",
+    "restartRecoveryWindowMs": 3000
+  },
+  "backend": {
+    "received": 5,
+    "duplicates": 1,
+    "unauthorized": 1,
+    "rejected": 0,
+    "records": [
+      {
+        "schemaVersion": "renma.local-observation.v1",
+        "producer": "delivery-fixture",
+        "receiverEpoch": "first",
+        "producerEpoch": "run-1",
+        "monotonic": true,
+        "seriesIdentity": "not-retained",
+        "evidenceClass": "synthetic-delivery",
+        "observedAt": "2026-09-28T06:37:57.402Z",
+        "skill": "renma-usage-alpha",
+        "providerLabel": "renma-usage-fixture_renma-usage-alpha",
+        "value": 1,
+        "aggregation": "delta",
+        "intervalStart": "1790575201000000000",
+        "intervalEnd": "1790575202000000000",
+        "deployments": ["initial"],
+        "manifest": [
+          {
+            "deployment": "initial",
+            "repository": "repository-a",
+            "assetId": "skill.fixture-alpha",
+            "skill": "renma-usage-alpha",
+            "plugin": "renma-usage-fixture",
+            "sourceCommit": "b58c109fd4bda04c316e611f5ad3b84e7748b369",
+            "contentDigest": "sha256:59b82c4fbe5cb05d7a65e705fe1127bcd6fe4a4823caf97cf35a780231d7f2ae",
+            "commitMatchesContent": true,
+            "digestScope": "skill-file"
+          }
+        ]
+      },
+      {
+        "schemaVersion": "renma.local-observation.v1",
+        "producer": "delivery-fixture",
+        "receiverEpoch": "first",
+        "producerEpoch": "run-1",
+        "monotonic": true,
+        "seriesIdentity": "not-retained",
+        "evidenceClass": "synthetic-delivery",
+        "observedAt": "2026-09-28T06:37:57.790Z",
+        "skill": "renma-usage-alpha",
+        "providerLabel": "renma-usage-fixture_renma-usage-alpha",
+        "value": 1,
+        "aggregation": "delta",
+        "intervalStart": "1790575202000000000",
+        "intervalEnd": "1790575203000000000",
+        "deployments": ["initial"],
+        "manifest": [
+          {
+            "deployment": "initial",
+            "repository": "repository-a",
+            "assetId": "skill.fixture-alpha",
+            "skill": "renma-usage-alpha",
+            "plugin": "renma-usage-fixture",
+            "sourceCommit": "b58c109fd4bda04c316e611f5ad3b84e7748b369",
+            "contentDigest": "sha256:59b82c4fbe5cb05d7a65e705fe1127bcd6fe4a4823caf97cf35a780231d7f2ae",
+            "commitMatchesContent": true,
+            "digestScope": "skill-file"
+          }
+        ]
+      },
+      {
+        "schemaVersion": "renma.local-observation.v1",
+        "producer": "delivery-fixture",
+        "receiverEpoch": "first",
+        "producerEpoch": "run-1",
+        "monotonic": true,
+        "seriesIdentity": "not-retained",
+        "evidenceClass": "synthetic-delivery",
+        "observedAt": "2026-09-28T06:37:59.457Z",
+        "skill": "renma-usage-alpha",
+        "providerLabel": "renma-usage-fixture_renma-usage-alpha",
+        "value": 1,
+        "aggregation": "delta",
+        "intervalStart": "1790575203000000000",
+        "intervalEnd": "1790575204000000000",
+        "deployments": ["initial"],
+        "manifest": [
+          {
+            "deployment": "initial",
+            "repository": "repository-a",
+            "assetId": "skill.fixture-alpha",
+            "skill": "renma-usage-alpha",
+            "plugin": "renma-usage-fixture",
+            "sourceCommit": "b58c109fd4bda04c316e611f5ad3b84e7748b369",
+            "contentDigest": "sha256:59b82c4fbe5cb05d7a65e705fe1127bcd6fe4a4823caf97cf35a780231d7f2ae",
+            "commitMatchesContent": true,
+            "digestScope": "skill-file"
+          }
+        ]
+      },
+      {
+        "schemaVersion": "renma.local-observation.v1",
+        "producer": "delivery-fixture",
+        "receiverEpoch": "first",
+        "producerEpoch": "run-1",
+        "monotonic": true,
+        "seriesIdentity": "not-retained",
+        "evidenceClass": "synthetic-delivery",
+        "observedAt": "2026-09-28T06:37:59.715Z",
+        "skill": "renma-usage-alpha",
+        "providerLabel": "renma-usage-fixture_renma-usage-alpha",
+        "value": 1,
+        "aggregation": "delta",
+        "intervalStart": "1790575204000000000",
+        "intervalEnd": "1790575205000000000",
+        "deployments": ["initial"],
+        "manifest": [
+          {
+            "deployment": "initial",
+            "repository": "repository-a",
+            "assetId": "skill.fixture-alpha",
+            "skill": "renma-usage-alpha",
+            "plugin": "renma-usage-fixture",
+            "sourceCommit": "b58c109fd4bda04c316e611f5ad3b84e7748b369",
+            "contentDigest": "sha256:59b82c4fbe5cb05d7a65e705fe1127bcd6fe4a4823caf97cf35a780231d7f2ae",
+            "commitMatchesContent": true,
+            "digestScope": "skill-file"
+          }
+        ]
+      },
+      {
+        "schemaVersion": "renma.local-observation.v1",
+        "producer": "delivery-fixture",
+        "receiverEpoch": "first",
+        "producerEpoch": "run-1",
+        "monotonic": true,
+        "seriesIdentity": "not-retained",
+        "evidenceClass": "synthetic-delivery",
+        "observedAt": "2026-09-28T06:38:06.465Z",
+        "skill": "renma-usage-alpha",
+        "providerLabel": "renma-usage-fixture_renma-usage-alpha",
+        "value": 1,
+        "aggregation": "delta",
+        "intervalStart": "1790575206000000000",
+        "intervalEnd": "1790575207000000000",
+        "deployments": ["initial"],
+        "manifest": [
+          {
+            "deployment": "initial",
+            "repository": "repository-a",
+            "assetId": "skill.fixture-alpha",
+            "skill": "renma-usage-alpha",
+            "plugin": "renma-usage-fixture",
+            "sourceCommit": "b58c109fd4bda04c316e611f5ad3b84e7748b369",
+            "contentDigest": "sha256:59b82c4fbe5cb05d7a65e705fe1127bcd6fe4a4823caf97cf35a780231d7f2ae",
+            "commitMatchesContent": true,
+            "digestScope": "skill-file"
+          }
+        ]
+      }
+    ]
+  },
+  "limits": {
+    "providerMetrics": "not-exercised-by-this-run",
+    "retries": "wrapper-and-standard-collector-not-codex-exporter",
+    "persistence": "backend-sender-reinitialization-collector-process-restart-not-power-loss",
+    "scope": "local-HTTP-JSON-not-TLS-or-gRPC"
+  }
+}

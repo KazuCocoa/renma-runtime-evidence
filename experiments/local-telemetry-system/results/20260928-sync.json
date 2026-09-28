@@ -1,0 +1,288 @@
+{
+  "schemaVersion": "renma.local-sync-evidence.v1",
+  "evidenceClass": "real-git-sync-and-renma-catalog-authored-fixtures",
+  "renmaVersion": "0.39.2",
+  "manifest": [
+    {
+      "deployment": "initial",
+      "repository": "repository-a",
+      "assetId": "skill.fixture-alpha",
+      "skill": "renma-usage-alpha",
+      "plugin": "renma-usage-fixture",
+      "sourceCommit": "b58c109fd4bda04c316e611f5ad3b84e7748b369",
+      "contentDigest": "sha256:59b82c4fbe5cb05d7a65e705fe1127bcd6fe4a4823caf97cf35a780231d7f2ae",
+      "commitMatchesContent": true,
+      "digestScope": "skill-file"
+    },
+    {
+      "deployment": "initial",
+      "repository": "repository-b",
+      "assetId": "skill.fixture-beta",
+      "skill": "renma-usage-beta",
+      "plugin": "renma-usage-fixture",
+      "sourceCommit": "6c92d7c1a4934523e8be2bcc1c296c558bbf37cf",
+      "contentDigest": "sha256:2c4ea4498a985a6de0813a9eac7b85643e3342cbe89ba05948c6a2d8e0d112a8",
+      "commitMatchesContent": true,
+      "digestScope": "skill-file"
+    },
+    {
+      "deployment": "same-content",
+      "repository": "repository-a",
+      "assetId": "skill.fixture-alpha",
+      "skill": "renma-usage-alpha",
+      "plugin": "renma-usage-fixture",
+      "sourceCommit": "fb4e23027efdf60d18219ca7c732fb8eb43eb1a6",
+      "contentDigest": "sha256:59b82c4fbe5cb05d7a65e705fe1127bcd6fe4a4823caf97cf35a780231d7f2ae",
+      "commitMatchesContent": true,
+      "digestScope": "skill-file"
+    },
+    {
+      "deployment": "same-content",
+      "repository": "repository-b",
+      "assetId": "skill.fixture-beta",
+      "skill": "renma-usage-beta",
+      "plugin": "renma-usage-fixture",
+      "sourceCommit": "6c92d7c1a4934523e8be2bcc1c296c558bbf37cf",
+      "contentDigest": "sha256:2c4ea4498a985a6de0813a9eac7b85643e3342cbe89ba05948c6a2d8e0d112a8",
+      "commitMatchesContent": true,
+      "digestScope": "skill-file"
+    },
+    {
+      "deployment": "changed",
+      "repository": "repository-a",
+      "assetId": "skill.fixture-alpha",
+      "skill": "renma-usage-alpha",
+      "plugin": "renma-usage-fixture",
+      "sourceCommit": "566369eab3f97daa3713b354d7231d3d2b827d5d",
+      "contentDigest": "sha256:25715c131fec44905aa010788029da1fe1639b1c53454f22cc0447430740b21f",
+      "commitMatchesContent": true,
+      "digestScope": "skill-file"
+    },
+    {
+      "deployment": "changed",
+      "repository": "repository-b",
+      "assetId": "skill.fixture-beta",
+      "skill": "renma-usage-beta",
+      "plugin": "renma-usage-fixture",
+      "sourceCommit": "6c92d7c1a4934523e8be2bcc1c296c558bbf37cf",
+      "contentDigest": "sha256:2c4ea4498a985a6de0813a9eac7b85643e3342cbe89ba05948c6a2d8e0d112a8",
+      "commitMatchesContent": true,
+      "digestScope": "skill-file"
+    },
+    {
+      "deployment": "dirty",
+      "repository": "repository-a",
+      "assetId": "skill.fixture-alpha",
+      "skill": "renma-usage-alpha",
+      "plugin": "renma-usage-fixture",
+      "sourceCommit": "566369eab3f97daa3713b354d7231d3d2b827d5d",
+      "contentDigest": "sha256:4998e43733539c40342b973d300f7a0dac13b87d6781ce141c7a66c7aa1ddc41",
+      "commitMatchesContent": false,
+      "digestScope": "skill-file"
+    },
+    {
+      "deployment": "dirty",
+      "repository": "repository-b",
+      "assetId": "skill.fixture-beta",
+      "skill": "renma-usage-beta",
+      "plugin": "renma-usage-fixture",
+      "sourceCommit": "6c92d7c1a4934523e8be2bcc1c296c558bbf37cf",
+      "contentDigest": "sha256:2c4ea4498a985a6de0813a9eac7b85643e3342cbe89ba05948c6a2d8e0d112a8",
+      "commitMatchesContent": true,
+      "digestScope": "skill-file"
+    }
+  ],
+  "checks": [
+    {
+      "deployment": "initial",
+      "repository": "repository-a",
+      "observedAt": "2026-09-28T06:27:30.124Z",
+      "cloneHeadMatchesSource": true,
+      "catalogIdAndDigestMatch": true,
+      "packagedBytesMatch": true,
+      "commitMatchesContent": true
+    },
+    {
+      "deployment": "initial",
+      "repository": "repository-b",
+      "observedAt": "2026-09-28T06:27:30.278Z",
+      "cloneHeadMatchesSource": true,
+      "catalogIdAndDigestMatch": true,
+      "packagedBytesMatch": true,
+      "commitMatchesContent": true
+    },
+    {
+      "deployment": "same-content",
+      "repository": "repository-a",
+      "observedAt": "2026-09-28T06:27:30.472Z",
+      "cloneHeadMatchesSource": true,
+      "catalogIdAndDigestMatch": true,
+      "packagedBytesMatch": true,
+      "commitMatchesContent": true
+    },
+    {
+      "deployment": "same-content",
+      "repository": "repository-b",
+      "observedAt": "2026-09-28T06:27:30.619Z",
+      "cloneHeadMatchesSource": true,
+      "catalogIdAndDigestMatch": true,
+      "packagedBytesMatch": true,
+      "commitMatchesContent": true
+    },
+    {
+      "deployment": "changed",
+      "repository": "repository-a",
+      "observedAt": "2026-09-28T06:27:30.813Z",
+      "cloneHeadMatchesSource": true,
+      "catalogIdAndDigestMatch": true,
+      "packagedBytesMatch": true,
+      "commitMatchesContent": true
+    },
+    {
+      "deployment": "changed",
+      "repository": "repository-b",
+      "observedAt": "2026-09-28T06:27:30.968Z",
+      "cloneHeadMatchesSource": true,
+      "catalogIdAndDigestMatch": true,
+      "packagedBytesMatch": true,
+      "commitMatchesContent": true
+    },
+    {
+      "deployment": "dirty",
+      "repository": "repository-a",
+      "observedAt": "2026-09-28T06:27:31.117Z",
+      "cloneHeadMatchesSource": true,
+      "catalogIdAndDigestMatch": true,
+      "packagedBytesMatch": true,
+      "commitMatchesContent": false
+    },
+    {
+      "deployment": "dirty",
+      "repository": "repository-b",
+      "observedAt": "2026-09-28T06:27:31.271Z",
+      "cloneHeadMatchesSource": true,
+      "catalogIdAndDigestMatch": true,
+      "packagedBytesMatch": true,
+      "commitMatchesContent": true
+    }
+  ],
+  "resolution": [
+    {
+      "state": "unique-deployment",
+      "assetId": "skill.fixture-alpha",
+      "contentDigest": "sha256:59b82c4fbe5cb05d7a65e705fe1127bcd6fe4a4823caf97cf35a780231d7f2ae",
+      "candidates": [
+        {
+          "deployment": "initial",
+          "repository": "repository-a",
+          "assetId": "skill.fixture-alpha",
+          "skill": "renma-usage-alpha",
+          "plugin": "renma-usage-fixture",
+          "sourceCommit": "b58c109fd4bda04c316e611f5ad3b84e7748b369",
+          "contentDigest": "sha256:59b82c4fbe5cb05d7a65e705fe1127bcd6fe4a4823caf97cf35a780231d7f2ae",
+          "commitMatchesContent": true,
+          "digestScope": "skill-file"
+        }
+      ],
+      "injectedRevision": "unsupported",
+      "provenance": "verified-sync-manifest"
+    },
+    {
+      "state": "equivalent-content",
+      "assetId": "skill.fixture-alpha",
+      "contentDigest": "sha256:59b82c4fbe5cb05d7a65e705fe1127bcd6fe4a4823caf97cf35a780231d7f2ae",
+      "candidates": [
+        {
+          "deployment": "initial",
+          "repository": "repository-a",
+          "assetId": "skill.fixture-alpha",
+          "skill": "renma-usage-alpha",
+          "plugin": "renma-usage-fixture",
+          "sourceCommit": "b58c109fd4bda04c316e611f5ad3b84e7748b369",
+          "contentDigest": "sha256:59b82c4fbe5cb05d7a65e705fe1127bcd6fe4a4823caf97cf35a780231d7f2ae",
+          "commitMatchesContent": true,
+          "digestScope": "skill-file"
+        },
+        {
+          "deployment": "same-content",
+          "repository": "repository-a",
+          "assetId": "skill.fixture-alpha",
+          "skill": "renma-usage-alpha",
+          "plugin": "renma-usage-fixture",
+          "sourceCommit": "fb4e23027efdf60d18219ca7c732fb8eb43eb1a6",
+          "contentDigest": "sha256:59b82c4fbe5cb05d7a65e705fe1127bcd6fe4a4823caf97cf35a780231d7f2ae",
+          "commitMatchesContent": true,
+          "digestScope": "skill-file"
+        }
+      ],
+      "injectedRevision": "unsupported",
+      "provenance": "verified-sync-manifest"
+    },
+    {
+      "state": "ambiguous-content",
+      "assetId": "skill.fixture-alpha",
+      "contentDigest": null,
+      "candidates": [
+        {
+          "deployment": "initial",
+          "repository": "repository-a",
+          "assetId": "skill.fixture-alpha",
+          "skill": "renma-usage-alpha",
+          "plugin": "renma-usage-fixture",
+          "sourceCommit": "b58c109fd4bda04c316e611f5ad3b84e7748b369",
+          "contentDigest": "sha256:59b82c4fbe5cb05d7a65e705fe1127bcd6fe4a4823caf97cf35a780231d7f2ae",
+          "commitMatchesContent": true,
+          "digestScope": "skill-file"
+        },
+        {
+          "deployment": "changed",
+          "repository": "repository-a",
+          "assetId": "skill.fixture-alpha",
+          "skill": "renma-usage-alpha",
+          "plugin": "renma-usage-fixture",
+          "sourceCommit": "566369eab3f97daa3713b354d7231d3d2b827d5d",
+          "contentDigest": "sha256:25715c131fec44905aa010788029da1fe1639b1c53454f22cc0447430740b21f",
+          "commitMatchesContent": true,
+          "digestScope": "skill-file"
+        }
+      ],
+      "injectedRevision": "unsupported",
+      "provenance": "verified-sync-manifest"
+    },
+    {
+      "state": "modified-deployment",
+      "assetId": "skill.fixture-alpha",
+      "contentDigest": "sha256:4998e43733539c40342b973d300f7a0dac13b87d6781ce141c7a66c7aa1ddc41",
+      "candidates": [
+        {
+          "deployment": "dirty",
+          "repository": "repository-a",
+          "assetId": "skill.fixture-alpha",
+          "skill": "renma-usage-alpha",
+          "plugin": "renma-usage-fixture",
+          "sourceCommit": "566369eab3f97daa3713b354d7231d3d2b827d5d",
+          "contentDigest": "sha256:4998e43733539c40342b973d300f7a0dac13b87d6781ce141c7a66c7aa1ddc41",
+          "commitMatchesContent": false,
+          "digestScope": "skill-file"
+        }
+      ],
+      "injectedRevision": "unsupported",
+      "provenance": "verified-sync-manifest"
+    },
+    {
+      "state": "unmapped",
+      "assetId": null,
+      "contentDigest": null,
+      "candidates": [],
+      "injectedRevision": "unsupported",
+      "provenance": "verified-sync-manifest"
+    }
+  ],
+  "integration": null,
+  "limits": {
+    "digestScope": "SKILL.md-only-not-supporting-files",
+    "injectedRevision": "unsupported",
+    "syncOwner": "experiment-wrapper",
+    "catalogOwner": "actual-renma-cli"
+  }
+}
