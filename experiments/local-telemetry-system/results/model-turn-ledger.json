@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "renma.local-goal.turn-budget.v1",
+  "limit": 60,
+  "attempts": [
+    {
+      "ordinal": 1,
+      "purpose": "plugin-integration",
+      "reservedAt": "2026-09-28T06:40:34.929Z"
+    },
+    {
+      "ordinal": 2,
+      "purpose": "plugin-integration",
+      "reservedAt": "2026-09-28T06:40:41.951Z"
+    },
+    {
+      "ordinal": 3,
+      "purpose": "plugin-integration",
+      "reservedAt": "2026-09-28T06:40:52.233Z"
+    },
+    {
+      "ordinal": 4,
+      "purpose": "plugin-integration",
+      "reservedAt": "2026-09-28T06:40:57.781Z"
+    },
+    {
+      "ordinal": 5,
+      "purpose": "plugin-integration",
+      "reservedAt": "2026-09-28T06:41:03.801Z"
+    },
+    {
+      "ordinal": 6,
+      "purpose": "plugin-integration",
+      "reservedAt": "2026-09-28T06:41:10.261Z"
+    },
+    {
+      "ordinal": 7,
+      "purpose": "version-compatibility",
+      "reservedAt": "2026-09-28T06:41:57.611Z"
+    },
+    {
+      "ordinal": 8,
+      "purpose": "version-compatibility",
+      "reservedAt": "2026-09-28T06:42:07.042Z"
+    },
+    {
+      "ordinal": 9,
+      "purpose": "version-compatibility",
+      "reservedAt": "2026-09-28T06:47:37.938Z"
+    },
+    {
+      "ordinal": 10,
+      "purpose": "version-compatibility",
+      "reservedAt": "2026-09-28T06:47:44.355Z"
+    }
+  ]
+}

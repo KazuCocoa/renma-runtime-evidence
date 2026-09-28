@@ -1,0 +1,75 @@
+{
+  "removal": {
+    "freshPluginServers": 0,
+    "sharedCollectorStillHealthy": true
+  },
+  "schemaVersion": "renma.plugin-path-probe.v1",
+  "evidenceClass": "actual-cli-mcp-no-model",
+  "version": "codex-cli 0.157.1",
+  "modelTurns": 0,
+  "states": [
+    {
+      "variant": "absolute-control",
+      "matches": 1,
+      "runtimeStatus": "connected",
+      "serverIdentified": true,
+      "toolsErrorObserved": false
+    },
+    {
+      "variant": "relative-arg",
+      "matches": 1,
+      "runtimeStatus": "failed",
+      "serverIdentified": false,
+      "toolsErrorObserved": true
+    },
+    {
+      "variant": "plugin-root",
+      "matches": 1,
+      "runtimeStatus": "failed",
+      "serverIdentified": false,
+      "toolsErrorObserved": true
+    },
+    {
+      "variant": "claude-root",
+      "matches": 1,
+      "runtimeStatus": "failed",
+      "serverIdentified": false,
+      "toolsErrorObserved": true
+    },
+    {
+      "variant": "env-plugin",
+      "matches": 1,
+      "runtimeStatus": "failed",
+      "serverIdentified": false,
+      "toolsErrorObserved": true
+    },
+    {
+      "variant": "env-claude",
+      "matches": 1,
+      "runtimeStatus": "failed",
+      "serverIdentified": false,
+      "toolsErrorObserved": true
+    },
+    {
+      "variant": "env-codex",
+      "matches": 1,
+      "runtimeStatus": "failed",
+      "serverIdentified": false,
+      "toolsErrorObserved": true
+    },
+    {
+      "variant": "inline-module",
+      "matches": 1,
+      "runtimeStatus": "connected",
+      "serverIdentified": true,
+      "toolsErrorObserved": false
+    },
+    {
+      "variant": "relative-command",
+      "matches": 1,
+      "runtimeStatus": "failed",
+      "serverIdentified": false,
+      "toolsErrorObserved": true
+    }
+  ]
+}
