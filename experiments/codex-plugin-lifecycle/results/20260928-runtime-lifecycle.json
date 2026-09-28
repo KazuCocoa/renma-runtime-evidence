@@ -1,0 +1,3805 @@
+{
+  "processControlEvidence": "wrapper-issued-instance-heartbeats-not-provider-usage",
+  "afterServerShutdown": {
+    "observedAt": "2026-09-28T05:28:02.958Z",
+    "instances": [
+      {
+        "instance": 1,
+        "role": "primary",
+        "revision": "initial",
+        "startedAt": "2026-09-28T05:27:30.261Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+        "stoppedAt": "2026-09-28T05:27:31.766Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 2,
+        "role": "companion",
+        "revision": "initial",
+        "startedAt": "2026-09-28T05:27:30.262Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+        "stoppedAt": "2026-09-28T05:27:31.768Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 3,
+        "role": "companion",
+        "revision": "initial",
+        "startedAt": "2026-09-28T05:27:32.638Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+        "stoppedAt": "2026-09-28T05:27:34.113Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 4,
+        "role": "primary",
+        "revision": "initial",
+        "startedAt": "2026-09-28T05:27:32.638Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+        "stoppedAt": "2026-09-28T05:27:34.112Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 5,
+        "role": "companion",
+        "revision": "initial",
+        "startedAt": "2026-09-28T05:27:34.974Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+        "stoppedAt": "2026-09-28T05:27:36.451Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 6,
+        "role": "companion",
+        "revision": "initial",
+        "startedAt": "2026-09-28T05:27:37.317Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+        "stoppedAt": "2026-09-28T05:27:41.100Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 7,
+        "role": "primary",
+        "revision": "initial",
+        "startedAt": "2026-09-28T05:27:37.317Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+        "stoppedAt": "2026-09-28T05:27:41.100Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 8,
+        "role": "companion",
+        "revision": "initial",
+        "startedAt": "2026-09-28T05:27:39.615Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:40.889Z",
+        "stoppedAt": "2026-09-28T05:27:41.100Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 9,
+        "role": "companion",
+        "revision": "initial",
+        "startedAt": "2026-09-28T05:27:41.968Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:45.520Z",
+        "stoppedAt": "2026-09-28T05:27:45.731Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 10,
+        "role": "primary",
+        "revision": "initial",
+        "startedAt": "2026-09-28T05:27:44.259Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+        "stoppedAt": "2026-09-28T05:27:45.731Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 11,
+        "role": "companion",
+        "revision": "initial",
+        "startedAt": "2026-09-28T05:27:44.259Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+        "stoppedAt": "2026-09-28T05:27:45.733Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 12,
+        "role": "companion",
+        "revision": "initial",
+        "startedAt": "2026-09-28T05:27:46.583Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:52.701Z",
+        "stoppedAt": "2026-09-28T05:27:52.848Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 13,
+        "role": "primary",
+        "revision": "initial",
+        "startedAt": "2026-09-28T05:27:46.584Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:52.701Z",
+        "stoppedAt": "2026-09-28T05:27:52.849Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 14,
+        "role": "companion",
+        "revision": "initial",
+        "startedAt": "2026-09-28T05:27:49.082Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:52.637Z",
+        "stoppedAt": "2026-09-28T05:27:52.848Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 15,
+        "role": "primary",
+        "revision": "updated",
+        "startedAt": "2026-09-28T05:27:49.082Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:52.637Z",
+        "stoppedAt": "2026-09-28T05:27:52.850Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 16,
+        "role": "primary",
+        "revision": "updated",
+        "startedAt": "2026-09-28T05:27:51.362Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:52.638Z",
+        "stoppedAt": "2026-09-28T05:27:52.850Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 17,
+        "role": "companion",
+        "revision": "initial",
+        "startedAt": "2026-09-28T05:27:51.363Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:52.638Z",
+        "stoppedAt": "2026-09-28T05:27:52.850Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 18,
+        "role": "companion",
+        "revision": "initial",
+        "startedAt": "2026-09-28T05:27:53.724Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:59.819Z",
+        "stoppedAt": "2026-09-28T05:27:59.840Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 19,
+        "role": "primary",
+        "revision": "updated",
+        "startedAt": "2026-09-28T05:27:53.725Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:59.819Z",
+        "stoppedAt": "2026-09-28T05:27:59.840Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 20,
+        "role": "companion",
+        "revision": "initial",
+        "startedAt": "2026-09-28T05:27:56.071Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:59.622Z",
+        "stoppedAt": "2026-09-28T05:27:59.840Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 21,
+        "role": "companion",
+        "revision": "initial",
+        "startedAt": "2026-09-28T05:27:58.353Z",
+        "lastHeartbeatAt": "2026-09-28T05:27:59.626Z",
+        "stoppedAt": "2026-09-28T05:27:59.840Z",
+        "recentHeartbeat": false
+      },
+      {
+        "instance": 22,
+        "role": "companion",
+        "revision": "initial",
+        "startedAt": "2026-09-28T05:28:00.710Z",
+        "lastHeartbeatAt": "2026-09-28T05:28:01.983Z",
+        "stoppedAt": "2026-09-28T05:28:02.199Z",
+        "recentHeartbeat": false
+      }
+    ]
+  },
+  "schemaVersion": "renma.plugin-lifecycle.config.v1",
+  "evidenceClass": "real-cli-metadata-only",
+  "codexVersion": "codex-cli 0.157.1",
+  "modelTurns": 0,
+  "authenticationUsed": false,
+  "analyticsEnabled": false,
+  "disableScope": "startup-override-and-persistent-config-write",
+  "writes": [
+    {
+      "enabled": false,
+      "status": "ok"
+    },
+    {
+      "enabled": true,
+      "status": "ok"
+    }
+  ],
+  "updatedVersion": "1.0.0+codex.20260928052748",
+  "updatedCachePresentBeforeRemove": true,
+  "updatedCacheExistsAfterRemove": false,
+  "sourceExistsAfterRemove": true,
+  "phases": [
+    {
+      "phase": "installed",
+      "observedAt": "2026-09-28T05:27:31.764Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": true,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": true
+      },
+      "beforeNewThread": {
+        "observedAt": "2026-09-28T05:27:30.171Z",
+        "instances": []
+      },
+      "afterNewThread": {
+        "observedAt": "2026-09-28T05:27:31.737Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          }
+        ]
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": true,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "disabled-startup-override",
+      "observedAt": "2026-09-28T05:27:34.111Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": true,
+        "literalQuotedPluginEnabled": false
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": true
+      },
+      "beforeNewThread": {
+        "observedAt": "2026-09-28T05:27:32.573Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          }
+        ]
+      },
+      "afterNewThread": {
+        "observedAt": "2026-09-28T05:27:34.100Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          }
+        ]
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": true,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "unquoted-startup-override",
+      "observedAt": "2026-09-28T05:27:36.449Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": false,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": false
+      },
+      "beforeNewThread": {
+        "observedAt": "2026-09-28T05:27:34.910Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          }
+        ]
+      },
+      "afterNewThread": {
+        "observedAt": "2026-09-28T05:27:36.436Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          }
+        ]
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": true,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "reenabled",
+      "observedAt": "2026-09-28T05:27:38.796Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": true,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": true
+      },
+      "beforeNewThread": {
+        "observedAt": "2026-09-28T05:27:37.251Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          }
+        ]
+      },
+      "afterNewThread": {
+        "observedAt": "2026-09-28T05:27:38.781Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:38.588Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:38.588Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          }
+        ]
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": true,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "persistent-disable-existing-server",
+      "observedAt": "2026-09-28T05:27:41.097Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": false,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": false
+      },
+      "beforeNewThread": {
+        "observedAt": "2026-09-28T05:27:39.551Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:39.348Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:39.349Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          }
+        ]
+      },
+      "afterNewThread": {
+        "observedAt": "2026-09-28T05:27:41.071Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 8,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:39.615Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.889Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          }
+        ]
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": true,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "persistent-disable-new-server",
+      "observedAt": "2026-09-28T05:27:43.445Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": false,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": false
+      },
+      "beforeNewThread": {
+        "observedAt": "2026-09-28T05:27:41.910Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 8,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:39.615Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.889Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          }
+        ]
+      },
+      "afterNewThread": {
+        "observedAt": "2026-09-28T05:27:43.426Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 8,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:39.615Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.889Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 9,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:41.968Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:43.241Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          }
+        ]
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": true,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "persistent-enable-existing-server",
+      "observedAt": "2026-09-28T05:27:45.730Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": true,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": true
+      },
+      "beforeNewThread": {
+        "observedAt": "2026-09-28T05:27:44.198Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 8,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:39.615Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.889Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 9,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:41.968Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:44.000Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          }
+        ]
+      },
+      "afterNewThread": {
+        "observedAt": "2026-09-28T05:27:45.717Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 8,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:39.615Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.889Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 9,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:41.968Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.520Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 10,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 11,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          }
+        ]
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": true,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "persistent-enable-new-server",
+      "observedAt": "2026-09-28T05:27:48.074Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": true,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": true
+      },
+      "beforeNewThread": {
+        "observedAt": "2026-09-28T05:27:46.533Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 8,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:39.615Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.889Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 9,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:41.968Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.520Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 10,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 11,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.733Z",
+            "recentHeartbeat": false
+          }
+        ]
+      },
+      "afterNewThread": {
+        "observedAt": "2026-09-28T05:27:48.049Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 8,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:39.615Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.889Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 9,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:41.968Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.520Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 10,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 11,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.733Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 12,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.583Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:47.855Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 13,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.584Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:47.856Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          }
+        ]
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": true,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "updated-existing-server-default",
+      "observedAt": "2026-09-28T05:27:50.557Z",
+      "forceReload": false,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 1,
+          "enabled": true,
+          "revision": "updated"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": true,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": true
+      },
+      "beforeNewThread": {
+        "observedAt": "2026-09-28T05:27:49.017Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 8,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:39.615Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.889Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 9,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:41.968Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.520Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 10,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 11,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.733Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 12,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.583Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:48.909Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 13,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.584Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:48.909Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          }
+        ]
+      },
+      "afterNewThread": {
+        "observedAt": "2026-09-28T05:27:50.541Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 8,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:39.615Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.889Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 9,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:41.968Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.520Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 10,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 11,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.733Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 12,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.583Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:50.425Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 13,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.584Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:50.426Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 14,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:50.357Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 15,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:50.357Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          }
+        ]
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": false,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "updated-existing-server-forced",
+      "observedAt": "2026-09-28T05:27:52.847Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 1,
+          "enabled": true,
+          "revision": "updated"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": true,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": true
+      },
+      "beforeNewThread": {
+        "observedAt": "2026-09-28T05:27:51.309Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 8,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:39.615Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.889Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 9,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:41.968Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.520Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 10,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 11,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.733Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 12,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.583Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:51.184Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 13,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.584Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:51.185Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 14,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:51.118Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 15,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:51.118Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          }
+        ]
+      },
+      "afterNewThread": {
+        "observedAt": "2026-09-28T05:27:52.821Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 8,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:39.615Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.889Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 9,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:41.968Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.520Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 10,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 11,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.733Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 12,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.583Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.701Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 13,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.584Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.701Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 14,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.637Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 15,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.637Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 16,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:51.362Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.638Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 17,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:51.363Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.638Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          }
+        ]
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": false,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "updated-new-server",
+      "observedAt": "2026-09-28T05:27:55.213Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 1,
+          "enabled": true,
+          "revision": "updated"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": true,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": true
+      },
+      "beforeNewThread": {
+        "observedAt": "2026-09-28T05:27:53.667Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 8,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:39.615Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.889Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 9,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:41.968Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.520Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 10,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 11,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.733Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 12,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.583Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.701Z",
+            "stoppedAt": "2026-09-28T05:27:52.848Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 13,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.584Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.701Z",
+            "stoppedAt": "2026-09-28T05:27:52.849Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 14,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.637Z",
+            "stoppedAt": "2026-09-28T05:27:52.848Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 15,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.637Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 16,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:51.362Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.638Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 17,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:51.363Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.638Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          }
+        ]
+      },
+      "afterNewThread": {
+        "observedAt": "2026-09-28T05:27:55.188Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 8,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:39.615Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.889Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 9,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:41.968Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.520Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 10,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 11,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.733Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 12,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.583Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.701Z",
+            "stoppedAt": "2026-09-28T05:27:52.848Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 13,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.584Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.701Z",
+            "stoppedAt": "2026-09-28T05:27:52.849Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 14,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.637Z",
+            "stoppedAt": "2026-09-28T05:27:52.848Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 15,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.637Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 16,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:51.362Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.638Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 17,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:51.363Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.638Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 18,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:53.724Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:54.997Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 19,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:53.725Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:54.998Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          }
+        ]
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": false,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "removed-existing-server-default",
+      "observedAt": "2026-09-28T05:27:57.551Z",
+      "forceReload": false,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": null,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": false,
+        "enabled": false
+      },
+      "beforeNewThread": {
+        "observedAt": "2026-09-28T05:27:56.016Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 8,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:39.615Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.889Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 9,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:41.968Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.520Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 10,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 11,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.733Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 12,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.583Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.701Z",
+            "stoppedAt": "2026-09-28T05:27:52.848Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 13,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.584Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.701Z",
+            "stoppedAt": "2026-09-28T05:27:52.849Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 14,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.637Z",
+            "stoppedAt": "2026-09-28T05:27:52.848Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 15,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.637Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 16,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:51.362Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.638Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 17,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:51.363Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.638Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 18,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:53.724Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:55.771Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 19,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:53.725Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:55.771Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          }
+        ]
+      },
+      "afterNewThread": {
+        "observedAt": "2026-09-28T05:27:57.531Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 8,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:39.615Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.889Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 9,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:41.968Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.520Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 10,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 11,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.733Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 12,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.583Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.701Z",
+            "stoppedAt": "2026-09-28T05:27:52.848Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 13,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.584Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.701Z",
+            "stoppedAt": "2026-09-28T05:27:52.849Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 14,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.637Z",
+            "stoppedAt": "2026-09-28T05:27:52.848Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 15,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.637Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 16,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:51.362Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.638Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 17,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:51.363Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.638Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 18,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:53.724Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:57.289Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 19,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:53.725Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:57.289Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 20,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:56.071Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:57.344Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          }
+        ]
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": false,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "removed-existing-server-forced",
+      "observedAt": "2026-09-28T05:27:59.837Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": null,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": false,
+        "enabled": false
+      },
+      "beforeNewThread": {
+        "observedAt": "2026-09-28T05:27:58.301Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 8,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:39.615Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.889Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 9,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:41.968Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.520Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 10,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 11,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.733Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 12,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.583Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.701Z",
+            "stoppedAt": "2026-09-28T05:27:52.848Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 13,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.584Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.701Z",
+            "stoppedAt": "2026-09-28T05:27:52.849Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 14,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.637Z",
+            "stoppedAt": "2026-09-28T05:27:52.848Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 15,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.637Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 16,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:51.362Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.638Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 17,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:51.363Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.638Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 18,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:53.724Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:58.301Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 19,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:53.725Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:58.301Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 20,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:56.071Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:58.104Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          }
+        ]
+      },
+      "afterNewThread": {
+        "observedAt": "2026-09-28T05:27:59.812Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 8,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:39.615Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.889Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 9,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:41.968Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.520Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 10,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 11,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.733Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 12,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.583Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.701Z",
+            "stoppedAt": "2026-09-28T05:27:52.848Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 13,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.584Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.701Z",
+            "stoppedAt": "2026-09-28T05:27:52.849Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 14,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.637Z",
+            "stoppedAt": "2026-09-28T05:27:52.848Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 15,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.637Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 16,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:51.362Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.638Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 17,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:51.363Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.638Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 18,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:53.724Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:59.566Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 19,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:53.725Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:59.566Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 20,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:56.071Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:59.622Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          },
+          {
+            "instance": 21,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:58.353Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:59.626Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          }
+        ]
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": false,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "removed-new-server",
+      "observedAt": "2026-09-28T05:28:02.197Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": null,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": false,
+        "enabled": false
+      },
+      "beforeNewThread": {
+        "observedAt": "2026-09-28T05:28:00.648Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 8,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:39.615Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.889Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 9,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:41.968Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.520Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 10,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 11,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.733Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 12,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.583Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.701Z",
+            "stoppedAt": "2026-09-28T05:27:52.848Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 13,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.584Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.701Z",
+            "stoppedAt": "2026-09-28T05:27:52.849Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 14,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.637Z",
+            "stoppedAt": "2026-09-28T05:27:52.848Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 15,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.637Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 16,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:51.362Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.638Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 17,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:51.363Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.638Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 18,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:53.724Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:59.819Z",
+            "stoppedAt": "2026-09-28T05:27:59.840Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 19,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:53.725Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:59.819Z",
+            "stoppedAt": "2026-09-28T05:27:59.840Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 20,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:56.071Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:59.622Z",
+            "stoppedAt": "2026-09-28T05:27:59.840Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 21,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:58.353Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:59.626Z",
+            "stoppedAt": "2026-09-28T05:27:59.840Z",
+            "recentHeartbeat": false
+          }
+        ]
+      },
+      "afterNewThread": {
+        "observedAt": "2026-09-28T05:28:02.172Z",
+        "instances": [
+          {
+            "instance": 1,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.261Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.531Z",
+            "stoppedAt": "2026-09-28T05:27:31.766Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 2,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:30.262Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:31.532Z",
+            "stoppedAt": "2026-09-28T05:27:31.768Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 3,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.908Z",
+            "stoppedAt": "2026-09-28T05:27:34.113Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 4,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:32.638Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:33.909Z",
+            "stoppedAt": "2026-09-28T05:27:34.112Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 5,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:34.974Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:36.245Z",
+            "stoppedAt": "2026-09-28T05:27:36.451Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 6,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 7,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:37.317Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.867Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 8,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:39.615Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:40.889Z",
+            "stoppedAt": "2026-09-28T05:27:41.100Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 9,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:41.968Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.520Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 10,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.731Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 11,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:44.259Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:45.529Z",
+            "stoppedAt": "2026-09-28T05:27:45.733Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 12,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.583Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.701Z",
+            "stoppedAt": "2026-09-28T05:27:52.848Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 13,
+            "role": "primary",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:46.584Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.701Z",
+            "stoppedAt": "2026-09-28T05:27:52.849Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 14,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.637Z",
+            "stoppedAt": "2026-09-28T05:27:52.848Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 15,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:49.082Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.637Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 16,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:51.362Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.638Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 17,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:51.363Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:52.638Z",
+            "stoppedAt": "2026-09-28T05:27:52.850Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 18,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:53.724Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:59.819Z",
+            "stoppedAt": "2026-09-28T05:27:59.840Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 19,
+            "role": "primary",
+            "revision": "updated",
+            "startedAt": "2026-09-28T05:27:53.725Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:59.819Z",
+            "stoppedAt": "2026-09-28T05:27:59.840Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 20,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:56.071Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:59.622Z",
+            "stoppedAt": "2026-09-28T05:27:59.840Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 21,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:27:58.353Z",
+            "lastHeartbeatAt": "2026-09-28T05:27:59.626Z",
+            "stoppedAt": "2026-09-28T05:27:59.840Z",
+            "recentHeartbeat": false
+          },
+          {
+            "instance": 22,
+            "role": "companion",
+            "revision": "initial",
+            "startedAt": "2026-09-28T05:28:00.710Z",
+            "lastHeartbeatAt": "2026-09-28T05:28:01.983Z",
+            "stoppedAt": null,
+            "recentHeartbeat": true
+          }
+        ]
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": false,
+      "exporterEndpointTextPreserved": true
+    }
+  ],
+  "runtimeConsumerTermination": "bounded-heartbeat-and-stop-observations",
+  "telemetryDeliveryDuringTransitions": "not-measured",
+  "coverage": "point-in-time-inventory-and-receiver-health-not-continuous-export-coverage"
+}

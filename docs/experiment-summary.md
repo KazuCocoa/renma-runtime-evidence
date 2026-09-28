@@ -1,6 +1,6 @@
 # Experiment summary
 
-This is the entry point for completed experiments through [PR #22](https://github.com/KazuCocoa/renma-runtime-evidence/pull/22), merged at `7fda2e99636f0bbbf76cf4da58ddeeabe740061e`. The earlier five-track program and the portfolio-telemetry follow-up are complete within their documented experimental boundaries. Historical blocked/unfinished entries describe the state at that time, not the current completion state.
+This is the entry point for the completed experiment program through [PR #22](https://github.com/KazuCocoa/renma-runtime-evidence/pull/22), the summary/baseline in [PR #23](https://github.com/KazuCocoa/renma-runtime-evidence/pull/23), and the operational lifecycle follow-up below. The earlier five-track program and the portfolio-telemetry follow-up are complete within their documented experimental boundaries. Historical blocked/unfinished entries describe the state at that time, not the current completion state.
 
 ## Conclusions
 
@@ -20,7 +20,7 @@ This is the entry point for completed experiments through [PR #22](https://githu
 | Usage quantities, UTC observation and plugin packaging   | Actual delta increments, receipt times, declared metadata and exposure inventory; per-thread receiver conflict found            | [Observation inventory](skill-usage-telemetry.md), [PR #21](https://github.com/KazuCocoa/renma-runtime-evidence/pull/21)                                                                                             |
 | Coexistence, loss/recovery, time and real Renma identity | Concurrent producers/consumers, collision failure controls, outage limits, canonical ID extraction and live changed-label joins | [Completion audit](telemetry-followup-experiments.md), [PR #22](https://github.com/KazuCocoa/renma-runtime-evidence/pull/22)                                                                                         |
 
-The most recent completed validation passed 200 tests, with one historical skip; Node 22/24 CI passed on both PR #22 and merged main. Live model evidence is stored separately from the deterministic tests. The historical skipped subagent test has no runtime evidence and supports no conclusion.
+The operational lifecycle follow-up passed 205 local tests, with one historical skip. The preceding baseline passed Node 22/24 CI on PR #23 and merged main. Live model evidence is stored separately from the deterministic tests. The historical skipped subagent test has no runtime evidence and supports no conclusion.
 
 ## Reading order
 
@@ -31,6 +31,6 @@ The most recent completed validation passed 200 tests, with one historical skip;
 
 ## Next phase
 
-The next operational checks are update/disable/uninstall behavior and observation coverage. These should establish what happens to existing processes, cached bundles and shared exporter settings, and how the dashboard distinguishes available-but-unobserved from unavailable/unobserved coverage. They are separate from the completed program above. The [operational lifecycle experiment](../experiments/codex-plugin-lifecycle/README.md) now contains its first metadata-only run and the remaining checks.
+The next operational checks are update/disable/uninstall behavior and observation coverage. These should establish what happens to existing processes, cached bundles and shared exporter settings, and how the dashboard distinguishes available-but-unobserved from unavailable/unobserved coverage. They are separate from the completed program above. The [operational lifecycle experiment](../experiments/codex-plugin-lifecycle/README.md) now includes the metadata baseline, effective disable/re-enable checks and actual MCP process heartbeats across updates/removal. Existing processes survived disable/removal; fresh threads followed current configuration. Updated and old observer revisions coexisted. Its coverage table separates inventory, consumer liveness, receiver health and actual sample receipt. Model behavior and metric delivery through these lifecycle transitions remain unmeasured.
 
 A real backend has not been selected. Backend delivery guarantees and cross-version/platform compatibility need their own targets and tests; they are not silently included in the local prototype's claims. No dashboard, production collector, or automatic archival decision is implemented by these experiments.
