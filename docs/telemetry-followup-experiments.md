@@ -28,3 +28,11 @@ Renma 0.39.2 explicitly excludes bundling assets in its README product boundary.
 - Actual CLI 0.157.1 shared receiver run: `experiments/codex-plugin-usage/results/20260928-cli-0.157.1-shared.json`. Both thread MCP connections succeeded without tools errors; four Skill increments received; receiver survived Codex shutdown. This completes the sequential multi-thread subcase only.
 - Local process test: two shared MCP clients attach concurrently to the same existing listener and their exit leaves HTTP ingestion working. This is a fixture test, not simultaneous Codex-process evidence.
 - Next: two installed collector plugins and multiple actual CLI producers; preserve source boundaries before summarizing, then deliberate outage/recovery and startup-order variations.
+
+### Two-plugin / multi-CLI results
+
+`experiments/codex-telemetry-coexistence` now contains actual two-CLI/two-plugin reports for both controlled consumer attachment orders. Unique MCP server keys connected successfully; dedicated ingress routes retained producer boundaries. After one CLI exited, the survivor's new thread produced an additional received increment, acknowledged by its consumer. Existing endpoint text and actual routing were preserved across plugin installation. Four generated manifests passed the plugin validator.
+
+A duplicate MCP server-key baseline failed plugin attachment despite successful metric collection. This adds a naming collision to the port/configuration/lifetime coexistence concerns. Another run completed same-thread Skill re-use without a new observed increment; request counts must not be substituted for injection increments.
+
+These complete the concurrent-CLI, cooperative consumer-order, data-distribution, and peer-exit subcases. Actual process restart, receiver outage/recovery, identity evolution, Renma integration, time analysis, and delivery remain open. Unknown third-party collectors are not certified by a cooperative synthetic fixture.
