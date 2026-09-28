@@ -1,0 +1,546 @@
+{
+  "schemaVersion": "renma.plugin-lifecycle.config.v1",
+  "evidenceClass": "real-cli-metadata-only",
+  "codexVersion": "codex-cli 0.157.1",
+  "modelTurns": 0,
+  "authenticationUsed": false,
+  "analyticsEnabled": false,
+  "disableScope": "startup-override-and-persistent-config-write",
+  "writes": [
+    {
+      "enabled": false,
+      "status": "ok"
+    },
+    {
+      "enabled": true,
+      "status": "ok"
+    }
+  ],
+  "updatedVersion": "1.0.0+codex.20260928052622",
+  "updatedCachePresentBeforeRemove": true,
+  "updatedCacheExistsAfterRemove": false,
+  "sourceExistsAfterRemove": true,
+  "phases": [
+    {
+      "phase": "installed",
+      "observedAt": "2026-09-28T05:26:21.897Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": true,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": true
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": true,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "disabled-startup-override",
+      "observedAt": "2026-09-28T05:26:21.959Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": true,
+        "literalQuotedPluginEnabled": false
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": true
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": true,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "unquoted-startup-override",
+      "observedAt": "2026-09-28T05:26:22.017Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": false,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": false
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": true,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "reenabled",
+      "observedAt": "2026-09-28T05:26:22.074Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": true,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": true
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": true,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "persistent-disable-existing-server",
+      "observedAt": "2026-09-28T05:26:22.086Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": false,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": false
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": true,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "persistent-disable-new-server",
+      "observedAt": "2026-09-28T05:26:22.140Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": false,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": false
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": true,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "persistent-enable-existing-server",
+      "observedAt": "2026-09-28T05:26:22.150Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": true,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": true
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": true,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "persistent-enable-new-server",
+      "observedAt": "2026-09-28T05:26:22.206Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": true,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": true
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": true,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "updated-existing-server-default",
+      "observedAt": "2026-09-28T05:26:22.360Z",
+      "forceReload": false,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 1,
+          "enabled": true,
+          "revision": "updated"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": true,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": true
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": false,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "updated-existing-server-forced",
+      "observedAt": "2026-09-28T05:26:22.370Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 1,
+          "enabled": true,
+          "revision": "updated"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": true,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": true
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": false,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "updated-new-server",
+      "observedAt": "2026-09-28T05:26:22.425Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 1,
+          "enabled": true,
+          "revision": "updated"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 1,
+          "enabled": true,
+          "revision": "initial"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": true,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": true,
+        "enabled": true
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": false,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "removed-existing-server-default",
+      "observedAt": "2026-09-28T05:26:22.473Z",
+      "forceReload": false,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": null,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": false,
+        "enabled": false
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": false,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "removed-existing-server-forced",
+      "observedAt": "2026-09-28T05:26:22.482Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": null,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": false,
+        "enabled": false
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": false,
+      "exporterEndpointTextPreserved": true
+    },
+    {
+      "phase": "removed-new-server",
+      "observedAt": "2026-09-28T05:26:22.536Z",
+      "forceReload": true,
+      "skills": [
+        {
+          "skill": "renma-usage-alpha",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-beta",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        },
+        {
+          "skill": "renma-usage-dormant",
+          "entries": 0,
+          "enabled": null,
+          "revision": "absent-or-unknown"
+        }
+      ],
+      "configuration": {
+        "pluginEnabled": null,
+        "literalQuotedPluginEnabled": null
+      },
+      "plugins": {
+        "entries": 1,
+        "installed": false,
+        "enabled": false
+      },
+      "sharedReceiverHealthy": true,
+      "originalCacheExists": false,
+      "exporterEndpointTextPreserved": true
+    }
+  ],
+  "runtimeConsumerTermination": "not-measured",
+  "telemetryDeliveryDuringTransitions": "not-measured",
+  "coverage": "point-in-time-inventory-and-receiver-health-not-continuous-export-coverage"
+}
