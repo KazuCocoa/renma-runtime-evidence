@@ -35,7 +35,7 @@ The live lifecycle follow-up passed 208 local tests, with one historical skip. T
 
 The operational follow-up measures update/disable/uninstall behavior and observation coverage, separately from the original program above. The [operational lifecycle experiment](../experiments/codex-plugin-lifecycle/README.md) now includes the metadata baseline, effective disable/re-enable checks and actual MCP process heartbeats across updates/removal. Existing processes survived disable/removal; fresh threads followed current configuration. Updated and old observer revisions coexisted. Its coverage table separates inventory, consumer liveness, receiver health and actual sample receipt. The live follow-up now adds two real model-turn/OTLP runs: existing threads emit after disable, fresh disabled threads do not yield target receipts in the tested windows, re-enable restores receipts, both thread categories emit after update, and removal yields no new target receipts. A hot update can mix deployment versions within one producer; exact injected revision remains unresolved.
 
-## Local six-track follow-up
+## Local six-track follow-up ([PR #26](https://github.com/KazuCocoa/renma-runtime-evidence/pull/26))
 
 The [local telemetry system](../experiments/local-telemetry-system/README.md) completes the next six tracks within an explicitly local scope: real Git/Renma sync provenance, conservative hot-update resolution, plugin portability/removal, OTLP delivery faults, a browser-verified dashboard and an actual runtime compatibility matrix.
 

@@ -1,5 +1,7 @@
 # Local telemetry system: six-track results
 
+Implementation and evidence: [PR #26](https://github.com/KazuCocoa/renma-runtime-evidence/pull/26).
+
 All six tracks have local evidence, with the limits below. Ten additional model turns were reserved and completed out of the authorized maximum of 60. Raw runtime content and credentials were not saved. The goal covers a local experiment, not a production deployment or an automatic archival decision.
 
 ## Conclusions and completion audit
