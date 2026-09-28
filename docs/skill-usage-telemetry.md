@@ -95,3 +95,9 @@ clock synchronization/uncertainty handling in addition to these local timestamps
 - Local provider-interval-end to receipt differences were 0–1 ms, with approximately one-second aggregation windows. This does not measure injection latency. UTC regression and batch-order limits have separate authored tests.
 
 See [coexistence and outage results](../experiments/codex-telemetry-coexistence/README.md), [Renma identity results](../experiments/renma-telemetry-identity/README.md), and [the remaining experiment ledger](telemetry-followup-experiments.md).
+
+## Operational lifecycle evidence
+
+The [live lifecycle experiment](../experiments/codex-plugin-lifecycle/README.md#live-skill-injection-and-metric-delivery-across-transitions) compares named Skill requests before and after plugin changes, with actual ChatGPT-authenticated Codex turns and allowlisted OTLP samples. Two runs agree: existing threads can emit an injection delta after disable; fresh disabled threads produce no target receipt in the tested windows; re-enable restores fresh-thread receipts; both old and fresh threads emit after update; removal produces no new target receipt in either tested thread category. Missing receipts remain unknown, not zero. A separate process-only run shows that MCP liveness can survive removal, so it cannot stand in for Skill usage.
+
+Inventory state, process liveness, receiver health, OTLP transport activity and target-sample receipts are separate dashboard dimensions with UTC observation times. A hot update can mix deployments within one Codex process: do not assign a same-label sample to the latest version or blindly retain its initial version. Mark version provenance unresolved while candidate deployments differ; stable asset identity remains joinable only when all candidates agree. Exact injected revision and task execution are still unsupported.

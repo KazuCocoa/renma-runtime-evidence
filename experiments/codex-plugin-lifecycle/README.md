@@ -65,8 +65,42 @@ Track separate dimensions, each with its own UTC observation time:
 | Receiver availability | Health checkpoint or explicit failure                                          | Healthy HTTP service does not prove exporter configuration or delivery |
 | Actual usage receipt  | Accepted allowlisted provider samples, producer/receiver epoch and receipt UTC | Received samples only; no samples means unknown, not zero              |
 
-A disabled/uninstalled snapshot should mean **unavailable to fresh threads at that checkpoint** in this tested setup. Retain a separate existing-process state until a stop is observed; gaps without stop are unknown. Updating inventory must not retroactively relabel an old process's samples with the new deployment manifest. Store sample receipts on their original producer/deployment and receiver epochs. A successful export establishes a receipt event, not lossless coverage for the interval between exports. Archive decisions must not use missing samples as zero usage or a health check as a complete collection window.
+A disabled/uninstalled snapshot records **fresh-thread inventory at that checkpoint** in this tested setup. Retain a separate existing-process state until a stop is observed; gaps without stop are unknown. Updating inventory must not retroactively relabel an old process's samples with the new deployment manifest. Store sample receipts on their original producer and receiver epochs; after an in-place update, retain deployment candidates rather than forcing an ambiguous label to one revision. A successful export establishes a receipt event, not lossless coverage for the interval between exports. Archive decisions must not use missing samples as zero usage or a health check as a complete collection window.
 
-### Remaining operational boundaries
+### Boundaries after the process-only run (historical)
 
-Effective disable and MCP process lifecycle are now measured. Actual model Skill behavior in an already-open thread after disable/removal, and real metric delivery across those transitions, remain unmeasured. The earlier coexistence/outage experiments establish other bounded delivery observations, not these lifecycle guarantees. Cross-version/platform tests and real backend delivery still require selected targets. No dashboard or production coverage computation is implemented here.
+At this stage effective disable and MCP process lifecycle were measured; model turns and metric delivery through transitions were still unmeasured. The live follow-up below now measures named-request injection-counter receipts. The earlier coexistence/outage experiments establish other bounded delivery observations, not these lifecycle guarantees. Cross-version/platform tests and real backend delivery still require selected targets. No dashboard or production coverage computation is implemented here.
+
+## Live Skill injection and metric delivery across transitions
+
+The next two runs use the actual CLI 0.157.1 with the existing ChatGPT file login and explicit analytics consent. They share one wrapper-owned receiver and one app-server for the whole run, preserving the configured exporter across disable/re-enable, update and removal. The plugin's shared MCP receiver clients do not own the listening port.
+
+```sh
+node .build/experiments/codex-plugin-lifecycle/src/live.js /absolute/path/to/plugin-creator/scripts /absolute/path/to/python3 --use-chatgpt-login --allow-codex-analytics
+node .build/experiments/codex-plugin-lifecycle/src/live.js /absolute/path/to/plugin-creator/scripts /absolute/path/to/python3 --use-chatgpt-login --allow-codex-analytics --prime-existing-threads
+```
+
+Every measured turn uses a textual `$plugin:skill` request, with no explicit Skill path. Each existing thread is created before its transition and has never requested a Skill. The second run additionally completes a neutral, no-Skill turn before each transition, so its existing threads have conversation history. Those neutral controls produce no target samples. This avoids confusing a repeated injection's deduplication with disable behavior; it does not test continued use of already-injected instructions.
+
+Reports: [thread-start control](results/20260928-live-thread-start.json), [existing conversation control](results/20260928-live-primed.json). Each uses nine measured turns; the second adds three neutral turns. No model content, tool payloads, thread IDs or credentials are retained. Turn completion means the API turn completed, not proof of instruction compliance.
+
+| Request window                         | Thread started before transition | Fresh thread after transition                    |
+| -------------------------------------- | -------------------------------- | ------------------------------------------------ |
+| Initial alpha / beta controls          | —                                | One accepted delta `+1` for each requested Skill |
+| Plugin disabled                        | Beta delta `+1`                  | No target sample received                        |
+| Plugin re-enabled                      | —                                | Beta delta `+1`                                  |
+| Plugin updated; original cache removed | Alpha delta `+1`                 | Alpha delta `+1`                                 |
+| Plugin removed; updated cache removed  | No target sample received        | No target sample received                        |
+
+The two runs agree on this matrix. Each records six accepted target samples (alpha total 3, beta total 3; dormant remains null), with no rejected requests or unknown Skill labels. Effective config and fresh inventory confirm disabled/uninstalled state at their checkpoints. The second run also retains request counters: OTLP HTTP requests continue during every measured turn window, including those with no target samples. Those request counts establish transport activity, not zero Skill usage or a lossless exporter.
+
+The observation window includes each turn and four seconds after completion; a final ten-second drain plus shutdown adds no target samples. These are **receipt windows**, not a per-turn causal join: a delayed or batched export could cross their boundaries. Export cadence is configured to one second. The collector remains healthy and the exporter endpoint text remains unchanged.
+
+### What this changes for the dashboard
+
+- Disabling a plugin does not immediately exclude future injection-counter observations from an existing thread in this tested version. A disabled inventory snapshot must not discard those received samples or close every exposure window.
+- Process liveness and Skill injection diverge: the earlier process experiment observed an MCP instance surviving removal, while these live runs received no new target sample after removal. Neither missing samples nor liveness alone measures actual Skill execution.
+- In-place update creates a **mixed deployment period within a single producer process**. Old and new threads can both emit the same Skill label. A manifest fixed at process start is insufficient for exact version attribution after a hot update, and replacing it would mislabel old-thread samples. Preserve candidate deployment metadata and mark the version join unresolved until a verified new producer boundary or stronger evidence resolves it. A stable asset ID can still be joined only when the candidate mappings agree on that ID; the injected revision remains unsupported.
+- No-receipt windows remain unknown rather than numeric zero, even with healthy transport and matching controls. These bounded observations do not prove permanent suppression, delivery completeness or instruction compliance.
+
+This completes the local lifecycle delivery matrix for named Skill requests in the tested version. Remaining limits include already-injected Skill reuse, long-running or interrupted turns during a configuration change, explicit stale-path requests, cross-version/platform behavior and production backend delivery. These are not inferred from the receipt counter.
