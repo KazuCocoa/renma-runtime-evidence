@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "renma.hardening-security.v1",
+  "evidenceClass": "synthetic-records-real-local-tls-and-http",
+  "modelTurns": 0,
+  "events": [
+    {
+      "phase": "unknown-ca-rejected",
+      "observedAt": "2026-09-28T14:44:36.936Z",
+      "status": null,
+      "error": "UNABLE_TO_VERIFY_LEAF_SIGNATURE",
+      "stored": 0
+    },
+    {
+      "phase": "wrong-hostname-rejected",
+      "observedAt": "2026-09-28T14:44:36.939Z",
+      "status": null,
+      "error": "ERR_TLS_CERT_ALTNAME_INVALID",
+      "stored": 0
+    },
+    {
+      "phase": "missing-credential-rejected",
+      "observedAt": "2026-09-28T14:44:36.941Z",
+      "status": 401,
+      "error": null,
+      "stored": 0
+    },
+    {
+      "phase": "wrong-credential-rejected",
+      "observedAt": "2026-09-28T14:44:36.941Z",
+      "status": 401,
+      "error": null,
+      "stored": 0
+    },
+    {
+      "phase": "trusted-authenticated-delivery",
+      "observedAt": "2026-09-28T14:44:36.956Z",
+      "status": 200,
+      "error": null,
+      "stored": 1
+    },
+    {
+      "phase": "old-credential-after-rotation",
+      "observedAt": "2026-09-28T14:44:36.956Z",
+      "status": 401,
+      "error": null,
+      "stored": 1
+    },
+    {
+      "phase": "new-credential-after-rotation",
+      "observedAt": "2026-09-28T14:44:36.963Z",
+      "status": 200,
+      "error": null,
+      "stored": 1
+    },
+    {
+      "phase": "timeout-after-storage",
+      "observedAt": "2026-09-28T14:44:37.039Z",
+      "status": null,
+      "error": "TEST_TIMEOUT",
+      "stored": 1
+    },
+    {
+      "phase": "retry-after-timeout",
+      "observedAt": "2026-09-28T14:44:37.048Z",
+      "status": 200,
+      "error": null,
+      "stored": 1
+    }
+  ],
+  "authorizedRequests": 4,
+  "rejectedCredentials": 3,
+  "uniqueStored": 1,
+  "duplicates": 3,
+  "verification": {
+    "rejectUnauthorized": true,
+    "temporaryCA": true,
+    "globalTrustModified": false
+  },
+  "limits": {
+    "client": "node-https-not-codex-exporter",
+    "productionReceiver": "not-exercised"
+  }
+}

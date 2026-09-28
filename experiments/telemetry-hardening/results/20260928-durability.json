@@ -1,0 +1,109 @@
+{
+  "schemaVersion": "renma.hardening-durability.v1",
+  "evidenceClass": "synthetic-records-real-os-processes-and-docker",
+  "modelTurns": 0,
+  "events": [
+    {
+      "phase": "503-before-sender-sigkill",
+      "observedAt": "2026-09-28T14:50:11.720Z",
+      "backend": {
+        "stored": 0,
+        "duplicates": 0,
+        "unauthorized": 0,
+        "rejected": 0
+      },
+      "sender": {
+        "pending": 1,
+        "attempts": 1,
+        "state": "retry"
+      }
+    },
+    {
+      "phase": "sender-restarted-stored-ack-lost",
+      "observedAt": "2026-09-28T14:50:11.765Z",
+      "backend": {
+        "stored": 1,
+        "duplicates": 0,
+        "unauthorized": 0,
+        "rejected": 0
+      },
+      "sender": {
+        "pending": 1,
+        "attempts": 1,
+        "state": "retry"
+      }
+    },
+    {
+      "phase": "tcp-disconnected-queue-retained",
+      "observedAt": "2026-09-28T14:50:11.922Z",
+      "sender": {
+        "pending": 1,
+        "attempts": 2,
+        "state": "retry"
+      }
+    },
+    {
+      "phase": "backend-restarted-exact-retry-deduplicated",
+      "observedAt": "2026-09-28T14:50:12.234Z",
+      "backend": {
+        "stored": 1,
+        "duplicates": 1,
+        "unauthorized": 0,
+        "rejected": 0
+      },
+      "sender": {
+        "pending": 0,
+        "attempts": 0,
+        "state": "ready"
+      }
+    },
+    {
+      "phase": "persistent-queue-before-sigkill",
+      "observedAt": "2026-09-28T14:50:13.948Z",
+      "backend": {
+        "stored": 1,
+        "duplicates": 1,
+        "unauthorized": 0,
+        "rejected": 0
+      },
+      "sender": null
+    },
+    {
+      "phase": "persistent-queue-after-recreate",
+      "observedAt": "2026-09-28T14:50:14.400Z",
+      "backend": {
+        "stored": 9,
+        "duplicates": 1,
+        "unauthorized": 0,
+        "rejected": 0
+      },
+      "sender": null
+    }
+  ],
+  "saturation": {
+    "queueSize": 4,
+    "submitted": 16,
+    "statuses": [
+      200, 200, 200, 200, 503, 503, 503, 503, 503, 503, 503, 503, 503, 503, 503,
+      503
+    ],
+    "accepted": 4,
+    "deliveredAfterRecovery": 4,
+    "recoveryWindowMs": 20000
+  },
+  "persistentCollector": {
+    "version": "0.161.0",
+    "imageDigest": "otel/opentelemetry-collector-contrib@sha256:fd328de2552466ad78385e1b1289c3f2402b1c45f265b252aab1955b42845ac1",
+    "fsync": true,
+    "acceptedStatuses": [200, 200, 200, 200, 200, 200, 200, 200],
+    "storageFiles": 1,
+    "storageBytes": 65536,
+    "expectedStored": 9,
+    "actualStored": 9,
+    "recoveryWindowMs": 20000
+  },
+  "limits": {
+    "powerLoss": "not-tested",
+    "providerExporter": "not-exercised"
+  }
+}

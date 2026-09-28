@@ -1,0 +1,258 @@
+{
+  "schemaVersion": "renma.hardening-aggregation.v1",
+  "evidenceClass": "authored-synthetic-boundaries-existing-dashboard",
+  "modelTurns": 0,
+  "cases": [
+    {
+      "name": "observed-zero",
+      "expectedTotal": 0,
+      "expectedState": "received-disjoint-deltas",
+      "summary": [
+        {
+          "skill": "renma-usage-alpha",
+          "assetId": "skill.fixture-alpha",
+          "samples": 1,
+          "total": 0,
+          "countState": "received-disjoint-deltas",
+          "coverage": "received-only-completeness-unknown",
+          "gaps": false,
+          "firstReceivedAt": "2026-09-28T12:00:00.000Z",
+          "lastReceivedAt": "2026-09-28T12:00:00.000Z",
+          "lastIncreaseAt": null,
+          "resolution": "unique-deployment",
+          "sourceCommits": ["b58c109fd4bda04c316e611f5ad3b84e7748b369"]
+        },
+        {
+          "skill": "renma-usage-beta",
+          "assetId": "skill.fixture-beta",
+          "samples": 0,
+          "total": null,
+          "countState": "no-sample",
+          "coverage": "received-only-completeness-unknown",
+          "gaps": false,
+          "firstReceivedAt": null,
+          "lastReceivedAt": null,
+          "lastIncreaseAt": null,
+          "resolution": "unobserved",
+          "sourceCommits": []
+        }
+      ]
+    },
+    {
+      "name": "missing",
+      "expectedTotal": null,
+      "expectedState": "no-sample",
+      "summary": [
+        {
+          "skill": "renma-usage-alpha",
+          "assetId": "skill.fixture-alpha",
+          "samples": 0,
+          "total": null,
+          "countState": "no-sample",
+          "coverage": "received-only-completeness-unknown",
+          "gaps": false,
+          "firstReceivedAt": null,
+          "lastReceivedAt": null,
+          "lastIncreaseAt": null,
+          "resolution": "unobserved",
+          "sourceCommits": []
+        },
+        {
+          "skill": "renma-usage-beta",
+          "assetId": "skill.fixture-beta",
+          "samples": 0,
+          "total": null,
+          "countState": "no-sample",
+          "coverage": "received-only-completeness-unknown",
+          "gaps": false,
+          "firstReceivedAt": null,
+          "lastReceivedAt": null,
+          "lastIncreaseAt": null,
+          "resolution": "unobserved",
+          "sourceCommits": []
+        }
+      ]
+    },
+    {
+      "name": "delayed",
+      "expectedTotal": 3,
+      "expectedState": "received-disjoint-deltas",
+      "summary": [
+        {
+          "skill": "renma-usage-alpha",
+          "assetId": "skill.fixture-alpha",
+          "samples": 3,
+          "total": 3,
+          "countState": "received-disjoint-deltas",
+          "coverage": "received-only-completeness-unknown",
+          "gaps": false,
+          "firstReceivedAt": "2026-09-28T12:00:00.000Z",
+          "lastReceivedAt": "2026-09-28T12:01:00.000Z",
+          "lastIncreaseAt": "2026-09-28T12:01:00.000Z",
+          "resolution": "unique-deployment",
+          "sourceCommits": ["b58c109fd4bda04c316e611f5ad3b84e7748b369"]
+        },
+        {
+          "skill": "renma-usage-beta",
+          "assetId": "skill.fixture-beta",
+          "samples": 0,
+          "total": null,
+          "countState": "no-sample",
+          "coverage": "received-only-completeness-unknown",
+          "gaps": false,
+          "firstReceivedAt": null,
+          "lastReceivedAt": null,
+          "lastIncreaseAt": null,
+          "resolution": "unobserved",
+          "sourceCommits": []
+        }
+      ]
+    },
+    {
+      "name": "gap",
+      "expectedTotal": 2,
+      "expectedState": "received-disjoint-deltas",
+      "summary": [
+        {
+          "skill": "renma-usage-alpha",
+          "assetId": "skill.fixture-alpha",
+          "samples": 2,
+          "total": 2,
+          "countState": "received-disjoint-deltas",
+          "coverage": "received-only-completeness-unknown",
+          "gaps": true,
+          "firstReceivedAt": "2026-09-28T12:00:00.000Z",
+          "lastReceivedAt": "2026-09-28T12:00:01.000Z",
+          "lastIncreaseAt": "2026-09-28T12:00:01.000Z",
+          "resolution": "unique-deployment",
+          "sourceCommits": ["b58c109fd4bda04c316e611f5ad3b84e7748b369"]
+        },
+        {
+          "skill": "renma-usage-beta",
+          "assetId": "skill.fixture-beta",
+          "samples": 0,
+          "total": null,
+          "countState": "no-sample",
+          "coverage": "received-only-completeness-unknown",
+          "gaps": false,
+          "firstReceivedAt": null,
+          "lastReceivedAt": null,
+          "lastIncreaseAt": null,
+          "resolution": "unobserved",
+          "sourceCommits": []
+        }
+      ]
+    },
+    {
+      "name": "exact-duplicate",
+      "expectedTotal": 1,
+      "expectedState": "received-disjoint-deltas",
+      "summary": [
+        {
+          "skill": "renma-usage-alpha",
+          "assetId": "skill.fixture-alpha",
+          "samples": 1,
+          "total": 1,
+          "countState": "received-disjoint-deltas",
+          "coverage": "received-only-completeness-unknown",
+          "gaps": false,
+          "firstReceivedAt": "2026-09-28T12:00:00.000Z",
+          "lastReceivedAt": "2026-09-28T12:00:00.000Z",
+          "lastIncreaseAt": "2026-09-28T12:00:00.000Z",
+          "resolution": "unique-deployment",
+          "sourceCommits": ["b58c109fd4bda04c316e611f5ad3b84e7748b369"]
+        },
+        {
+          "skill": "renma-usage-beta",
+          "assetId": "skill.fixture-beta",
+          "samples": 0,
+          "total": null,
+          "countState": "no-sample",
+          "coverage": "received-only-completeness-unknown",
+          "gaps": false,
+          "firstReceivedAt": null,
+          "lastReceivedAt": null,
+          "lastIncreaseAt": null,
+          "resolution": "unobserved",
+          "sourceCommits": []
+        }
+      ]
+    },
+    {
+      "name": "overlap",
+      "expectedTotal": null,
+      "expectedState": "ambiguous-overlap",
+      "summary": [
+        {
+          "skill": "renma-usage-alpha",
+          "assetId": "skill.fixture-alpha",
+          "samples": 2,
+          "total": null,
+          "countState": "ambiguous-overlap",
+          "coverage": "received-only-completeness-unknown",
+          "gaps": false,
+          "firstReceivedAt": "2026-09-28T12:00:00.000Z",
+          "lastReceivedAt": "2026-09-28T12:02:00.000Z",
+          "lastIncreaseAt": "2026-09-28T12:02:00.000Z",
+          "resolution": "unique-deployment",
+          "sourceCommits": ["b58c109fd4bda04c316e611f5ad3b84e7748b369"]
+        },
+        {
+          "skill": "renma-usage-beta",
+          "assetId": "skill.fixture-beta",
+          "samples": 0,
+          "total": null,
+          "countState": "no-sample",
+          "coverage": "received-only-completeness-unknown",
+          "gaps": false,
+          "firstReceivedAt": null,
+          "lastReceivedAt": null,
+          "lastIncreaseAt": null,
+          "resolution": "unobserved",
+          "sourceCommits": []
+        }
+      ]
+    },
+    {
+      "name": "mixed-version",
+      "expectedTotal": 2,
+      "expectedState": "received-disjoint-deltas",
+      "summary": [
+        {
+          "skill": "renma-usage-alpha",
+          "assetId": "skill.fixture-alpha",
+          "samples": 2,
+          "total": 2,
+          "countState": "received-disjoint-deltas",
+          "coverage": "received-only-completeness-unknown",
+          "gaps": false,
+          "firstReceivedAt": "2026-09-28T12:00:00.000Z",
+          "lastReceivedAt": "2026-09-28T12:01:00.000Z",
+          "lastIncreaseAt": "2026-09-28T12:01:00.000Z",
+          "resolution": "ambiguous-content",
+          "sourceCommits": [
+            "b58c109fd4bda04c316e611f5ad3b84e7748b369",
+            "566369eab3f97daa3713b354d7231d3d2b827d5d"
+          ]
+        },
+        {
+          "skill": "renma-usage-beta",
+          "assetId": "skill.fixture-beta",
+          "samples": 0,
+          "total": null,
+          "countState": "no-sample",
+          "coverage": "received-only-completeness-unknown",
+          "gaps": false,
+          "firstReceivedAt": null,
+          "lastReceivedAt": null,
+          "lastIncreaseAt": null,
+          "resolution": "unobserved",
+          "sourceCommits": []
+        }
+      ]
+    }
+  ],
+  "limits": {
+    "timestamps": "authored-not-new-provider-observations"
+  }
+}
