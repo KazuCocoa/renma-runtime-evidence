@@ -1,5 +1,7 @@
 # Additional local operational experiments
 
+Implementation and evidence: [PR #27](https://github.com/KazuCocoa/renma-runtime-evidence/pull/27).
+
 This follow-up completes the five requested **local experiment areas** after PR #26. It measures concrete configurations and failure controls; it does not certify an unspecified production deployment. All new runs used **zero model turns**. Authored synthetic load/fault fixtures, actual CLI metadata, and previous provider observations remain separate.
 
 ## Completion audit

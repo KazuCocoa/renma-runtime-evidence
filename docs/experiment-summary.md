@@ -47,7 +47,7 @@ The [dashboard](../experiments/local-telemetry-system/results/dashboard.png) dis
 
 See the [six-track audit and reproduction instructions](../experiments/local-telemetry-system/README.md) for each result and its boundary. No production backend was selected or deployed.
 
-## Additional local operational experiments
+## Additional local operational experiments ([PR #27](https://github.com/KazuCocoa/renma-runtime-evidence/pull/27))
 
 The [five-area follow-up](../experiments/telemetry-hardening/README.md) now tests process-level crash/restart, persistent Collector queues and saturation, local TLS/credential rotation, larger authored catalogs and concurrent storage, plugin update/remove coexistence, and seven rendered aggregation boundary cases. No new model turns were used.
 
