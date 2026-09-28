@@ -78,6 +78,7 @@ async function refresh() {
         );
         if (row.countState === "ambiguous-overlap")
           count.append(node("small", "重なる計測区間あり"));
+        if (row.gaps) count.append(node("small", "計測区間に空きあり"));
         tr.append(identity, count, state, last);
         return tr;
       }),

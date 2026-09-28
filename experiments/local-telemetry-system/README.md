@@ -47,6 +47,8 @@ Absolute-path control and a self-contained inline Node module connected. Relativ
 
 The successful module is embedded in `.mcp.json` and performs a health check/MCP handshake without opening another receiver port. It requires Node on PATH and an explicitly provisioned shared broker and Codex exporter configuration. It does **not** itself activate global Codex telemetry or provide a zero-setup installer. The exact configuration works in two isolated homes on the same broker; arbitrary hosts still need their receiver address configured. The configured exporter endpoint text remains preserved through the live updates. Earlier [coexistence experiments](../codex-telemetry-coexistence/README.md) test concurrent producers, cooperative plugins and collision controls; universal cooperation with unknown third-party plugins is not established.
 
+Later tests of persistent queues, OS-process crashes, TLS and load are in the [additional local operational experiments](../telemetry-hardening/README.md). The results below retain their original scope.
+
 ## Delivery boundaries
 
 The experimental backend receives **OTLP/HTTP JSON logs** carrying one reduced `renma.observation` attribute, forwarded by the real OTel Collector. This is not general raw Codex log collection. Direct provider metrics first pass through the allowlisted usage collector. The backend binds loopback, checks an ephemeral bearer credential, limits input size and reconstructs records before storage. It supports one process/writer, bounded queues and atomic file replacement with file fsync.

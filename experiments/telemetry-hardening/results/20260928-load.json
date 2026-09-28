@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "renma.hardening-load.v1",
+  "evidenceClass": "authored-catalog-and-synthetic-real-http-load",
+  "modelTurns": 0,
+  "environment": {
+    "platform": "darwin",
+    "architecture": "arm64",
+    "node": "v24.18.0"
+  },
+  "inventory": {
+    "repositories": 20,
+    "skills": 1000,
+    "catalogMs": 3171
+  },
+  "load": {
+    "concurrency": 8,
+    "requests": 64,
+    "allAccepted": true,
+    "elapsedMs": 317,
+    "p50Ms": 36,
+    "p95Ms": 64,
+    "uniqueStored": 4096,
+    "distinctSkills": 1000,
+    "storageBytes": 274777,
+    "duplicates": 65,
+    "replayStatus": 200,
+    "overflowStatus": 507,
+    "unknownStatus": 400,
+    "contaminatedStatus": 200,
+    "invalidChangedStorage": false,
+    "sentinelPersisted": false,
+    "rejected": 1
+  },
+  "existingComponentBounds": {
+    "senderCapacity": 256,
+    "senderOverflowRejected": true,
+    "backendCapacity": 1024,
+    "allWithinCapacityAccepted": true,
+    "overflowStatus": 400,
+    "stored": 1024
+  },
+  "limits": {
+    "portfolioReceiver": "authored-indexed-envelope-prototype-not-existing-two-skill-schema",
+    "providerRuntimeLoad": "not-exercised",
+    "capacity": "local-measurement-not-production-sizing"
+  }
+}

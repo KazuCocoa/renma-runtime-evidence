@@ -1,0 +1,119 @@
+{
+  "schemaVersion": "renma.hardening-plugins.v1",
+  "evidenceClass": "actual-cli-mcp-no-model",
+  "version": "codex-cli 0.157.1",
+  "modelTurns": 0,
+  "collisionResult": "address-in-use",
+  "events": [
+    {
+      "phase": "both-installed",
+      "observedAt": "2026-09-28T14:45:51.155Z",
+      "states": [
+        {
+          "plugin": "renma-hardening-alpha",
+          "matches": 1,
+          "connected": true,
+          "identified": true
+        },
+        {
+          "plugin": "renma-hardening-beta",
+          "matches": 1,
+          "connected": true,
+          "identified": true
+        }
+      ],
+      "receiverHealthy": true,
+      "exporterEndpointPreserved": true,
+      "jsonProtocolPreserved": true
+    },
+    {
+      "phase": "after-port-conflict",
+      "observedAt": "2026-09-28T14:45:51.198Z",
+      "states": [
+        {
+          "plugin": "renma-hardening-alpha",
+          "matches": 1,
+          "connected": true,
+          "identified": true
+        },
+        {
+          "plugin": "renma-hardening-beta",
+          "matches": 1,
+          "connected": true,
+          "identified": true
+        }
+      ],
+      "receiverHealthy": true,
+      "exporterEndpointPreserved": true,
+      "jsonProtocolPreserved": true
+    },
+    {
+      "phase": "updated-fresh-thread",
+      "observedAt": "2026-09-28T14:45:52.088Z",
+      "states": [
+        {
+          "plugin": "renma-hardening-alpha",
+          "matches": 1,
+          "connected": true,
+          "identified": true
+        },
+        {
+          "plugin": "renma-hardening-beta",
+          "matches": 1,
+          "connected": true,
+          "identified": true
+        }
+      ],
+      "receiverHealthy": true,
+      "exporterEndpointPreserved": true,
+      "jsonProtocolPreserved": true
+    },
+    {
+      "phase": "removed-fresh-thread-peer-survives",
+      "observedAt": "2026-09-28T14:45:52.882Z",
+      "states": [
+        {
+          "plugin": "renma-hardening-alpha",
+          "matches": 0,
+          "connected": false,
+          "identified": false
+        },
+        {
+          "plugin": "renma-hardening-beta",
+          "matches": 1,
+          "connected": true,
+          "identified": true
+        }
+      ],
+      "receiverHealthy": true,
+      "exporterEndpointPreserved": true,
+      "jsonProtocolPreserved": true
+    },
+    {
+      "phase": "removed-existing-thread",
+      "observedAt": "2026-09-28T14:45:52.925Z",
+      "states": [
+        {
+          "plugin": "renma-hardening-alpha",
+          "matches": 0,
+          "connected": false,
+          "identified": false
+        },
+        {
+          "plugin": "renma-hardening-beta",
+          "matches": 1,
+          "connected": true,
+          "identified": true
+        }
+      ],
+      "receiverHealthy": true,
+      "exporterEndpointPreserved": true,
+      "jsonProtocolPreserved": true
+    }
+  ],
+  "limits": {
+    "exporter": "configuration-preservation-not-new-provider-traffic",
+    "plugins": "two-cooperative-authored-plugins",
+    "setup": "explicit-shared-receiver"
+  }
+}

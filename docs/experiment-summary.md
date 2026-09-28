@@ -46,3 +46,11 @@ A real Docker OTel Collector forwarded normalized, allowlisted OTLP/HTTP JSON lo
 The [dashboard](../experiments/local-telemetry-system/results/dashboard.png) displays saved actual observations, UTC receipt filters, provenance candidates and unknown coverage; synthetic delivery checkpoints are separate. Start it with `node .build/experiments/local-telemetry-system/src/dashboard.js 18581` after building. Windows, x64, Desktop runtime, persistent Collector queues, remote production transport and automatic archival decisions remain outside the verified scope. Local validation passed **220 tests**, with one historical skip; live provider runs are separate evidence.
 
 See the [six-track audit and reproduction instructions](../experiments/local-telemetry-system/README.md) for each result and its boundary. No production backend was selected or deployed.
+
+## Additional local operational experiments ([PR #27](https://github.com/KazuCocoa/renma-runtime-evidence/pull/27))
+
+The [five-area follow-up](../experiments/telemetry-hardening/README.md) now tests process-level crash/restart, persistent Collector queues and saturation, local TLS/credential rotation, larger authored catalogs and concurrent storage, plugin update/remove coexistence, and seven rendered aggregation boundary cases. No new model turns were used.
+
+Eight queued observations survived a persistent Collector's forced container replacement. With queue size four, four requests were accepted and recovered while twelve received 503. Sender/backend OS-process restarts preserved one stored record without double-counting its retry. Local certificate/hostname failures and bad or revoked credentials were rejected; timeout-after-storage retries were deduplicated.
+
+The load experiment cataloged 20 real authored Git roots / 1,000 Skills and stored 4,096 synthetic records through a separate indexed-envelope prototype. This does not generalize the previous two-Skill schema: its sender/backend still reject their 256/1,024 capacities. The dashboard now labels interval gaps; zero, absence, delayed arrival, exact duplication, overlap and mixed-version cases have API and browser evidence. The detailed audit distinguishes these measured outcomes from provider delivery guarantees, power-loss durability, sustained production load and remote service integration.

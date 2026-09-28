@@ -1,0 +1,60 @@
+{
+  "evidenceClass": "actual-browser-over-authored-synthetic-cases",
+  "observedZero": 0,
+  "cases": [
+    {
+      "name": "missing",
+      "count": "不明",
+      "expected": "不明",
+      "passed": true,
+      "gapShown": false,
+      "overlapShown": false,
+      "mixedShown": false
+    },
+    {
+      "name": "delayed",
+      "count": "3",
+      "expected": "3",
+      "passed": true,
+      "gapShown": false,
+      "overlapShown": false,
+      "mixedShown": false
+    },
+    {
+      "name": "gap",
+      "count": "2",
+      "expected": "2",
+      "passed": true,
+      "gapShown": true,
+      "overlapShown": false,
+      "mixedShown": false
+    },
+    {
+      "name": "exact-duplicate",
+      "count": "1",
+      "expected": "1",
+      "passed": true,
+      "gapShown": false,
+      "overlapShown": false,
+      "mixedShown": false
+    },
+    {
+      "name": "overlap",
+      "count": "不明",
+      "expected": "不明",
+      "passed": true,
+      "gapShown": false,
+      "overlapShown": true,
+      "mixedShown": false
+    },
+    {
+      "name": "mixed-version",
+      "count": "2",
+      "expected": "2",
+      "passed": true,
+      "gapShown": false,
+      "overlapShown": false,
+      "mixedShown": true
+    }
+  ]
+}
