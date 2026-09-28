@@ -1,4 +1,5 @@
 import { spawnSync } from "node:child_process";
+import { writeFileSync, renameSync } from "node:fs";
 import { mkdir, readFile, realpath, lstat } from "node:fs/promises";
 import { createServer } from "node:net";
 import { once } from "node:events";
@@ -18,16 +19,20 @@ import {
   object,
   requireOptIn,
 } from "../../codex-model-freshness/src/contract.js";
-import { SKILLS } from "./collector.js";
+import { SKILLS, createUsageCollector } from "./collector.js";
 import { installFixtureFiles, verifyInstalled, PLUGIN } from "./fixture.js";
 import { FixtureRpc } from "./rpc.js";
 
 let stage = "consent";
 let diagnostic: string[] = [];
 async function run() {
-  requireOptIn(process.argv.slice(2));
+  const args = process.argv.slice(2);
+  const shared = args.includes("--shared-collector");
+  requireOptIn(args.filter((arg) => arg !== "--shared-collector"));
   const dirs = await createCharacterizationIsolatedDirectories();
   let rpc: FixtureRpc | undefined;
+  let sharedCollector:
+    Awaited<ReturnType<typeof createUsageCollector>> | undefined;
   const abort = () => {
     void rpc?.close();
   };
@@ -104,12 +109,33 @@ async function run() {
     await new Promise<void>((resolve) => reserve.close(() => resolve()));
     const output = join(dirs.rootDirectory, "reduced");
     await mkdir(output);
+    if (shared) {
+      const persistShared = () => {
+        if (!sharedCollector) return;
+        writeFileSync(
+          join(output, "observations.tmp"),
+          JSON.stringify(sharedCollector.snapshot()),
+          { mode: 0o600 },
+        );
+        renameSync(
+          join(output, "observations.tmp"),
+          join(output, "observations.json"),
+        );
+      };
+      sharedCollector = await createUsageCollector(
+        address.port,
+        persistShared,
+        true,
+      );
+      persistShared();
+    }
     const fixture = await installFixtureFiles(
       dirs.homeDirectory,
       cwd,
       dirs.codexHomeDirectory,
       address.port,
       output,
+      shared,
     );
     stage = "marketplace-install";
     const marketplace = command([
@@ -373,6 +399,14 @@ async function run() {
     stage = "shutdown";
     await rpc.close();
     rpc = undefined;
+    const sharedReceiverSurvivedCodexShutdown = sharedCollector
+      ? await fetch(`http://127.0.0.1:${address.port}/health`, {
+          signal: AbortSignal.timeout(2000),
+        }).then(async (response) => {
+          await response.body?.cancel();
+          return response.status === 200;
+        })
+      : null;
     snapshot = await readObservations();
     let receiverStartupFailure:
       "not-observed" | "address-in-use" | "receiver-start-failed" =
@@ -402,7 +436,9 @@ async function run() {
       analyticsConsent: true,
       requestedExportIntervalMs: 1000,
       pluginInstalledByCli: true,
-      collectorStartedByPluginMcp: true,
+      collectorStartedByPluginMcp: !shared,
+      collectorOwner: shared ? "experiment-wrapper" : "plugin-mcp",
+      sharedReceiverSurvivedCodexShutdown,
       sourceRepositories:
         "two-synthetic-source-directories-not-a-renma-sync-run",
       manifest: fixture.manifest,
@@ -416,6 +452,7 @@ async function run() {
     };
   } finally {
     await rpc?.close();
+    await sharedCollector?.close();
     await cleanupCharacterizationIsolatedDirectories(dirs);
     process.removeListener("SIGINT", abort);
     process.removeListener("SIGTERM", abort);

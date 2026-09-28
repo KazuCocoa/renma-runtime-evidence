@@ -14,6 +14,7 @@ export async function installFixtureFiles(
   codexHome: string,
   port: number,
   output: string,
+  shared = false,
 ) {
   const market = join(home, ".agents/plugins");
   const plugin = join(home, "plugins", PLUGIN);
@@ -84,6 +85,7 @@ export async function installFixtureFiles(
             ),
             String(port),
             output,
+            ...(shared ? ["--shared"] : []),
           ],
         },
       },

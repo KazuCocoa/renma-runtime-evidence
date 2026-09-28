@@ -331,6 +331,7 @@ export function summarize(samples: readonly Sample[]) {
 export async function createUsageCollector(
   port = 0,
   changed: () => void = () => {},
+  sharedHealth = false,
 ) {
   const samples: Sample[] = [];
   const started = performance.now();
@@ -339,6 +340,12 @@ export async function createUsageCollector(
     rejectedRequests = 0;
   let unknownSkillObserved = false;
   const server = createServer(async (req, res) => {
+    if (sharedHealth && req.method === "GET" && req.url === "/health") {
+      res
+        .writeHead(200, { "content-type": "application/json" })
+        .end(JSON.stringify({ service: "renma-usage-fixture", version: 1 }));
+      return;
+    }
     if (req.method !== "POST" || req.url !== "/v1/metrics") {
       res.writeHead(404).end();
       req.resume();

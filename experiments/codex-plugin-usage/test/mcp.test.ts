@@ -129,3 +129,62 @@ test("a second receiver cannot claim the first receiver's port and records only 
     await rm(root, { recursive: true, force: true });
   }
 });
+
+test("two shared MCP clients attach without binding or owning collector lifetime", async () => {
+  const { createUsageCollector } = await import("../src/collector.js");
+  const collector = await createUsageCollector(0, undefined, true);
+  const root = await mkdtemp(join(tmpdir(), "renma-mcp-shared-"));
+  const children: ReturnType<typeof spawn>[] = [];
+  const closed: Promise<unknown>[] = [];
+  try {
+    for (let index = 0; index < 2; index++) {
+      const child = spawn(
+        process.execPath,
+        [
+          fileURLToPath(new URL("../src/mcp.js", import.meta.url)),
+          new URL(collector.endpoint).port,
+          root,
+          "--shared",
+        ],
+        { stdio: ["pipe", "pipe", "ignore"] },
+      );
+      children.push(child);
+      closed.push(once(child, "close"));
+      const received = once(child.stdout!, "data");
+      child.stdin!.write(
+        JSON.stringify({ jsonrpc: "2.0", id: index, method: "initialize" }) +
+          "\n",
+      );
+      const [chunk] = await received;
+      assert.equal(
+        JSON.parse(String(chunk)).result.serverInfo.name,
+        "renma-usage-fixture",
+      );
+    }
+    for (let index = 0; index < children.length; index++) {
+      children[index]!.stdin!.end();
+      await closed[index];
+      const response = await fetch(new URL("/health", collector.endpoint));
+      assert.equal(response.status, 200);
+      await response.body?.cancel();
+    }
+    const response = await fetch(collector.endpoint, {
+      method: "POST",
+      body: JSON.stringify({ resourceMetrics: [] }),
+    });
+    assert.equal(response.status, 200);
+    await response.body?.cancel();
+    assert.equal(collector.snapshot().requests, 1);
+    await assert.rejects(readFile(join(root, "observations.json")), {
+      code: "ENOENT",
+    });
+    await assert.rejects(readFile(join(root, "startup-failure.json")), {
+      code: "ENOENT",
+    });
+  } finally {
+    for (const child of children) child.kill("SIGTERM");
+    await Promise.all(closed);
+    await collector.close();
+    await rm(root, { recursive: true, force: true });
+  }
+});

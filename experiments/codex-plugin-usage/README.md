@@ -126,3 +126,11 @@ payloads, prompts, responses, reasoning, transcripts or tool contents.
 
 This is an experimental module, excluded from the existing private package's
 runtime exports. The existing presence-only collector is unchanged.
+
+## Shared receiver follow-up (2026-09-28 UTC)
+
+Run the same experiment with `--shared-collector` in addition to both consent flags. The experiment wrapper starts the receiver before Codex; each installed plugin MCP checks its bounded loopback health response and attaches without binding a port. MCP exit does not stop the receiver. The marker is a fixture compatibility check, not authentication or a safe automatic discovery mechanism for untrusted services.
+
+`results/20260928-cli-0.157.1-shared.json` is an actual CLI 0.157.1 run: all five turns completed, alpha had three received delta increments and beta one. Both initial and new-thread MCP states were `connected`, with the expected server name and no reported tools error. No receiver startup failure was observed. An actual health request after Codex shutdown succeeded. The old failing lifecycle result remains unchanged as historical evidence.
+
+This proves the owned shared receiver removes the demonstrated per-thread port conflict for this run. It does not yet establish simultaneous multi-CLI support, another plugin's coexistence, recovery, automatic bootstrap, or a production service. Those remain tracked in `docs/telemetry-followup-experiments.md`.

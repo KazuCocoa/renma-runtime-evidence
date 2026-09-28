@@ -1,0 +1,30 @@
+# Telemetry follow-up experiment ledger
+
+Requested scope: finish the usage-telemetry follow-up experiments, including coexistence with other OpenTelemetry plugins. A passing fixture test is not proof of Codex runtime behavior. No production readiness claim follows from a successful bounded experiment.
+
+| Requirement                          | Evidence required                                                                                                           | Status      |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| Concurrent threads and CLI processes | Actual Codex processes, independent producer boundaries, no bind collision, shutdown/restart observations                   | In progress |
+| Plugin installation and bootstrap    | Fresh isolated install, explicit consent/configuration, existing exporter preserved                                         | Pending     |
+| Other collector plugins              | Two installed synthetic collectors, both start orders, existing listener, ownership and shutdown, reduced data distribution | Pending     |
+| Loss, retry and restart              | Actual exporter outage/recovery plus separately labeled replay fixtures; no silent zero or double count                     | Pending     |
+| Rename, move and version updates     | Stable asset ID mapping across changed labels/plugin/version; collision detection                                           | Pending     |
+| Actual Renma packaging path          | Actual Renma scans owned Git repositories; wrapper bundles their assets; identity manifest and updates verified             | Pending     |
+| Time-based dashboard limits          | Receipt UTC and monotonic time, batching/delay measurements; clock-skew fixture labeled synthetic                           | Pending     |
+| Delivery                             | Documentation, relevant tests, self-review, PR and CI, merge and return to main                                             | Pending     |
+
+## Architecture being tested
+
+The experiment owner starts one receiver before Codex. Plugin MCP processes attach without binding or owning its lifetime. This first step tests thread lifecycle; it is not a zero-setup installed service. Multiple independent Codex producers must not be merged into the existing single-producer summary. A future coexistence runner must preserve producer identity at the receiver boundary before reducing payloads.
+
+Existing user configuration and plugins must remain untouched: all installations, exporter configuration, and deliberate failures use owned temporary homes and repositories. Only explicit allowlisted reduced observations may persist. Exact injection time, task success, and prompt/tool content remain outside scope.
+
+## Scope clarification from source inspection
+
+Renma 0.39.2 explicitly excludes bundling assets in its README product boundary. The earlier suggestion that Renma itself would bundle was inaccurate. This requirement therefore exercises real Renma repository discovery/identity output and the separate packaging wrapper together; it does not invent a Renma sync/bundle command.
+
+## Evidence collected so far
+
+- Actual CLI 0.157.1 shared receiver run: `experiments/codex-plugin-usage/results/20260928-cli-0.157.1-shared.json`. Both thread MCP connections succeeded without tools errors; four Skill increments received; receiver survived Codex shutdown. This completes the sequential multi-thread subcase only.
+- Local process test: two shared MCP clients attach concurrently to the same existing listener and their exit leaves HTTP ingestion working. This is a fixture test, not simultaneous Codex-process evidence.
+- Next: two installed collector plugins and multiple actual CLI producers; preserve source boundaries before summarizing, then deliberate outage/recovery and startup-order variations.
