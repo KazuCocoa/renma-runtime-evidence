@@ -97,3 +97,37 @@ test("saved lifecycle failure remains distinct from successful HTTP usage collec
     [3, 1, null],
   );
 });
+
+test("saved shared receiver run verifies both thread connections and survival after Codex exits", async () => {
+  const r = JSON.parse(
+    await readFile(
+      "experiments/codex-plugin-usage/results/20260928-cli-0.157.1-shared.json",
+      "utf8",
+    ),
+  );
+  assert.equal(r.evidenceClass, "real-cli-on-synthetic-plugin");
+  assert.equal(r.collectorStartedByPluginMcp, false);
+  assert.equal(r.collectorOwner, "experiment-wrapper");
+  assert.equal(r.sharedReceiverSurvivedCodexShutdown, true);
+  assert.equal(r.receiverStartupFailure, "not-observed");
+  assert.deepEqual(
+    r.receiverStates.map((s: { state: string }) => s.state),
+    ["connected", "connected"],
+  );
+  assert.ok(
+    r.receiverStates.every(
+      (s: { fixtureServerIdentified: boolean; toolsErrorObserved: boolean }) =>
+        s.fixtureServerIdentified && !s.toolsErrorObserved,
+    ),
+  );
+  assert.equal(r.turns.length, 5);
+  assert.ok(r.turns.every((t: { status: string }) => t.status === "completed"));
+  assert.equal(r.telemetry.rejectedRequests, 0);
+  assert.deepEqual(summarize(r.telemetry.samples), r.telemetry.skills);
+  assert.deepEqual(
+    r.telemetry.skills.map(
+      (s: { providerCounterTotal: number | null }) => s.providerCounterTotal,
+    ),
+    [3, 1, null],
+  );
+});

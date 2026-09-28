@@ -1,0 +1,430 @@
+{
+  "schemaVersion": "renma.telemetry-coexistence.v1",
+  "evidenceClass": "real-cli-two-synthetic-plugins",
+  "versions": ["codex-cli 0.157.1", "codex-cli 0.157.1"],
+  "authentication": "chatgpt-file-linked",
+  "analyticsConsent": true,
+  "startupOrder": "alpha",
+  "startupOrderControl": "fixture-gates-second-consumer-until-first-registers",
+  "exporterConfiguredBeforePluginInstall": true,
+  "exporterEndpointTextPreserved": true,
+  "installedObserverBytesVerified": true,
+  "connections": [
+    [
+      {
+        "plugin": "renma-usage-fixture",
+        "connected": true,
+        "toolsErrorObserved": false,
+        "knownServer": true
+      },
+      {
+        "plugin": "renma-observer-fixture",
+        "connected": true,
+        "toolsErrorObserved": false,
+        "knownServer": true
+      }
+    ],
+    [
+      {
+        "plugin": "renma-usage-fixture",
+        "connected": true,
+        "toolsErrorObserved": false,
+        "knownServer": true
+      },
+      {
+        "plugin": "renma-observer-fixture",
+        "connected": true,
+        "toolsErrorObserved": false,
+        "knownServer": true
+      }
+    ]
+  ],
+  "turns": [
+    {
+      "producer": "first",
+      "skill": "renma-usage-alpha",
+      "phase": "both-alive",
+      "status": "completed",
+      "startedAt": "2026-09-28T04:24:41.345Z",
+      "completedAt": "2026-09-28T04:24:48.059Z"
+    },
+    {
+      "producer": "second",
+      "skill": "renma-usage-alpha",
+      "phase": "both-alive",
+      "status": "completed",
+      "startedAt": "2026-09-28T04:24:41.345Z",
+      "completedAt": "2026-09-28T04:24:48.778Z"
+    },
+    {
+      "producer": "first",
+      "skill": "renma-usage-beta",
+      "phase": "both-alive",
+      "status": "completed",
+      "startedAt": "2026-09-28T04:24:48.778Z",
+      "completedAt": "2026-09-28T04:24:56.269Z"
+    },
+    {
+      "producer": "second",
+      "skill": "renma-usage-beta",
+      "phase": "both-alive",
+      "status": "completed",
+      "startedAt": "2026-09-28T04:24:48.779Z",
+      "completedAt": "2026-09-28T04:24:56.794Z"
+    },
+    {
+      "producer": "second",
+      "skill": "renma-usage-alpha",
+      "phase": "first-exited",
+      "status": "completed",
+      "startedAt": "2026-09-28T04:24:58.838Z",
+      "completedAt": "2026-09-28T04:25:00.528Z"
+    }
+  ],
+  "hubSurvivedFirstExit": true,
+  "telemetry": {
+    "evidenceClass": "wrapper-reduced-actual-http",
+    "identityBasis": "dedicated-wrapper-ingress-route",
+    "requests": 1030,
+    "rejected": 0,
+    "unknownSkillObserved": false,
+    "events": [
+      {
+        "producer": "second",
+        "consumer": "alpha",
+        "action": "start",
+        "observedAt": "2026-09-28T04:24:38.969Z"
+      },
+      {
+        "producer": "second",
+        "consumer": "beta",
+        "action": "start",
+        "observedAt": "2026-09-28T04:24:39.074Z"
+      },
+      {
+        "producer": "first",
+        "consumer": "alpha",
+        "action": "start",
+        "observedAt": "2026-09-28T04:24:39.149Z"
+      },
+      {
+        "producer": "first",
+        "consumer": "beta",
+        "action": "start",
+        "observedAt": "2026-09-28T04:24:39.253Z"
+      },
+      {
+        "producer": "first",
+        "consumer": "beta",
+        "action": "start",
+        "observedAt": "2026-09-28T04:24:41.279Z"
+      },
+      {
+        "producer": "first",
+        "consumer": "alpha",
+        "action": "start",
+        "observedAt": "2026-09-28T04:24:41.280Z"
+      },
+      {
+        "producer": "first",
+        "consumer": "alpha",
+        "action": "stop",
+        "observedAt": "2026-09-28T04:24:41.297Z"
+      },
+      {
+        "producer": "first",
+        "consumer": "beta",
+        "action": "stop",
+        "observedAt": "2026-09-28T04:24:41.297Z"
+      },
+      {
+        "producer": "second",
+        "consumer": "beta",
+        "action": "start",
+        "observedAt": "2026-09-28T04:24:41.332Z"
+      },
+      {
+        "producer": "second",
+        "consumer": "alpha",
+        "action": "start",
+        "observedAt": "2026-09-28T04:24:41.332Z"
+      },
+      {
+        "producer": "second",
+        "consumer": "beta",
+        "action": "stop",
+        "observedAt": "2026-09-28T04:24:41.339Z"
+      },
+      {
+        "producer": "second",
+        "consumer": "alpha",
+        "action": "stop",
+        "observedAt": "2026-09-28T04:24:41.339Z"
+      },
+      {
+        "producer": "first",
+        "consumer": "beta",
+        "action": "stop",
+        "observedAt": "2026-09-28T04:24:58.799Z"
+      },
+      {
+        "producer": "first",
+        "consumer": "alpha",
+        "action": "stop",
+        "observedAt": "2026-09-28T04:24:58.799Z"
+      },
+      {
+        "producer": "second",
+        "consumer": "alpha",
+        "action": "stop",
+        "observedAt": "2026-09-28T04:25:20.556Z"
+      },
+      {
+        "producer": "second",
+        "consumer": "beta",
+        "action": "stop",
+        "observedAt": "2026-09-28T04:25:20.557Z"
+      }
+    ],
+    "producers": [
+      {
+        "producer": "first",
+        "samples": [
+          {
+            "skill": "renma-usage-alpha",
+            "providerSkill": "renma-usage-fixture_renma-usage-alpha",
+            "observedAt": "2026-09-28T04:24:47.433Z",
+            "elapsedMs": 9246,
+            "value": 1,
+            "aggregation": "delta",
+            "monotonic": true,
+            "startTimeUnixNano": "1790569486603770000",
+            "timeUnixNano": "1790569487432181000",
+            "extraDimensions": true,
+            "dimensions": {
+              "app.version": "0.157.1",
+              "auth_mode": "Chatgpt",
+              "model": "gpt-6-astra",
+              "model_slug": "gpt-6-astra",
+              "originator": "renma_usage_fixture",
+              "reasoning_effort": "medium",
+              "session_source": "vscode"
+            },
+            "unsupportedDimensionKinds": ["other"]
+          },
+          {
+            "skill": "renma-usage-beta",
+            "providerSkill": "renma-usage-fixture_renma-usage-beta",
+            "observedAt": "2026-09-28T04:24:55.457Z",
+            "elapsedMs": 17270,
+            "value": 1,
+            "aggregation": "delta",
+            "monotonic": true,
+            "startTimeUnixNano": "1790569494451895000",
+            "timeUnixNano": "1790569495456575000",
+            "extraDimensions": true,
+            "dimensions": {
+              "app.version": "0.157.1",
+              "auth_mode": "Chatgpt",
+              "model": "gpt-6-astra",
+              "model_slug": "gpt-6-astra",
+              "originator": "renma_usage_fixture",
+              "reasoning_effort": "medium",
+              "session_source": "vscode"
+            },
+            "unsupportedDimensionKinds": ["other"]
+          }
+        ],
+        "skills": [
+          {
+            "skill": "renma-usage-alpha",
+            "observed": true,
+            "firstObservedAt": "2026-09-28T04:24:47.433Z",
+            "lastReceivedAt": "2026-09-28T04:24:47.433Z",
+            "lastIncreaseObservedAt": "2026-09-28T04:24:47.433Z",
+            "receivedSamples": 1,
+            "providerCounterTotal": 1,
+            "deltaIntervalGapsObserved": false,
+            "coverage": "received-samples-only",
+            "countStatus": "single-producer-disjoint-delta-sum",
+            "injectionTime": "unsupported"
+          },
+          {
+            "skill": "renma-usage-beta",
+            "observed": true,
+            "firstObservedAt": "2026-09-28T04:24:55.457Z",
+            "lastReceivedAt": "2026-09-28T04:24:55.457Z",
+            "lastIncreaseObservedAt": "2026-09-28T04:24:55.457Z",
+            "receivedSamples": 1,
+            "providerCounterTotal": 1,
+            "deltaIntervalGapsObserved": false,
+            "coverage": "received-samples-only",
+            "countStatus": "single-producer-disjoint-delta-sum",
+            "injectionTime": "unsupported"
+          },
+          {
+            "skill": "renma-usage-dormant",
+            "observed": false,
+            "firstObservedAt": null,
+            "lastReceivedAt": null,
+            "lastIncreaseObservedAt": null,
+            "receivedSamples": 0,
+            "providerCounterTotal": null,
+            "deltaIntervalGapsObserved": null,
+            "coverage": "received-samples-only",
+            "countStatus": "no-sample",
+            "injectionTime": "unsupported"
+          }
+        ],
+        "acknowledged": {
+          "alpha": 1,
+          "beta": 1
+        }
+      },
+      {
+        "producer": "second",
+        "samples": [
+          {
+            "skill": "renma-usage-alpha",
+            "providerSkill": "renma-usage-fixture_renma-usage-alpha",
+            "observedAt": "2026-09-28T04:24:47.578Z",
+            "elapsedMs": 9391,
+            "value": 1,
+            "aggregation": "delta",
+            "monotonic": true,
+            "startTimeUnixNano": "1790569487091507000",
+            "timeUnixNano": "1790569487577772000",
+            "extraDimensions": true,
+            "dimensions": {
+              "app.version": "0.157.1",
+              "auth_mode": "Chatgpt",
+              "model": "gpt-6-astra",
+              "model_slug": "gpt-6-astra",
+              "originator": "renma_usage_fixture",
+              "reasoning_effort": "medium",
+              "session_source": "vscode"
+            },
+            "unsupportedDimensionKinds": ["other"]
+          },
+          {
+            "skill": "renma-usage-beta",
+            "providerSkill": "renma-usage-fixture_renma-usage-beta",
+            "observedAt": "2026-09-28T04:24:54.597Z",
+            "elapsedMs": 16409,
+            "value": 1,
+            "aggregation": "delta",
+            "monotonic": true,
+            "startTimeUnixNano": "1790569493591310000",
+            "timeUnixNano": "1790569494596485000",
+            "extraDimensions": true,
+            "dimensions": {
+              "app.version": "0.157.1",
+              "auth_mode": "Chatgpt",
+              "model": "gpt-6-astra",
+              "model_slug": "gpt-6-astra",
+              "originator": "renma_usage_fixture",
+              "reasoning_effort": "medium",
+              "session_source": "vscode"
+            },
+            "unsupportedDimensionKinds": ["other"]
+          }
+        ],
+        "skills": [
+          {
+            "skill": "renma-usage-alpha",
+            "observed": true,
+            "firstObservedAt": "2026-09-28T04:24:47.578Z",
+            "lastReceivedAt": "2026-09-28T04:24:47.578Z",
+            "lastIncreaseObservedAt": "2026-09-28T04:24:47.578Z",
+            "receivedSamples": 1,
+            "providerCounterTotal": 1,
+            "deltaIntervalGapsObserved": false,
+            "coverage": "received-samples-only",
+            "countStatus": "single-producer-disjoint-delta-sum",
+            "injectionTime": "unsupported"
+          },
+          {
+            "skill": "renma-usage-beta",
+            "observed": true,
+            "firstObservedAt": "2026-09-28T04:24:54.597Z",
+            "lastReceivedAt": "2026-09-28T04:24:54.597Z",
+            "lastIncreaseObservedAt": "2026-09-28T04:24:54.597Z",
+            "receivedSamples": 1,
+            "providerCounterTotal": 1,
+            "deltaIntervalGapsObserved": false,
+            "coverage": "received-samples-only",
+            "countStatus": "single-producer-disjoint-delta-sum",
+            "injectionTime": "unsupported"
+          },
+          {
+            "skill": "renma-usage-dormant",
+            "observed": false,
+            "firstObservedAt": null,
+            "lastReceivedAt": null,
+            "lastIncreaseObservedAt": null,
+            "receivedSamples": 0,
+            "providerCounterTotal": null,
+            "deltaIntervalGapsObserved": null,
+            "coverage": "received-samples-only",
+            "countStatus": "no-sample",
+            "injectionTime": "unsupported"
+          }
+        ],
+        "acknowledged": {
+          "alpha": 1,
+          "beta": 1
+        }
+      },
+      {
+        "producer": "restarted",
+        "samples": [],
+        "skills": [
+          {
+            "skill": "renma-usage-alpha",
+            "observed": false,
+            "firstObservedAt": null,
+            "lastReceivedAt": null,
+            "lastIncreaseObservedAt": null,
+            "receivedSamples": 0,
+            "providerCounterTotal": null,
+            "deltaIntervalGapsObserved": null,
+            "coverage": "received-samples-only",
+            "countStatus": "no-sample",
+            "injectionTime": "unsupported"
+          },
+          {
+            "skill": "renma-usage-beta",
+            "observed": false,
+            "firstObservedAt": null,
+            "lastReceivedAt": null,
+            "lastIncreaseObservedAt": null,
+            "receivedSamples": 0,
+            "providerCounterTotal": null,
+            "deltaIntervalGapsObserved": null,
+            "coverage": "received-samples-only",
+            "countStatus": "no-sample",
+            "injectionTime": "unsupported"
+          },
+          {
+            "skill": "renma-usage-dormant",
+            "observed": false,
+            "firstObservedAt": null,
+            "lastReceivedAt": null,
+            "lastIncreaseObservedAt": null,
+            "receivedSamples": 0,
+            "providerCounterTotal": null,
+            "deltaIntervalGapsObserved": null,
+            "coverage": "received-samples-only",
+            "countStatus": "no-sample",
+            "injectionTime": "unsupported"
+          }
+        ],
+        "acknowledged": {
+          "alpha": 0,
+          "beta": 0
+        }
+      }
+    ]
+  },
+  "scope": "owned-loopback-fixture-not-authenticated-production-collector"
+}

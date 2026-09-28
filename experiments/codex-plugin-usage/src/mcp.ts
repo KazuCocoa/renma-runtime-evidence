@@ -5,6 +5,7 @@ import { createUsageCollector } from "./collector.js";
 // Installed as the synthetic plugin's MCP server. It exposes no model-callable tools.
 const port = Number(process.argv[2]);
 const output = process.argv[3];
+const shared = process.argv[4] === "--shared";
 if (
   !Number.isInteger(port) ||
   port < 1024 ||
@@ -41,7 +42,24 @@ process.stdout.on("error", () => void stop());
 const deadline = setTimeout(() => void stop(), 900_000);
 deadline.unref();
 try {
-  collector = await createUsageCollector(port, persist);
+  if (shared) {
+    const response = await fetch(`http://127.0.0.1:${port}/health`, {
+      signal: AbortSignal.timeout(2000),
+    });
+    // This is a compatibility check for an owned fixture, not authentication.
+    let body = "";
+    if (!response.body) throw new Error("Shared receiver unavailable");
+    for await (const chunk of response.body) {
+      if (body.length + chunk.length > 256)
+        throw new Error("Invalid shared receiver response");
+      body += Buffer.from(chunk).toString("utf8");
+    }
+    if (
+      response.status !== 200 ||
+      body !== JSON.stringify({ service: "renma-usage-fixture", version: 1 })
+    )
+      throw new Error("Shared receiver unavailable");
+  } else collector = await createUsageCollector(port, persist);
 } catch (error) {
   const reason =
     error instanceof Error && "code" in error && error.code === "EADDRINUSE"

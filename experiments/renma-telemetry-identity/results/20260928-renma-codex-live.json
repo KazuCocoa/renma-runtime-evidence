@@ -1,0 +1,439 @@
+{
+  "schemaVersion": "renma.identity-evolution-experiment.v1",
+  "evidenceClass": "real-renma-catalog-and-git-on-authored-fixtures",
+  "renmaVersion": "0.39.2",
+  "cliEntryDigest": "sha256:f0aacb4c2d48310c9fc9b44229819771166a562394ee887f35bc89bdb9c8498b",
+  "nestedIdRecognized": false,
+  "canonicalMetadataKey": "metadata[renma.id]",
+  "observations": [
+    {
+      "deployment": "before",
+      "repository": "repository-a",
+      "explicitIdRecognized": true,
+      "sourcePathMatched": true,
+      "contentHashMatched": true,
+      "catalogExit": 0,
+      "gitCommit": "53ff2f9f1028211cc493e753c47ced80997359c0",
+      "packagedBytesMatch": true
+    },
+    {
+      "deployment": "before",
+      "repository": "repository-b",
+      "explicitIdRecognized": true,
+      "sourcePathMatched": true,
+      "contentHashMatched": true,
+      "catalogExit": 0,
+      "gitCommit": "9262db5d83361650f82f348c3d9990fe25d0d4d6",
+      "packagedBytesMatch": true
+    },
+    {
+      "deployment": "after",
+      "repository": "repository-a",
+      "explicitIdRecognized": true,
+      "sourcePathMatched": true,
+      "contentHashMatched": true,
+      "catalogExit": 0,
+      "gitCommit": "619201f997d3763420f972f899150c156fcab721",
+      "packagedBytesMatch": true
+    },
+    {
+      "deployment": "after",
+      "repository": "repository-b",
+      "explicitIdRecognized": true,
+      "sourcePathMatched": true,
+      "contentHashMatched": true,
+      "catalogExit": 0,
+      "gitCommit": "b31c6d9b9ffaa3038ed4e8e4c55b8e1895b78abd",
+      "packagedBytesMatch": true
+    }
+  ],
+  "manifest": [
+    {
+      "deployment": "before",
+      "repository": "repository-a",
+      "assetId": "skill.fixture-alpha",
+      "plugin": "renma-bundle",
+      "name": "renma-usage-alpha",
+      "version": "1.0.0",
+      "digest": "sha256:73eefb24ff46cb8fd42258466745ed00ddab308915cd594b1af7cfa82ad1834b",
+      "providerLabelCandidate": "renma-bundle_renma-usage-alpha"
+    },
+    {
+      "deployment": "before",
+      "repository": "repository-b",
+      "assetId": "skill.fixture-beta",
+      "plugin": "renma-bundle",
+      "name": "renma-usage-beta",
+      "version": "1.0.0",
+      "digest": "sha256:63dc6165c66b554e636ec7be585e57af05ccc95621d0884d16cc726f8b4aae35",
+      "providerLabelCandidate": "renma-bundle_renma-usage-beta"
+    },
+    {
+      "deployment": "after",
+      "repository": "repository-a",
+      "assetId": "skill.fixture-alpha",
+      "plugin": "renma-moved-bundle",
+      "name": "renma-renamed-alpha",
+      "version": "2.0.0",
+      "digest": "sha256:c3ff09618b1c61f8a0252c88972ab98b5500b731ff9633a8febee0b214c8c5af",
+      "providerLabelCandidate": "renma-moved-bundle_renma-renamed-alpha"
+    },
+    {
+      "deployment": "after",
+      "repository": "repository-b",
+      "assetId": "skill.fixture-beta",
+      "plugin": "renma-bundle",
+      "name": "renma-usage-beta",
+      "version": "2.0.0",
+      "digest": "sha256:b1760d1f66f57561a27711a685e9c3310d164bd41f31d42add3b53974180fd47",
+      "providerLabelCandidate": "renma-bundle_renma-usage-beta"
+    }
+  ],
+  "resolution": [
+    {
+      "deployment": "before",
+      "label": "renma-bundle_renma-usage-alpha",
+      "resolved": {
+        "assetId": "skill.fixture-alpha",
+        "repository": "repository-a",
+        "provenance": "packaging-manifest",
+        "injectedRevision": "unsupported"
+      }
+    },
+    {
+      "deployment": "before",
+      "label": "renma-bundle_renma-usage-beta",
+      "resolved": {
+        "assetId": "skill.fixture-beta",
+        "repository": "repository-b",
+        "provenance": "packaging-manifest",
+        "injectedRevision": "unsupported"
+      }
+    },
+    {
+      "deployment": "after",
+      "label": "renma-moved-bundle_renma-renamed-alpha",
+      "resolved": {
+        "assetId": "skill.fixture-alpha",
+        "repository": "repository-a",
+        "provenance": "packaging-manifest",
+        "injectedRevision": "unsupported"
+      }
+    },
+    {
+      "deployment": "after",
+      "label": "renma-bundle_renma-usage-beta",
+      "resolved": {
+        "assetId": "skill.fixture-beta",
+        "repository": "repository-b",
+        "provenance": "packaging-manifest",
+        "injectedRevision": "unsupported"
+      }
+    }
+  ],
+  "duplicateNameRejected": true,
+  "crossDeploymentLabelRejected": true,
+  "liveCodexRenamedLabel": "see-live-results",
+  "liveResults": [
+    {
+      "deployment": "before",
+      "codexVersion": "codex-cli 0.157.1",
+      "listing": [
+        {
+          "assetId": "skill.fixture-alpha",
+          "listedName": "renma-bundle:renma-usage-alpha",
+          "installedDigestVerified": true,
+          "enabled": true
+        },
+        {
+          "assetId": "skill.fixture-beta",
+          "listedName": "renma-bundle:renma-usage-beta",
+          "installedDigestVerified": true,
+          "enabled": true
+        }
+      ],
+      "turns": [
+        {
+          "requestedAssetId": "skill.fixture-alpha",
+          "status": "completed"
+        },
+        {
+          "requestedAssetId": "skill.fixture-beta",
+          "status": "completed"
+        }
+      ],
+      "telemetry": {
+        "schemaVersion": "renma.plugin-usage-observations.v1",
+        "startedAt": "2026-09-28T04:34:07.809Z",
+        "timeBasis": "collector-receipt-utc",
+        "producerScope": "one-owned-codex-process",
+        "requests": 9,
+        "rejectedRequests": 0,
+        "unknownSkillObserved": false,
+        "samples": [
+          {
+            "skill": "renma-usage-alpha",
+            "providerSkill": "renma-bundle_renma-usage-alpha",
+            "observedAt": "2026-09-28T04:34:11.069Z",
+            "elapsedMs": 3260,
+            "value": 1,
+            "aggregation": "delta",
+            "monotonic": true,
+            "startTimeUnixNano": "1790570050696933000",
+            "timeUnixNano": "1790570051067506000",
+            "extraDimensions": true,
+            "dimensions": {
+              "app.version": "0.157.1",
+              "auth_mode": "Chatgpt",
+              "model": "gpt-6-astra",
+              "model_slug": "gpt-6-astra",
+              "originator": "renma_usage_fixture",
+              "reasoning_effort": "medium",
+              "session_source": "vscode"
+            },
+            "unsupportedDimensionKinds": ["other"]
+          },
+          {
+            "skill": "renma-usage-beta",
+            "providerSkill": "renma-bundle_renma-usage-beta",
+            "observedAt": "2026-09-28T04:34:14.080Z",
+            "elapsedMs": 6271,
+            "value": 1,
+            "aggregation": "delta",
+            "monotonic": true,
+            "startTimeUnixNano": "1790570053073749000",
+            "timeUnixNano": "1790570054078916000",
+            "extraDimensions": true,
+            "dimensions": {
+              "app.version": "0.157.1",
+              "auth_mode": "Chatgpt",
+              "model": "gpt-6-astra",
+              "model_slug": "gpt-6-astra",
+              "originator": "renma_usage_fixture",
+              "reasoning_effort": "medium",
+              "session_source": "vscode"
+            },
+            "unsupportedDimensionKinds": ["other"]
+          }
+        ],
+        "skills": [
+          {
+            "skill": "renma-usage-alpha",
+            "observed": true,
+            "firstObservedAt": "2026-09-28T04:34:11.069Z",
+            "lastReceivedAt": "2026-09-28T04:34:11.069Z",
+            "lastIncreaseObservedAt": "2026-09-28T04:34:11.069Z",
+            "receivedSamples": 1,
+            "providerCounterTotal": 1,
+            "deltaIntervalGapsObserved": false,
+            "coverage": "received-samples-only",
+            "countStatus": "single-producer-disjoint-delta-sum",
+            "injectionTime": "unsupported"
+          },
+          {
+            "skill": "renma-usage-beta",
+            "observed": true,
+            "firstObservedAt": "2026-09-28T04:34:14.080Z",
+            "lastReceivedAt": "2026-09-28T04:34:14.080Z",
+            "lastIncreaseObservedAt": "2026-09-28T04:34:14.080Z",
+            "receivedSamples": 1,
+            "providerCounterTotal": 1,
+            "deltaIntervalGapsObserved": false,
+            "coverage": "received-samples-only",
+            "countStatus": "single-producer-disjoint-delta-sum",
+            "injectionTime": "unsupported"
+          },
+          {
+            "skill": "renma-usage-dormant",
+            "observed": false,
+            "firstObservedAt": null,
+            "lastReceivedAt": null,
+            "lastIncreaseObservedAt": null,
+            "receivedSamples": 0,
+            "providerCounterTotal": null,
+            "deltaIntervalGapsObserved": null,
+            "coverage": "received-samples-only",
+            "countStatus": "no-sample",
+            "injectionTime": "unsupported"
+          }
+        ]
+      },
+      "joins": [
+        {
+          "providerLabel": "renma-bundle_renma-usage-alpha",
+          "normalizedFixtureSkill": "renma-usage-alpha",
+          "resolved": {
+            "assetId": "skill.fixture-alpha",
+            "repository": "repository-a",
+            "provenance": "packaging-manifest",
+            "injectedRevision": "unsupported"
+          }
+        },
+        {
+          "providerLabel": "renma-bundle_renma-usage-beta",
+          "normalizedFixtureSkill": "renma-usage-beta",
+          "resolved": {
+            "assetId": "skill.fixture-beta",
+            "repository": "repository-b",
+            "provenance": "packaging-manifest",
+            "injectedRevision": "unsupported"
+          }
+        }
+      ],
+      "deploymentBinding": "wrapper-frozen-manifest-before-process-launch",
+      "installedByCli": true,
+      "installationScope": "fresh-isolated-home-per-deployment-not-hot-update"
+    },
+    {
+      "deployment": "after",
+      "codexVersion": "codex-cli 0.157.1",
+      "listing": [
+        {
+          "assetId": "skill.fixture-alpha",
+          "listedName": "renma-moved-bundle:renma-renamed-alpha",
+          "installedDigestVerified": true,
+          "enabled": true
+        },
+        {
+          "assetId": "skill.fixture-beta",
+          "listedName": "renma-bundle:renma-usage-beta",
+          "installedDigestVerified": true,
+          "enabled": true
+        }
+      ],
+      "turns": [
+        {
+          "requestedAssetId": "skill.fixture-alpha",
+          "status": "completed"
+        },
+        {
+          "requestedAssetId": "skill.fixture-beta",
+          "status": "completed"
+        }
+      ],
+      "telemetry": {
+        "schemaVersion": "renma.plugin-usage-observations.v1",
+        "startedAt": "2026-09-28T04:34:17.659Z",
+        "timeBasis": "collector-receipt-utc",
+        "producerScope": "one-owned-codex-process",
+        "requests": 7,
+        "rejectedRequests": 0,
+        "unknownSkillObserved": false,
+        "samples": [
+          {
+            "skill": "renma-usage-alpha",
+            "providerSkill": "renma-moved-bundle_renma-renamed-alpha",
+            "observedAt": "2026-09-28T04:34:20.856Z",
+            "elapsedMs": 3197,
+            "value": 1,
+            "aggregation": "delta",
+            "monotonic": true,
+            "startTimeUnixNano": "1790570060469962000",
+            "timeUnixNano": "1790570060854766000",
+            "extraDimensions": true,
+            "dimensions": {
+              "app.version": "0.157.1",
+              "auth_mode": "Chatgpt",
+              "model": "gpt-6-astra",
+              "model_slug": "gpt-6-astra",
+              "originator": "renma_usage_fixture",
+              "reasoning_effort": "medium",
+              "session_source": "vscode"
+            },
+            "unsupportedDimensionKinds": ["other"]
+          },
+          {
+            "skill": "renma-usage-beta",
+            "providerSkill": "renma-bundle_renma-usage-beta",
+            "observedAt": "2026-09-28T04:34:23.866Z",
+            "elapsedMs": 6207,
+            "value": 1,
+            "aggregation": "delta",
+            "monotonic": true,
+            "startTimeUnixNano": "1790570062862971000",
+            "timeUnixNano": "1790570063864523000",
+            "extraDimensions": true,
+            "dimensions": {
+              "app.version": "0.157.1",
+              "auth_mode": "Chatgpt",
+              "model": "gpt-6-astra",
+              "model_slug": "gpt-6-astra",
+              "originator": "renma_usage_fixture",
+              "reasoning_effort": "medium",
+              "session_source": "vscode"
+            },
+            "unsupportedDimensionKinds": ["other"]
+          }
+        ],
+        "skills": [
+          {
+            "skill": "renma-usage-alpha",
+            "observed": true,
+            "firstObservedAt": "2026-09-28T04:34:20.856Z",
+            "lastReceivedAt": "2026-09-28T04:34:20.856Z",
+            "lastIncreaseObservedAt": "2026-09-28T04:34:20.856Z",
+            "receivedSamples": 1,
+            "providerCounterTotal": 1,
+            "deltaIntervalGapsObserved": false,
+            "coverage": "received-samples-only",
+            "countStatus": "single-producer-disjoint-delta-sum",
+            "injectionTime": "unsupported"
+          },
+          {
+            "skill": "renma-usage-beta",
+            "observed": true,
+            "firstObservedAt": "2026-09-28T04:34:23.866Z",
+            "lastReceivedAt": "2026-09-28T04:34:23.866Z",
+            "lastIncreaseObservedAt": "2026-09-28T04:34:23.866Z",
+            "receivedSamples": 1,
+            "providerCounterTotal": 1,
+            "deltaIntervalGapsObserved": false,
+            "coverage": "received-samples-only",
+            "countStatus": "single-producer-disjoint-delta-sum",
+            "injectionTime": "unsupported"
+          },
+          {
+            "skill": "renma-usage-dormant",
+            "observed": false,
+            "firstObservedAt": null,
+            "lastReceivedAt": null,
+            "lastIncreaseObservedAt": null,
+            "receivedSamples": 0,
+            "providerCounterTotal": null,
+            "deltaIntervalGapsObserved": null,
+            "coverage": "received-samples-only",
+            "countStatus": "no-sample",
+            "injectionTime": "unsupported"
+          }
+        ]
+      },
+      "joins": [
+        {
+          "providerLabel": "renma-moved-bundle_renma-renamed-alpha",
+          "normalizedFixtureSkill": "renma-usage-alpha",
+          "resolved": {
+            "assetId": "skill.fixture-alpha",
+            "repository": "repository-a",
+            "provenance": "packaging-manifest",
+            "injectedRevision": "unsupported"
+          }
+        },
+        {
+          "providerLabel": "renma-bundle_renma-usage-beta",
+          "normalizedFixtureSkill": "renma-usage-beta",
+          "resolved": {
+            "assetId": "skill.fixture-beta",
+            "repository": "repository-b",
+            "provenance": "packaging-manifest",
+            "injectedRevision": "unsupported"
+          }
+        }
+      ],
+      "deploymentBinding": "wrapper-frozen-manifest-before-process-launch",
+      "installedByCli": true,
+      "installationScope": "fresh-isolated-home-per-deployment-not-hot-update"
+    }
+  ],
+  "injectedRevision": "unsupported",
+  "packagingOwner": "experiment-wrapper-not-renma"
+}
