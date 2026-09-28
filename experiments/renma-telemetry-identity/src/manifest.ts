@@ -11,6 +11,7 @@ export interface Mapping {
 export function manifest(rows: readonly Mapping[]) {
   const labels = new Set<string>(),
     ids = new Set<string>();
+  const repositories = new Map<string, Mapping["repository"]>();
   for (const row of rows) {
     if (
       !/^[a-z0-9][a-z0-9._-]{0,79}$/.test(row.assetId) ||
@@ -22,6 +23,11 @@ export function manifest(rows: readonly Mapping[]) {
       throw new Error("Invalid manifest field");
     const label = `${row.deployment}:${row.plugin}_${row.name}`;
     const id = `${row.deployment}:${row.plugin}:${row.assetId}`;
+    const globalId = `${row.deployment}:${row.assetId}`;
+    const repository = repositories.get(globalId);
+    if (repository && repository !== row.repository)
+      throw new Error("Ambiguous asset repository");
+    repositories.set(globalId, row.repository);
     if (labels.has(label) || ids.has(id))
       throw new Error("Ambiguous deployment identity");
     labels.add(label);

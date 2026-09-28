@@ -253,3 +253,23 @@ test("disjoint delta intervals can aggregate over omitted dimensions; ambiguous 
   );
   assert.equal(summarize([a, b, a])[0]!.providerCounterTotal, null);
 });
+
+test("explicit deployment aliases preserve actual provider labels and reject other deployments", () => {
+  const label = "renma-moved-bundle_renma-renamed-alpha";
+  const aliases = new Map([[label, "renma-usage-alpha" as const]]);
+  const p = payload(1, {
+    attributes: [
+      { key: "skill", value: { stringValue: label } },
+      { key: "status", value: { stringValue: "ok" } },
+    ],
+  });
+  const r = reduceMetrics(p, time, 1, aliases);
+  assert.equal(r.samples[0]!.providerSkill, label);
+  assert.equal(r.samples[0]!.skill, "renma-usage-alpha");
+  assert.equal(
+    reduceMetrics(payload(), time, 1, aliases).unknownSkillObserved,
+    true,
+  );
+  assert.equal(reduceMetrics(p, time, 1).samples.length, 0);
+  assert.ok(!JSON.stringify(r).includes("SECRET"));
+});

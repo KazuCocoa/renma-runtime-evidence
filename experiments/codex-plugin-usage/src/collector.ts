@@ -91,6 +91,7 @@ export function reduceMetrics(
   input: unknown,
   observedAt: string,
   elapsedMs: number,
+  labelAliases?: ReadonlyMap<string, Skill>,
 ): {
   samples: Sample[];
   unknownSkillObserved: boolean;
@@ -117,12 +118,16 @@ export function reduceMetrics(
           if (skills.length !== 1 || statuses.length !== 1)
             throw new Error("Invalid target attributes");
           const providerSkill = object(skills[0]!.value)?.stringValue;
-          const skill = SKILLS.find(
-            (name) =>
-              providerSkill === name ||
-              providerSkill === `renma-usage-fixture:${name}` ||
-              providerSkill === `renma-usage-fixture_${name}`,
-          );
+          const skill = labelAliases
+            ? labelAliases.get(
+                typeof providerSkill === "string" ? providerSkill : "",
+              )
+            : SKILLS.find(
+                (name) =>
+                  providerSkill === name ||
+                  providerSkill === `renma-usage-fixture:${name}` ||
+                  providerSkill === `renma-usage-fixture_${name}`,
+              );
           if (!skill) {
             unknownSkillObserved = true;
             continue;
@@ -332,7 +337,9 @@ export async function createUsageCollector(
   port = 0,
   changed: () => void = () => {},
   sharedHealth = false,
+  labelAliases?: ReadonlyMap<string, Skill>,
 ) {
+  const aliases = labelAliases ? new Map(labelAliases) : undefined;
   const samples: Sample[] = [];
   const started = performance.now();
   const startedAt = new Date().toISOString();
@@ -366,6 +373,7 @@ export async function createUsageCollector(
         JSON.parse(Buffer.concat(chunks).toString("utf8")),
         observedAt,
         elapsedMs,
+        aliases,
       );
       if (samples.length + reduced.samples.length > 256)
         throw new Error("Sample limit");

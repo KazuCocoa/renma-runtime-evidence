@@ -21,6 +21,10 @@ metadata:
 
 The earlier synthetic Skill used nested `metadata: { renma: { id: ... } }`. Actual Renma 0.39.2 did **not** recognize that as the explicit asset ID. Historical usage reports remain valid as manually assigned wrapper mappings; they did not establish Renma metadata extraction. The new report does establish extraction via the actual catalog for the canonical form.
 
-## Runtime boundary still to verify
+## Actual Codex integration
 
-The labels in this manifest experiment are **candidates constructed by the packaging wrapper**, based on the label shape seen in earlier actual Codex runs. This experiment has not yet installed the renamed/moved bundles and observed their live Codex labels. That remaining integration check is tracked in the follow-up ledger. Even after such a check, a label cannot prove injected file revision; old/new versions using the same name require external deployment binding. An asset ID must be governed for uniqueness across repositories if it is to be used as a global portfolio identity.
+`results/20260928-renma-codex-live.json` repeats actual Renma cataloging and Git changes, then installs the resulting bundles with CLI 0.157.1 into fresh isolated homes for each deployment. It verifies installed digests, enabled listings and plugin ownership, completes four model turns with the existing ChatGPT login, and captures real provider labels. Each deployment received alpha=1 and beta=1. The moved/renamed alpha label `renma-moved-bundle_renma-renamed-alpha` resolved to the original `skill.fixture-alpha`; beta retained its label and ID across the version change.
+
+To reproduce, append `--use-chatgpt-login --allow-codex-analytics` to the command above. Without both flags this runner performs only local Renma/Git work. Each collector uses an explicit deployment label allowlist; original provider labels are retained alongside normalized fixture aliases. The mapping is frozen before the Codex process launches.
+
+The integration covers fresh installations of both revisions, not an in-place hot update of an already-running thread. A label still cannot prove injected file revision; old/new versions using the same name require external deployment binding. An asset ID must be governed for uniqueness across repositories if it is to be used as a global portfolio identity.

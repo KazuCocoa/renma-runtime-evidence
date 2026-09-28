@@ -11,6 +11,8 @@ import { join, isAbsolute } from "node:path";
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { manifest, type Mapping } from "./manifest.js";
+import { liveDeployments } from "./live.js";
+import { requireOptIn } from "../../codex-model-freshness/src/contract.js";
 const hash = (s: string | Buffer) =>
   `sha256:${createHash("sha256").update(s).digest("hex")}`;
 const obj = (v: unknown): Record<string, unknown> | undefined =>
@@ -18,12 +20,14 @@ const obj = (v: unknown): Record<string, unknown> | undefined =>
     ? (v as Record<string, unknown>)
     : undefined;
 async function run() {
-  const [flag, cli] = process.argv.slice(2);
+  const [flag, cli, ...consent] = process.argv.slice(2);
+  const live = consent.length > 0;
+  if (live) requireOptIn(consent);
   if (
     flag !== "--renma-cli" ||
     !cli ||
     !isAbsolute(cli) ||
-    process.argv.length !== 4
+    (!live && process.argv.length !== 4)
   )
     throw new Error("Explicit Renma CLI path required");
   const root = await mkdtemp(join(tmpdir(), "renma-identity-"));
@@ -190,6 +194,7 @@ async function run() {
     } catch {
       duplicateNameRejected = true;
     }
+    const liveResults = live ? await liveDeployments(root, rows) : null;
     return {
       schemaVersion: "renma.identity-evolution-experiment.v1",
       evidenceClass: "real-renma-catalog-and-git-on-authored-fixtures",
@@ -204,7 +209,8 @@ async function run() {
       crossDeploymentLabelRejected:
         mapping.resolve("after", mapping.rows[0]!.providerLabelCandidate) ===
         null,
-      liveCodexRenamedLabel: "not-tested",
+      liveCodexRenamedLabel: live ? "see-live-results" : "not-tested",
+      liveResults,
       injectedRevision: "unsupported",
       packagingOwner: "experiment-wrapper-not-renma",
     };

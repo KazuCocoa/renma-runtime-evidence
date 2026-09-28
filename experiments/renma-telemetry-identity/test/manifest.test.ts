@@ -61,6 +61,19 @@ test("same plugin/name in different repositories cannot silently select an asset
       ]),
     /Ambiguous/,
   );
+  assert.throws(
+    () =>
+      manifest([
+        row,
+        {
+          ...row,
+          repository: "repository-b",
+          plugin: "other-bundle",
+          name: "beta",
+        },
+      ]),
+    /Ambiguous/,
+  );
   const m = manifest([
     row,
     { ...row, deployment: "after", assetId: "skill.replacement" },
@@ -71,4 +84,63 @@ test("same plugin/name in different repositories cannot silently select an asset
     "skill.replacement",
   );
   assert.equal(m.resolve("before", "unknown"), null);
+});
+
+test("actual installed before/after Codex labels join the IDs verified by actual Renma", async () => {
+  const r = JSON.parse(
+    await readFile(
+      "experiments/renma-telemetry-identity/results/20260928-renma-codex-live.json",
+      "utf8",
+    ),
+  );
+  assert.equal(r.liveResults.length, 2);
+  const m = manifest(r.manifest);
+  for (const phase of r.liveResults) {
+    assert.equal(phase.installedByCli, true);
+    assert.equal(phase.listing.length, 2);
+    assert.ok(
+      phase.listing.every(
+        (s: { installedDigestVerified: boolean; enabled: boolean }) =>
+          s.installedDigestVerified && s.enabled,
+      ),
+    );
+    assert.equal(phase.turns.length, 2);
+    assert.ok(
+      phase.turns.every((t: { status: string }) => t.status === "completed"),
+    );
+    assert.equal(phase.telemetry.rejectedRequests, 0);
+    assert.equal(phase.telemetry.unknownSkillObserved, false);
+    assert.deepEqual(
+      phase.telemetry.skills.map(
+        (s: { providerCounterTotal: number | null }) => s.providerCounterTotal,
+      ),
+      [1, 1, null],
+    );
+    assert.equal(phase.joins.length, 2);
+    for (const join of phase.joins) {
+      assert.deepEqual(
+        join.resolved,
+        m.resolve(phase.deployment, join.providerLabel),
+      );
+      assert.ok(
+        phase.telemetry.samples.some(
+          (s: { providerSkill: string }) =>
+            s.providerSkill === join.providerLabel,
+        ),
+      );
+      assert.equal(join.resolved.injectedRevision, "unsupported");
+    }
+    assert.deepEqual(
+      phase.joins
+        .map((j: { resolved: { assetId: string } }) => j.resolved.assetId)
+        .sort(),
+      ["skill.fixture-alpha", "skill.fixture-beta"],
+    );
+  }
+  assert.ok(
+    r.liveResults[1].joins.some(
+      (j: { providerLabel: string }) =>
+        j.providerLabel === "renma-moved-bundle_renma-renamed-alpha",
+    ),
+  );
 });
