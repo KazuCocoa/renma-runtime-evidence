@@ -1,0 +1,21 @@
+{
+  "evidenceClass": "local-generated-protocol-inspection",
+  "codexVersion": "0.159.2",
+  "notificationCandidates": {
+    "skills/changed": true,
+    "skill/injected": false,
+    "skills/injected": false,
+    "skill/loaded": false,
+    "hook/started": true,
+    "hook/completed": true
+  },
+  "hookCandidates": {
+    "preToolUse": true,
+    "postToolUse": true,
+    "sessionStart": true,
+    "stop": true,
+    "skillInjected": false,
+    "skillLoaded": false
+  },
+  "boundary": "Presence/absence of these exact names only; not an exhaustive undocumented-runtime audit."
+}

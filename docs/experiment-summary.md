@@ -64,3 +64,7 @@ Repository-wide name uniqueness is therefore not established as necessary. The d
 ## Plugin-owned observation of model-selected Skill reads
 
 The [plugin Skill read follow-up](../experiments/codex-plugin-skill-read/README.md) removes explicit Skill/path selection from ordinary tasks: one plugin supplies same-name payment/mobile Skills and four distractors. Trusted plugin-bundled Hooks can record the model's tool-mediated read target as an allowlisted Skill name plus plugin-relative path, with exact authored-content return predicates and UTC timestamps. This is a separate evidence kind from the injection counter; direct injection can avoid tool reads. The report retains the initially untrusted Hook setup as a failed control and explains the deployment trust requirement.
+
+## Same-session injection attribution and plugin feasibility
+
+The [same-session follow-up](../experiments/codex-plugin-session-attribution/README.md) compares native OTel and trusted bundled Hooks with seven turns in each of two persistent threads: duplicate names versus unique names inside one six-Skill plugin. It separates initial selection, reuse, forced rereading, and direct single/multiple injection. The feasibility report distinguishes uniquely resolving an asset from receiving a unique event per injection, documents required host exporter/Hook trust setup, and keeps direct injection counters separate from path-bearing read observations.

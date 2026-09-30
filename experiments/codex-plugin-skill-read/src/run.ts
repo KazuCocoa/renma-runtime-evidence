@@ -1,3 +1,4 @@
+import { reduceMetrics } from "../../codex-plugin-usage/src/collector.js";
 import { object } from "../../codex-model-freshness/src/contract.js";
 import {
   mkdir,
@@ -28,6 +29,7 @@ import {
   observer,
   type Asset,
 } from "../../codex-duplicate-skill-identity/src/evidence.js";
+const sessionMatrix = process.argv.includes("--session-matrix");
 const live = process.argv.includes("--live");
 const output = process.argv[process.argv.indexOf("--output") + 1];
 if (!process.argv.includes("--output") || !output)
@@ -39,7 +41,9 @@ const report: {
   turnsAttempted: number;
   results: unknown[];
 } = {
-  schema: "renma.plugin-skill-read.v1",
+  schema: sessionMatrix
+    ? "renma.plugin-session-attribution.v1"
+    : "renma.plugin-skill-read.v1",
   live,
   startedAtUTC: new Date().toISOString(),
   turnsAttempted: 0,
@@ -47,11 +51,15 @@ const report: {
 };
 const save = () => writeFile(output, JSON.stringify(report, null, 2) + "\n");
 async function run() {
-  for (const repetition of [1, 2])
-    for (const layout of ["one-plugin"] as const) {
+  for (const repetition of sessionMatrix ? [1] : [1, 2])
+    for (const layout of sessionMatrix
+      ? ["duplicate-names", "unique-names"]
+      : ["one-plugin"]) {
       const d = await isolate();
       let rpc: FixtureRpc | undefined;
       const samples: unknown[] = [];
+      const counterSamples: unknown[] = [];
+      const epoch = performance.now();
       let assets: Asset[] = [];
       const server = createServer((req, res) => {
         const chunks: Buffer[] = [];
@@ -70,6 +78,38 @@ async function run() {
                 : buf;
             const parsed: unknown = JSON.parse(body.toString());
             const projected = metricProjection(parsed, assets);
+            if (sessionMatrix) {
+              const aliases = new Map<
+                string,
+                "renma-usage-alpha" | "renma-usage-beta" | "renma-usage-dormant"
+              >();
+              for (const a of assets)
+                aliases.set(
+                  a.name.replace(":", "_"),
+                  layout === "unique-names"
+                    ? a.alias === "A"
+                      ? "renma-usage-alpha"
+                      : "renma-usage-beta"
+                    : "renma-usage-dormant",
+                );
+              const reduced = reduceMetrics(
+                parsed,
+                new Date().toISOString(),
+                performance.now() - epoch,
+                aliases,
+              );
+              if (counterSamples.length + reduced.samples.length > 10000)
+                throw new Error("Counter limit");
+              for (const { skill, ...sample } of reduced.samples)
+                counterSamples.push({
+                  ...sample,
+                  candidateAssets: assets
+                    .filter(
+                      (a) => a.name.replace(":", "_") === sample.providerSkill,
+                    )
+                    .map((a) => a.alias),
+                });
+            }
             if (samples.length + projected.length > 10000)
               throw new Error("Observation limit");
             for (const p of projected)
@@ -92,6 +132,7 @@ async function run() {
           d.codexHomeDirectory,
           d.rootDirectory,
         );
+        if (sessionMatrix) env.OTEL_METRIC_EXPORT_INTERVAL = "1000";
         const command = (args: string[]) => {
           const r = spawnSync("codex", args, {
             cwd: d.workspaceDirectory,
@@ -127,12 +168,18 @@ async function run() {
           const source = plugin
             ? join(d.homeDirectory, "plugins", plugin, "skills", rel)
             : join(d.workspaceDirectory, ".agents/skills", rel);
+          const skillName =
+            layout === "unique-names"
+              ? alias === "A"
+                ? "payment-review"
+                : "mobile-review"
+              : "code-review";
           const description =
             alias === "A"
               ? "Review payment transaction retry logic and duplicate-charge prevention. Use for payment idempotency questions."
               : "Review mobile application offline synchronization and conflicting edits. Use for mobile offline merge questions.";
           await mkdir(join(source, ".."), { recursive: true });
-          const content = `---\nname: code-review\ndescription: ${description}\nmetadata:\n  renma.id: experiment.${alias.toLowerCase()}.code-review\n---\n\nSynthetic fixture ${alias}. Give a concise review checklist for the requested domain. After reading these instructions, do not use more tools or access files.\n`;
+          const content = `---\nname: ${skillName}\ndescription: ${description}\nmetadata:\n  renma.id: experiment.${alias.toLowerCase()}.code-review\n---\n\nSynthetic fixture ${alias}. Give a concise review checklist for the requested domain. ${sessionMatrix ? "Do not modify files. Keep the review concise." : "After reading these instructions, do not use more tools or access files."}\n`;
           await writeFile(source, content);
           assets.push({
             alias,
@@ -145,7 +192,7 @@ async function run() {
                   rel,
                 )
               : source,
-            name: plugin ? `${plugin}:code-review` : "code-review",
+            name: plugin ? `${plugin}:${skillName}` : skillName,
             description,
             ...(plugin ? { pluginId: `${plugin}@personal` } : {}),
           });
@@ -411,43 +458,67 @@ async function run() {
           discovery,
           turns: [] as unknown[],
           samples,
+          ...(sessionMatrix
+            ? { counterSamples, threadScope: "one-thread-per-layout" }
+            : {}),
           events: obs.events,
         };
         report.results.push(row);
         await save();
         if (live) {
           let previousHookCount = 0;
-          for (const scenario of [
-            "payments",
-            "mobile",
-            "explicit-control",
-            "negative-control",
-          ] as const) {
+          const sharedThread = sessionMatrix
+            ? await rpc.startThread(d.workspaceDirectory)
+            : undefined;
+          const scenarios = sessionMatrix
+            ? [
+                "payments",
+                "mobile",
+                "reuse-payments",
+                "reread-both",
+                "explicit-control",
+                "explicit-b",
+                "explicit-both",
+              ]
+            : ["payments", "mobile", "explicit-control", "negative-control"];
+          for (const scenario of scenarios) {
             const a = assets[0]!;
-            if (report.turnsAttempted >= 8) throw new Error("Turn cap");
+            if (report.turnsAttempted >= (sessionMatrix ? 14 : 8))
+              throw new Error("Turn cap");
             report.turnsAttempted++;
             await save();
             const start = obs.events.length;
-            const thread = await rpc.startThread(d.workspaceDirectory);
+            const thread =
+              sharedThread ?? (await rpc.startThread(d.workspaceDirectory));
             let status = "failed";
             try {
               const text =
-                scenario === "payments"
-                  ? "Please review a payment retry design: a timeout makes the client retry the same charge. Give a brief checklist for avoiding duplicate charges."
-                  : scenario === "mobile"
-                    ? "Please review a mobile offline synchronization design: two devices edit the same record while disconnected. Give a brief checklist for resolving conflicting edits."
-                    : scenario === "negative-control"
-                      ? "What is 2 plus 2? Answer briefly; no tools are needed."
-                      : `$${a.name} Give a brief checklist.`;
+                scenario === "reuse-payments"
+                  ? "Using the payment review Skill we used earlier, give one additional check for retry safety."
+                  : scenario === "reread-both"
+                    ? "Read both the payment review and mobile synchronization Skill instruction files again, then give one check from each."
+                    : scenario === "payments"
+                      ? "Please review a payment retry design: a timeout makes the client retry the same charge. Give a brief checklist for avoiding duplicate charges."
+                      : scenario === "mobile"
+                        ? "Please review a mobile offline synchronization design: two devices edit the same record while disconnected. Give a brief checklist for resolving conflicting edits."
+                        : scenario === "negative-control"
+                          ? "What is 2 plus 2? Answer briefly; no tools are needed."
+                          : "Follow the attached Skill instructions and give a brief checklist.";
               status = await rpc.turn(thread, [
                 { type: "text", text },
                 ...(scenario === "explicit-control"
-                  ? [{ type: "skill", name: a.name, path: a.path }]
-                  : []),
+                  ? [assets[0]!]
+                  : scenario === "explicit-b"
+                    ? [assets[1]!]
+                    : scenario === "explicit-both"
+                      ? assets
+                      : []
+                ).map((a) => ({ type: "skill", name: a.name, path: a.path })),
               ]);
             } catch {
               /* finite failure retained */
             }
+            if (sessionMatrix) await delay(2200);
             let hooks: unknown[] = [];
             try {
               hooks = (await readFile(hookFile, "utf8"))
@@ -459,11 +530,13 @@ async function run() {
             row.turns.push({
               hooks: hooks.slice(previousHookCount),
               scenario,
-              selection:
-                scenario === "explicit-control"
-                  ? "explicit-name-and-path"
-                  : "plain-task-no-skill-name-or-path",
+              selection: scenario.startsWith("explicit-")
+                ? "explicit-name-and-path"
+                : "plain-task-no-skill-name-or-path",
               status,
+              ...(sessionMatrix
+                ? { counterSamplesReceivedSoFar: counterSamples.length }
+                : {}),
               eventStart: start,
               eventEnd: obs.events.length,
             });

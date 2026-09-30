@@ -68,3 +68,47 @@ test("hook distinguishes path reference from returned fixture and discards arbit
     await rm(root, { recursive: true, force: true });
   }
 });
+
+test("one tool result may contain two distinct same-plugin Skills", async () => {
+  const root = await realpath(
+    await mkdtemp(join(tmpdir(), "renma-hook-multiple-")),
+  );
+  try {
+    const bodies = [
+      "---\nname: payment-review\n---\nFixture A\n",
+      "---\nname: mobile-review\n---\nFixture B\n",
+    ];
+    const paths = [];
+    for (const [i, a] of ["a", "b"].entries()) {
+      const dir = join(root, "skills", a, "code-review");
+      await mkdir(dir, { recursive: true });
+      const file = join(dir, "SKILL.md");
+      await writeFile(file, bodies[i]!);
+      paths.push(file);
+    }
+    const file = join(root, "observations.jsonl");
+    const p = spawnSync(
+      process.execPath,
+      [resolve("experiments/codex-plugin-skill-read/src/observe.cjs"), file],
+      {
+        env: { PLUGIN_ROOT: root },
+        input: JSON.stringify({
+          hook_event_name: "PostToolUse",
+          tool_name: "Bash",
+          tool_input: { command: "cat " + paths.join(" ") },
+          tool_response: { output: bodies.join("\n") },
+        }),
+        encoding: "utf8",
+      },
+    );
+    assert.equal(p.status, 0);
+    const row = JSON.parse(await readFile(file, "utf8"));
+    assert.deepEqual(row.fullFixtureReturned, ["A", "B"]);
+    assert.deepEqual(
+      row.pathReferences.map((r: { name: string }) => r.name),
+      ["payment-review", "mobile-review"],
+    );
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});

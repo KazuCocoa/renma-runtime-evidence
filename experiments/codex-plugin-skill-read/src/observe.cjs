@@ -19,7 +19,13 @@ process.stdin.on("end", () => {
     const fixtures = ["A", "B"].map((alias) => {
       const relative = `skills/${alias.toLowerCase()}/code-review/SKILL.md`;
       const full = path.join(root, relative);
-      return { alias, relative, full, content: fs.readFileSync(full, "utf8") };
+      const content = fs.readFileSync(full, "utf8");
+      const name = content.startsWith("---\nname: payment-review\n")
+        ? "payment-review"
+        : content.startsWith("---\nname: mobile-review\n")
+          ? "mobile-review"
+          : "code-review";
+      return { alias, relative, full, content, name };
     });
     const strings = (x, depth = 0) =>
       depth > 8
@@ -42,7 +48,7 @@ process.stdin.on("end", () => {
         .filter((f) => args.some((t) => t.includes(f.full)))
         .map((f) => ({
           asset: f.alias,
-          name: "code-review",
+          name: f.name,
           relativePath: f.relative,
         })),
       fullFixtureReturned: fixtures

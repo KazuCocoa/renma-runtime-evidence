@@ -65,3 +65,7 @@ npm test
 The live runner caps each run at eight reserved model attempts. Failed setup and corrected runs are separate, totaling sixteen attempts for this follow-up. Re-running incurs new calls. Temporary runtime state is removed in cleanup. Tests verify that path references alone are not classified as returned Skill content and that private/unrecognized data does not survive the Hook projection.
 
 Official references: [Hooks](https://learn.chatgpt.com/docs/hooks) describes plugin roots, trust, tool inputs/results and coverage; [configuration schema](https://learn.chatgpt.com/docs/config-schema.json) defines per-Hook trusted hashes. Local protocol types were generated from the tested CLI to verify `hooks/list` fields.
+
+## Persistent-session follow-up
+
+The [same-session attribution experiment](../codex-plugin-session-attribution/README.md) runs several Skills, reuse, rereading and direct injection within each persistent thread, compares duplicate and unique names, and evaluates the deployable plugin contract alongside native OpenTelemetry. Run it with `--session-matrix`; the original mode above continues to use fresh threads per request.
