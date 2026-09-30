@@ -72,3 +72,7 @@ npm test
 The first command opens only a loopback receiver and uses no model. Live commands use the existing ChatGPT login and explicitly enable analytics in isolated CLI processes. Each main run reserves attempts before dispatch and caps them at 12; extended mode has one two-turn scenario. Re-running deliberately incurs new model calls. Saved result files are not merged across runs.
 
 Official protocol reference: [Codex app-server](https://learn.chatgpt.com/docs/app-server) documents path-bearing explicit Skill input and `skills/list`. Documentation explains the interface; the duplicate-name conclusions above come from the actual saved runs.
+
+## Natural-selection follow-up
+
+This experiment explicitly selected Skill paths. The subsequent [plugin-owned read observation](../codex-plugin-skill-read/README.md) instead supplies ordinary domain requests and lets the model choose among six bundled Skills. It tests plugin Hooks as a separate path-bearing read observation source; it does not add paths to `codex.skill.injected` or establish a universal injection callback.

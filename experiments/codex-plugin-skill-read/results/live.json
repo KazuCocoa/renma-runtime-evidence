@@ -1,0 +1,515 @@
+{
+  "schema": "renma.plugin-skill-read.v1",
+  "live": true,
+  "diagnosticExportersEnabled": false,
+  "startedAtUTC": "2026-09-30T06:35:39.731Z",
+  "turnsAttempted": 8,
+  "results": [
+    {
+      "repetition": 1,
+      "layout": "one-plugin",
+      "version": "codex-cli 0.159.2",
+      "discovery": [
+        {
+          "asset": "A",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        },
+        {
+          "asset": "B",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        }
+      ],
+      "turns": [
+        {
+          "hooks": [],
+          "scenario": "payments",
+          "selection": "plain-task-no-skill-name-or-path",
+          "status": "completed",
+          "eventStart": 0,
+          "eventEnd": 8
+        },
+        {
+          "hooks": [],
+          "scenario": "mobile",
+          "selection": "plain-task-no-skill-name-or-path",
+          "status": "completed",
+          "eventStart": 8,
+          "eventEnd": 16
+        },
+        {
+          "hooks": [],
+          "scenario": "explicit-control",
+          "selection": "explicit-name-and-path",
+          "status": "completed",
+          "eventStart": 16,
+          "eventEnd": 24
+        },
+        {
+          "hooks": [],
+          "scenario": "negative-control",
+          "selection": "plain-task-no-skill-name-or-path",
+          "status": "completed",
+          "eventStart": 24,
+          "eventEnd": 28
+        }
+      ],
+      "samples": [
+        {
+          "observedAtUTC": "2026-09-30T06:36:39.893Z",
+          "evidence": {
+            "providerLabel": "identity-shared_code-review",
+            "matchingAssets": ["A", "B"],
+            "attributeFields": ["skill", "status"],
+            "resourceFields": [],
+            "scopeFields": ["name"],
+            "value": 2
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:36:39.893Z",
+          "evidence": {
+            "providerLabel": "identity-shared_code-review",
+            "matchingAssets": ["A", "B"],
+            "attributeFields": ["skill", "status"],
+            "resourceFields": [],
+            "scopeFields": ["name"],
+            "value": 1
+          }
+        }
+      ],
+      "events": [
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "commandExecution",
+          "fields": ["pluginId", "source", "id", "status"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "commandExecution",
+          "fields": ["pluginId", "source", "id", "status"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "commandExecution",
+          "fields": ["pluginId", "source", "id", "status"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "commandExecution",
+          "fields": ["pluginId", "source", "id", "status"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "reasoning",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "reasoning",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        }
+      ]
+    },
+    {
+      "repetition": 2,
+      "layout": "one-plugin",
+      "version": "codex-cli 0.159.2",
+      "discovery": [
+        {
+          "asset": "A",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        },
+        {
+          "asset": "B",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        }
+      ],
+      "turns": [
+        {
+          "hooks": [],
+          "scenario": "payments",
+          "selection": "plain-task-no-skill-name-or-path",
+          "status": "completed",
+          "eventStart": 0,
+          "eventEnd": 8
+        },
+        {
+          "hooks": [],
+          "scenario": "mobile",
+          "selection": "plain-task-no-skill-name-or-path",
+          "status": "completed",
+          "eventStart": 8,
+          "eventEnd": 16
+        },
+        {
+          "hooks": [],
+          "scenario": "explicit-control",
+          "selection": "explicit-name-and-path",
+          "status": "completed",
+          "eventStart": 16,
+          "eventEnd": 24
+        },
+        {
+          "hooks": [],
+          "scenario": "negative-control",
+          "selection": "plain-task-no-skill-name-or-path",
+          "status": "completed",
+          "eventStart": 24,
+          "eventEnd": 28
+        }
+      ],
+      "samples": [
+        {
+          "observedAtUTC": "2026-09-30T06:37:55.393Z",
+          "evidence": {
+            "providerLabel": "identity-shared_code-review",
+            "matchingAssets": ["A", "B"],
+            "attributeFields": ["skill", "status"],
+            "resourceFields": [],
+            "scopeFields": ["name"],
+            "value": 2
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:37:55.393Z",
+          "evidence": {
+            "providerLabel": "identity-shared_code-review",
+            "matchingAssets": ["A", "B"],
+            "attributeFields": ["skill", "status"],
+            "resourceFields": [],
+            "scopeFields": ["name"],
+            "value": 1
+          }
+        }
+      ],
+      "events": [
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "commandExecution",
+          "fields": ["pluginId", "source", "id", "status"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "commandExecution",
+          "fields": ["pluginId", "source", "id", "status"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "commandExecution",
+          "fields": ["pluginId", "source", "id", "status"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "commandExecution",
+          "fields": ["pluginId", "source", "id", "status"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "reasoning",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "reasoning",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        }
+      ]
+    }
+  ]
+}

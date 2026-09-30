@@ -1,0 +1,148 @@
+{
+  "schema": "renma.plugin-skill-read.v1",
+  "live": false,
+  "startedAtUTC": "2026-09-30T06:39:08.931Z",
+  "turnsAttempted": 0,
+  "results": [
+    {
+      "hooksMetadata": [
+        {
+          "event": "preToolUse",
+          "enabled": true,
+          "trustStatus": "trusted"
+        },
+        {
+          "event": "postToolUse",
+          "enabled": true,
+          "trustStatus": "trusted"
+        },
+        {
+          "event": "sessionStart",
+          "enabled": true,
+          "trustStatus": "trusted"
+        },
+        {
+          "event": "stop",
+          "enabled": true,
+          "trustStatus": "trusted"
+        }
+      ],
+      "repetition": 1,
+      "layout": "one-plugin",
+      "version": "codex-cli 0.159.2",
+      "discovery": {
+        "targets": [
+          {
+            "asset": "A",
+            "matches": 1,
+            "fields": ["name", "path", "pluginId", "scope", "description"],
+            "nameMatches": true,
+            "descriptionMatches": true,
+            "enabled": true,
+            "pluginIdMatches": true
+          },
+          {
+            "asset": "B",
+            "matches": 1,
+            "fields": ["name", "path", "pluginId", "scope", "description"],
+            "nameMatches": true,
+            "descriptionMatches": true,
+            "enabled": true,
+            "pluginIdMatches": true
+          }
+        ],
+        "distractors": [
+          {
+            "name": "sql-tuning",
+            "found": true
+          },
+          {
+            "name": "accessibility",
+            "found": true
+          },
+          {
+            "name": "release-notes",
+            "found": true
+          },
+          {
+            "name": "image-layout",
+            "found": true
+          }
+        ]
+      },
+      "turns": [],
+      "samples": [],
+      "events": []
+    },
+    {
+      "hooksMetadata": [
+        {
+          "event": "preToolUse",
+          "enabled": true,
+          "trustStatus": "trusted"
+        },
+        {
+          "event": "postToolUse",
+          "enabled": true,
+          "trustStatus": "trusted"
+        },
+        {
+          "event": "sessionStart",
+          "enabled": true,
+          "trustStatus": "trusted"
+        },
+        {
+          "event": "stop",
+          "enabled": true,
+          "trustStatus": "trusted"
+        }
+      ],
+      "repetition": 2,
+      "layout": "one-plugin",
+      "version": "codex-cli 0.159.2",
+      "discovery": {
+        "targets": [
+          {
+            "asset": "A",
+            "matches": 1,
+            "fields": ["name", "path", "pluginId", "scope", "description"],
+            "nameMatches": true,
+            "descriptionMatches": true,
+            "enabled": true,
+            "pluginIdMatches": true
+          },
+          {
+            "asset": "B",
+            "matches": 1,
+            "fields": ["name", "path", "pluginId", "scope", "description"],
+            "nameMatches": true,
+            "descriptionMatches": true,
+            "enabled": true,
+            "pluginIdMatches": true
+          }
+        ],
+        "distractors": [
+          {
+            "name": "sql-tuning",
+            "found": true
+          },
+          {
+            "name": "accessibility",
+            "found": true
+          },
+          {
+            "name": "release-notes",
+            "found": true
+          },
+          {
+            "name": "image-layout",
+            "found": true
+          }
+        ]
+      },
+      "turns": [],
+      "samples": [],
+      "events": []
+    }
+  ]
+}
