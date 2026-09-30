@@ -1,0 +1,114 @@
+{
+  "evidenceClass": "derived-from-saved-allowlisted-runtime-observations",
+  "turnsAttempted": 14,
+  "results": [
+    {
+      "layout": "duplicate-names",
+      "turns": [
+        {
+          "scenario": "payments",
+          "status": "completed",
+          "returnedSkillObservations": ["A"]
+        },
+        {
+          "scenario": "mobile",
+          "status": "completed",
+          "returnedSkillObservations": ["B"]
+        },
+        {
+          "scenario": "reuse-payments",
+          "status": "completed",
+          "returnedSkillObservations": []
+        },
+        {
+          "scenario": "reread-both",
+          "status": "completed",
+          "returnedSkillObservations": ["A", "B"]
+        },
+        {
+          "scenario": "explicit-control",
+          "status": "completed",
+          "returnedSkillObservations": []
+        },
+        {
+          "scenario": "explicit-b",
+          "status": "completed",
+          "returnedSkillObservations": []
+        },
+        {
+          "scenario": "explicit-both",
+          "status": "completed",
+          "returnedSkillObservations": []
+        }
+      ],
+      "metrics": [
+        {
+          "providerLabel": "identity-shared_code-review",
+          "candidateAssets": ["A", "B"],
+          "receivedCounterTotal": 8,
+          "receivedSamples": 6,
+          "intervalGaps": true,
+          "coverage": "received-samples-only"
+        }
+      ]
+    },
+    {
+      "layout": "unique-names",
+      "turns": [
+        {
+          "scenario": "payments",
+          "status": "completed",
+          "returnedSkillObservations": ["A"]
+        },
+        {
+          "scenario": "mobile",
+          "status": "completed",
+          "returnedSkillObservations": ["B"]
+        },
+        {
+          "scenario": "reuse-payments",
+          "status": "completed",
+          "returnedSkillObservations": []
+        },
+        {
+          "scenario": "reread-both",
+          "status": "completed",
+          "returnedSkillObservations": ["B", "A"]
+        },
+        {
+          "scenario": "explicit-control",
+          "status": "completed",
+          "returnedSkillObservations": []
+        },
+        {
+          "scenario": "explicit-b",
+          "status": "completed",
+          "returnedSkillObservations": []
+        },
+        {
+          "scenario": "explicit-both",
+          "status": "completed",
+          "returnedSkillObservations": []
+        }
+      ],
+      "metrics": [
+        {
+          "providerLabel": "identity-shared_payment-review",
+          "candidateAssets": ["A"],
+          "receivedCounterTotal": 4,
+          "receivedSamples": 4,
+          "intervalGaps": true,
+          "coverage": "received-samples-only"
+        },
+        {
+          "providerLabel": "identity-shared_mobile-review",
+          "candidateAssets": ["B"],
+          "receivedCounterTotal": 4,
+          "receivedSamples": 4,
+          "intervalGaps": true,
+          "coverage": "received-samples-only"
+        }
+      ]
+    }
+  ]
+}

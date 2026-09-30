@@ -1,0 +1,807 @@
+{
+  "schema": "renma.plugin-skill-read.v1",
+  "live": true,
+  "diagnosticExportersEnabled": false,
+  "startedAtUTC": "2026-09-30T06:38:28.688Z",
+  "turnsAttempted": 8,
+  "results": [
+    {
+      "hooksMetadata": [
+        {
+          "event": "preToolUse",
+          "enabled": true,
+          "trustStatus": "trusted"
+        },
+        {
+          "event": "postToolUse",
+          "enabled": true,
+          "trustStatus": "trusted"
+        },
+        {
+          "event": "sessionStart",
+          "enabled": true,
+          "trustStatus": "trusted"
+        },
+        {
+          "event": "stop",
+          "enabled": true,
+          "trustStatus": "trusted"
+        }
+      ],
+      "repetition": 1,
+      "layout": "one-plugin",
+      "version": "codex-cli 0.159.2",
+      "discovery": [
+        {
+          "asset": "A",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        },
+        {
+          "asset": "B",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        }
+      ],
+      "turns": [
+        {
+          "hooks": [
+            {
+              "event": "SessionStart",
+              "observedAtUTC": "2026-09-30T06:38:31.008Z",
+              "pluginRootAvailable": true,
+              "tool": "other",
+              "pathReferences": [],
+              "fullFixtureReturned": []
+            },
+            {
+              "event": "PreToolUse",
+              "observedAtUTC": "2026-09-30T06:38:38.576Z",
+              "pluginRootAvailable": true,
+              "tool": "Bash",
+              "pathReferences": [
+                {
+                  "asset": "A",
+                  "name": "code-review",
+                  "relativePath": "skills/a/code-review/SKILL.md"
+                }
+              ],
+              "fullFixtureReturned": []
+            },
+            {
+              "event": "PostToolUse",
+              "observedAtUTC": "2026-09-30T06:38:38.641Z",
+              "pluginRootAvailable": true,
+              "tool": "Bash",
+              "pathReferences": [
+                {
+                  "asset": "A",
+                  "name": "code-review",
+                  "relativePath": "skills/a/code-review/SKILL.md"
+                }
+              ],
+              "fullFixtureReturned": ["A"]
+            },
+            {
+              "event": "Stop",
+              "observedAtUTC": "2026-09-30T06:38:47.402Z",
+              "pluginRootAvailable": true,
+              "tool": "other",
+              "pathReferences": [],
+              "fullFixtureReturned": []
+            }
+          ],
+          "scenario": "payments",
+          "selection": "plain-task-no-skill-name-or-path",
+          "status": "completed",
+          "eventStart": 0,
+          "eventEnd": 8
+        },
+        {
+          "hooks": [
+            {
+              "event": "SessionStart",
+              "observedAtUTC": "2026-09-30T06:38:48.579Z",
+              "pluginRootAvailable": true,
+              "tool": "other",
+              "pathReferences": [],
+              "fullFixtureReturned": []
+            },
+            {
+              "event": "PreToolUse",
+              "observedAtUTC": "2026-09-30T06:38:57.626Z",
+              "pluginRootAvailable": true,
+              "tool": "Bash",
+              "pathReferences": [
+                {
+                  "asset": "B",
+                  "name": "code-review",
+                  "relativePath": "skills/b/code-review/SKILL.md"
+                }
+              ],
+              "fullFixtureReturned": []
+            },
+            {
+              "event": "PostToolUse",
+              "observedAtUTC": "2026-09-30T06:38:57.693Z",
+              "pluginRootAvailable": true,
+              "tool": "Bash",
+              "pathReferences": [
+                {
+                  "asset": "B",
+                  "name": "code-review",
+                  "relativePath": "skills/b/code-review/SKILL.md"
+                }
+              ],
+              "fullFixtureReturned": ["B"]
+            },
+            {
+              "event": "Stop",
+              "observedAtUTC": "2026-09-30T06:39:09.990Z",
+              "pluginRootAvailable": true,
+              "tool": "other",
+              "pathReferences": [],
+              "fullFixtureReturned": []
+            }
+          ],
+          "scenario": "mobile",
+          "selection": "plain-task-no-skill-name-or-path",
+          "status": "completed",
+          "eventStart": 8,
+          "eventEnd": 16
+        },
+        {
+          "hooks": [
+            {
+              "event": "SessionStart",
+              "observedAtUTC": "2026-09-30T06:39:11.672Z",
+              "pluginRootAvailable": true,
+              "tool": "other",
+              "pathReferences": [],
+              "fullFixtureReturned": []
+            },
+            {
+              "event": "Stop",
+              "observedAtUTC": "2026-09-30T06:39:21.826Z",
+              "pluginRootAvailable": true,
+              "tool": "other",
+              "pathReferences": [],
+              "fullFixtureReturned": []
+            }
+          ],
+          "scenario": "explicit-control",
+          "selection": "explicit-name-and-path",
+          "status": "completed",
+          "eventStart": 16,
+          "eventEnd": 24
+        },
+        {
+          "hooks": [
+            {
+              "event": "SessionStart",
+              "observedAtUTC": "2026-09-30T06:39:22.868Z",
+              "pluginRootAvailable": true,
+              "tool": "other",
+              "pathReferences": [],
+              "fullFixtureReturned": []
+            },
+            {
+              "event": "Stop",
+              "observedAtUTC": "2026-09-30T06:39:25.308Z",
+              "pluginRootAvailable": true,
+              "tool": "other",
+              "pathReferences": [],
+              "fullFixtureReturned": []
+            }
+          ],
+          "scenario": "negative-control",
+          "selection": "plain-task-no-skill-name-or-path",
+          "status": "completed",
+          "eventStart": 24,
+          "eventEnd": 28
+        }
+      ],
+      "samples": [
+        {
+          "observedAtUTC": "2026-09-30T06:39:28.962Z",
+          "evidence": {
+            "providerLabel": "identity-shared_code-review",
+            "matchingAssets": ["A", "B"],
+            "attributeFields": ["skill", "status"],
+            "resourceFields": [],
+            "scopeFields": ["name"],
+            "value": 1
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:39:28.962Z",
+          "evidence": {
+            "providerLabel": "identity-shared_code-review",
+            "matchingAssets": ["A", "B"],
+            "attributeFields": ["skill", "status"],
+            "resourceFields": [],
+            "scopeFields": ["name"],
+            "value": 2
+          }
+        }
+      ],
+      "events": [
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "commandExecution",
+          "fields": ["pluginId", "source", "id", "status"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "commandExecution",
+          "fields": ["pluginId", "source", "id", "status"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "commandExecution",
+          "fields": ["pluginId", "source", "id", "status"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "commandExecution",
+          "fields": ["pluginId", "source", "id", "status"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "reasoning",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "reasoning",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        }
+      ]
+    },
+    {
+      "hooksMetadata": [
+        {
+          "event": "preToolUse",
+          "enabled": true,
+          "trustStatus": "trusted"
+        },
+        {
+          "event": "postToolUse",
+          "enabled": true,
+          "trustStatus": "trusted"
+        },
+        {
+          "event": "sessionStart",
+          "enabled": true,
+          "trustStatus": "trusted"
+        },
+        {
+          "event": "stop",
+          "enabled": true,
+          "trustStatus": "trusted"
+        }
+      ],
+      "repetition": 2,
+      "layout": "one-plugin",
+      "version": "codex-cli 0.159.2",
+      "discovery": [
+        {
+          "asset": "A",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        },
+        {
+          "asset": "B",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        }
+      ],
+      "turns": [
+        {
+          "hooks": [
+            {
+              "event": "SessionStart",
+              "observedAtUTC": "2026-09-30T06:39:39.641Z",
+              "pluginRootAvailable": true,
+              "tool": "other",
+              "pathReferences": [],
+              "fullFixtureReturned": []
+            },
+            {
+              "event": "PreToolUse",
+              "observedAtUTC": "2026-09-30T06:39:47.712Z",
+              "pluginRootAvailable": true,
+              "tool": "Bash",
+              "pathReferences": [
+                {
+                  "asset": "A",
+                  "name": "code-review",
+                  "relativePath": "skills/a/code-review/SKILL.md"
+                }
+              ],
+              "fullFixtureReturned": []
+            },
+            {
+              "event": "PostToolUse",
+              "observedAtUTC": "2026-09-30T06:39:47.778Z",
+              "pluginRootAvailable": true,
+              "tool": "Bash",
+              "pathReferences": [
+                {
+                  "asset": "A",
+                  "name": "code-review",
+                  "relativePath": "skills/a/code-review/SKILL.md"
+                }
+              ],
+              "fullFixtureReturned": ["A"]
+            },
+            {
+              "event": "Stop",
+              "observedAtUTC": "2026-09-30T06:39:56.279Z",
+              "pluginRootAvailable": true,
+              "tool": "other",
+              "pathReferences": [],
+              "fullFixtureReturned": []
+            }
+          ],
+          "scenario": "payments",
+          "selection": "plain-task-no-skill-name-or-path",
+          "status": "completed",
+          "eventStart": 0,
+          "eventEnd": 8
+        },
+        {
+          "hooks": [
+            {
+              "event": "SessionStart",
+              "observedAtUTC": "2026-09-30T06:39:57.625Z",
+              "pluginRootAvailable": true,
+              "tool": "other",
+              "pathReferences": [],
+              "fullFixtureReturned": []
+            },
+            {
+              "event": "PreToolUse",
+              "observedAtUTC": "2026-09-30T06:40:05.789Z",
+              "pluginRootAvailable": true,
+              "tool": "Bash",
+              "pathReferences": [
+                {
+                  "asset": "B",
+                  "name": "code-review",
+                  "relativePath": "skills/b/code-review/SKILL.md"
+                }
+              ],
+              "fullFixtureReturned": []
+            },
+            {
+              "event": "PostToolUse",
+              "observedAtUTC": "2026-09-30T06:40:05.855Z",
+              "pluginRootAvailable": true,
+              "tool": "Bash",
+              "pathReferences": [
+                {
+                  "asset": "B",
+                  "name": "code-review",
+                  "relativePath": "skills/b/code-review/SKILL.md"
+                }
+              ],
+              "fullFixtureReturned": ["B"]
+            },
+            {
+              "event": "Stop",
+              "observedAtUTC": "2026-09-30T06:40:19.019Z",
+              "pluginRootAvailable": true,
+              "tool": "other",
+              "pathReferences": [],
+              "fullFixtureReturned": []
+            }
+          ],
+          "scenario": "mobile",
+          "selection": "plain-task-no-skill-name-or-path",
+          "status": "completed",
+          "eventStart": 8,
+          "eventEnd": 16
+        },
+        {
+          "hooks": [
+            {
+              "event": "SessionStart",
+              "observedAtUTC": "2026-09-30T06:40:22.143Z",
+              "pluginRootAvailable": true,
+              "tool": "other",
+              "pathReferences": [],
+              "fullFixtureReturned": []
+            },
+            {
+              "event": "Stop",
+              "observedAtUTC": "2026-09-30T06:40:30.584Z",
+              "pluginRootAvailable": true,
+              "tool": "other",
+              "pathReferences": [],
+              "fullFixtureReturned": []
+            }
+          ],
+          "scenario": "explicit-control",
+          "selection": "explicit-name-and-path",
+          "status": "completed",
+          "eventStart": 16,
+          "eventEnd": 24
+        },
+        {
+          "hooks": [
+            {
+              "event": "SessionStart",
+              "observedAtUTC": "2026-09-30T06:40:31.549Z",
+              "pluginRootAvailable": true,
+              "tool": "other",
+              "pathReferences": [],
+              "fullFixtureReturned": []
+            },
+            {
+              "event": "Stop",
+              "observedAtUTC": "2026-09-30T06:40:33.972Z",
+              "pluginRootAvailable": true,
+              "tool": "other",
+              "pathReferences": [],
+              "fullFixtureReturned": []
+            }
+          ],
+          "scenario": "negative-control",
+          "selection": "plain-task-no-skill-name-or-path",
+          "status": "completed",
+          "eventStart": 24,
+          "eventEnd": 28
+        }
+      ],
+      "samples": [
+        {
+          "observedAtUTC": "2026-09-30T06:40:37.625Z",
+          "evidence": {
+            "providerLabel": "identity-shared_code-review",
+            "matchingAssets": ["A", "B"],
+            "attributeFields": ["skill", "status"],
+            "resourceFields": [],
+            "scopeFields": ["name"],
+            "value": 1
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:40:37.625Z",
+          "evidence": {
+            "providerLabel": "identity-shared_code-review",
+            "matchingAssets": ["A", "B"],
+            "attributeFields": ["skill", "status"],
+            "resourceFields": [],
+            "scopeFields": ["name"],
+            "value": 2
+          }
+        }
+      ],
+      "events": [
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "commandExecution",
+          "fields": ["pluginId", "source", "id", "status"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "commandExecution",
+          "fields": ["pluginId", "source", "id", "status"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "commandExecution",
+          "fields": ["pluginId", "source", "id", "status"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "commandExecution",
+          "fields": ["pluginId", "source", "id", "status"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "reasoning",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "reasoning",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        }
+      ]
+    }
+  ]
+}

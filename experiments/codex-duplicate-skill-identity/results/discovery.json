@@ -1,0 +1,176 @@
+{
+  "schema": "renma.duplicate-skill-identity.v1",
+  "live": false,
+  "startedAtUTC": "2026-09-30T06:23:28.755Z",
+  "turnsAttempted": 0,
+  "results": [
+    {
+      "repetition": 1,
+      "layout": "workspace",
+      "version": "codex-cli 0.159.2",
+      "discovery": [
+        {
+          "asset": "A",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": null
+        },
+        {
+          "asset": "B",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": null
+        }
+      ],
+      "turns": [],
+      "samples": [],
+      "events": []
+    },
+    {
+      "repetition": 1,
+      "layout": "one-plugin",
+      "version": "codex-cli 0.159.2",
+      "discovery": [
+        {
+          "asset": "A",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        },
+        {
+          "asset": "B",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        }
+      ],
+      "turns": [],
+      "samples": [],
+      "events": []
+    },
+    {
+      "repetition": 1,
+      "layout": "two-plugins",
+      "version": "codex-cli 0.159.2",
+      "discovery": [
+        {
+          "asset": "A",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        },
+        {
+          "asset": "B",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        }
+      ],
+      "turns": [],
+      "samples": [],
+      "events": []
+    },
+    {
+      "repetition": 2,
+      "layout": "workspace",
+      "version": "codex-cli 0.159.2",
+      "discovery": [
+        {
+          "asset": "A",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": null
+        },
+        {
+          "asset": "B",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": null
+        }
+      ],
+      "turns": [],
+      "samples": [],
+      "events": []
+    },
+    {
+      "repetition": 2,
+      "layout": "one-plugin",
+      "version": "codex-cli 0.159.2",
+      "discovery": [
+        {
+          "asset": "A",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        },
+        {
+          "asset": "B",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        }
+      ],
+      "turns": [],
+      "samples": [],
+      "events": []
+    },
+    {
+      "repetition": 2,
+      "layout": "two-plugins",
+      "version": "codex-cli 0.159.2",
+      "discovery": [
+        {
+          "asset": "A",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        },
+        {
+          "asset": "B",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        }
+      ],
+      "turns": [],
+      "samples": [],
+      "events": []
+    }
+  ]
+}

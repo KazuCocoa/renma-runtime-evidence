@@ -1,0 +1,109 @@
+{
+  "schema": "renma.plugin-skill-read.v1",
+  "live": false,
+  "diagnosticExportersEnabled": false,
+  "startedAtUTC": "2026-09-30T06:37:03.903Z",
+  "turnsAttempted": 0,
+  "results": [
+    {
+      "hooksMetadata": [
+        {
+          "event": "other",
+          "enabled": true,
+          "trustStatus": "untrusted"
+        },
+        {
+          "event": "other",
+          "enabled": true,
+          "trustStatus": "untrusted"
+        },
+        {
+          "event": "other",
+          "enabled": true,
+          "trustStatus": "untrusted"
+        },
+        {
+          "event": "other",
+          "enabled": true,
+          "trustStatus": "untrusted"
+        }
+      ],
+      "repetition": 1,
+      "layout": "one-plugin",
+      "version": "codex-cli 0.159.2",
+      "discovery": [
+        {
+          "asset": "A",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        },
+        {
+          "asset": "B",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        }
+      ],
+      "turns": [],
+      "samples": [],
+      "events": []
+    },
+    {
+      "hooksMetadata": [
+        {
+          "event": "other",
+          "enabled": true,
+          "trustStatus": "untrusted"
+        },
+        {
+          "event": "other",
+          "enabled": true,
+          "trustStatus": "untrusted"
+        },
+        {
+          "event": "other",
+          "enabled": true,
+          "trustStatus": "untrusted"
+        },
+        {
+          "event": "other",
+          "enabled": true,
+          "trustStatus": "untrusted"
+        }
+      ],
+      "repetition": 2,
+      "layout": "one-plugin",
+      "version": "codex-cli 0.159.2",
+      "discovery": [
+        {
+          "asset": "A",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        },
+        {
+          "asset": "B",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        }
+      ],
+      "turns": [],
+      "samples": [],
+      "events": []
+    }
+  ]
+}

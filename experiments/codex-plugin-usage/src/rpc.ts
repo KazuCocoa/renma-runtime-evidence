@@ -31,7 +31,12 @@ export class FixtureRpc {
         done?: () => void;
       }
     | undefined;
-  constructor(args: string[], cwd: string, env: NodeJS.ProcessEnv) {
+  constructor(
+    args: string[],
+    cwd: string,
+    env: NodeJS.ProcessEnv,
+    observe?: (message: unknown) => void,
+  ) {
     this.child = spawn("codex", args, {
       cwd,
       env,
@@ -67,6 +72,8 @@ export class FixtureRpc {
         try {
           const msg = object(JSON.parse(line));
           if (!msg) throw new Error("RPC");
+          // Observers must immediately project onto an explicit allowlist.
+          observe?.(msg);
           if (
             this.pending &&
             msg.id === this.pending.id &&

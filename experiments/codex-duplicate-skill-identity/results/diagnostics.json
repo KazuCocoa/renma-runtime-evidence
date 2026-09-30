@@ -1,0 +1,762 @@
+{
+  "schema": "renma.duplicate-skill-identity.v1",
+  "live": true,
+  "startedAtUTC": "2026-09-30T06:24:57.130Z",
+  "turnsAttempted": 2,
+  "results": [
+    {
+      "repetition": 1,
+      "layout": "workspace",
+      "version": "codex-cli 0.159.2",
+      "discovery": [
+        {
+          "asset": "A",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": null
+        },
+        {
+          "asset": "B",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": null
+        }
+      ],
+      "turns": [
+        {
+          "requestedAsset": "A",
+          "selection": "explicit-name-and-path",
+          "status": "completed",
+          "eventStart": 0,
+          "eventEnd": 4
+        },
+        {
+          "requestedAsset": "B",
+          "selection": "explicit-name-and-path",
+          "status": "completed",
+          "eventStart": 4,
+          "eventEnd": 8
+        }
+      ],
+      "samples": [
+        {
+          "observedAtUTC": "2026-09-30T06:24:58.215Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 13
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:24:58.215Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 13
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:24:58.215Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 20
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:24:58.215Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 14
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:24:58.215Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 13
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:24:58.215Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 14
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:24:58.215Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 13
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:24:59.218Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 13
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:24:59.218Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 22
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:24:59.218Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 13
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:24:59.218Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 18
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:00.222Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 18
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:00.222Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 13
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:00.222Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 14
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:00.222Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 14
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:00.222Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 18
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:03.229Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 12
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:04.233Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 20
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:04.233Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 20
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:04.233Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 14
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:04.233Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 14
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:04.233Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 13
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:04.233Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 13
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:04.233Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 13
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:04.233Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 22
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:04.233Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 13
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:04.233Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 18
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:05.237Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 18
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:05.237Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 13
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:05.237Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 14
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:05.237Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 14
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:05.237Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 18
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:07.243Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 12
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:07.243Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 20
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 8
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 8
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 8
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 8
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": ["name"],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 8
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": ["name"],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 8
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 8
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 8
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 9
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 9
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 8
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 8
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 8
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 8
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 9
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 16
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 10
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 9
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 8
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 8
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 9
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 9
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 8
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 8
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 8
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 10
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 8
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 9
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 16
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.961Z",
+          "evidence": {
+            "channel": "traces",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 9
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.966Z",
+          "evidence": {
+            "providerLabel": "code-review",
+            "matchingAssets": ["A", "B"],
+            "attributeFields": ["skill", "status"],
+            "resourceFields": [],
+            "scopeFields": ["name"],
+            "value": 2
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:18.967Z",
+          "evidence": {
+            "channel": "logs",
+            "attributeFields": [],
+            "knownPathAssets": [],
+            "knownNameAssets": [],
+            "ignoredAttributeCount": 0
+          }
+        }
+      ],
+      "events": [
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        }
+      ]
+    }
+  ]
+}
