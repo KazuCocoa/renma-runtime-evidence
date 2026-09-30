@@ -1,0 +1,654 @@
+{
+  "schema": "renma.duplicate-skill-identity.v1",
+  "live": true,
+  "startedAtUTC": "2026-09-30T06:23:39.207Z",
+  "turnsAttempted": 12,
+  "results": [
+    {
+      "repetition": 1,
+      "layout": "workspace",
+      "version": "codex-cli 0.159.2",
+      "discovery": [
+        {
+          "asset": "A",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": null
+        },
+        {
+          "asset": "B",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": null
+        }
+      ],
+      "turns": [
+        {
+          "requestedAsset": "A",
+          "selection": "explicit-name-and-path",
+          "status": "completed",
+          "eventStart": 0,
+          "eventEnd": 4
+        },
+        {
+          "requestedAsset": "B",
+          "selection": "explicit-name-and-path",
+          "status": "completed",
+          "eventStart": 4,
+          "eventEnd": 8
+        }
+      ],
+      "samples": [
+        {
+          "observedAtUTC": "2026-09-30T06:24:04.366Z",
+          "evidence": {
+            "providerLabel": "code-review",
+            "matchingAssets": ["A", "B"],
+            "attributeFields": ["skill", "status"],
+            "resourceFields": [],
+            "scopeFields": ["name"],
+            "value": 2
+          }
+        }
+      ],
+      "events": [
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        }
+      ]
+    },
+    {
+      "repetition": 1,
+      "layout": "one-plugin",
+      "version": "codex-cli 0.159.2",
+      "discovery": [
+        {
+          "asset": "A",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        },
+        {
+          "asset": "B",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        }
+      ],
+      "turns": [
+        {
+          "requestedAsset": "A",
+          "selection": "explicit-name-and-path",
+          "status": "completed",
+          "eventStart": 0,
+          "eventEnd": 4
+        },
+        {
+          "requestedAsset": "B",
+          "selection": "explicit-name-and-path",
+          "status": "completed",
+          "eventStart": 4,
+          "eventEnd": 8
+        }
+      ],
+      "samples": [
+        {
+          "observedAtUTC": "2026-09-30T06:24:31.595Z",
+          "evidence": {
+            "providerLabel": "identity-shared_code-review",
+            "matchingAssets": ["A", "B"],
+            "attributeFields": ["skill", "status"],
+            "resourceFields": [],
+            "scopeFields": ["name"],
+            "value": 2
+          }
+        }
+      ],
+      "events": [
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        }
+      ]
+    },
+    {
+      "repetition": 1,
+      "layout": "two-plugins",
+      "version": "codex-cli 0.159.2",
+      "discovery": [
+        {
+          "asset": "A",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        },
+        {
+          "asset": "B",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        }
+      ],
+      "turns": [
+        {
+          "requestedAsset": "A",
+          "selection": "explicit-name-and-path",
+          "status": "completed",
+          "eventStart": 0,
+          "eventEnd": 4
+        },
+        {
+          "requestedAsset": "B",
+          "selection": "explicit-name-and-path",
+          "status": "completed",
+          "eventStart": 4,
+          "eventEnd": 8
+        }
+      ],
+      "samples": [
+        {
+          "observedAtUTC": "2026-09-30T06:24:51.623Z",
+          "evidence": {
+            "providerLabel": "identity-b_code-review",
+            "matchingAssets": ["B"],
+            "attributeFields": ["skill", "status"],
+            "resourceFields": [],
+            "scopeFields": ["name"],
+            "value": 1
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:24:51.623Z",
+          "evidence": {
+            "providerLabel": "identity-a_code-review",
+            "matchingAssets": ["A"],
+            "attributeFields": ["skill", "status"],
+            "resourceFields": [],
+            "scopeFields": ["name"],
+            "value": 1
+          }
+        }
+      ],
+      "events": [
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        }
+      ]
+    },
+    {
+      "repetition": 2,
+      "layout": "workspace",
+      "version": "codex-cli 0.159.2",
+      "discovery": [
+        {
+          "asset": "A",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": null
+        },
+        {
+          "asset": "B",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": null
+        }
+      ],
+      "turns": [
+        {
+          "requestedAsset": "A",
+          "selection": "explicit-name-and-path",
+          "status": "completed",
+          "eventStart": 0,
+          "eventEnd": 4
+        },
+        {
+          "requestedAsset": "B",
+          "selection": "explicit-name-and-path",
+          "status": "completed",
+          "eventStart": 4,
+          "eventEnd": 8
+        }
+      ],
+      "samples": [
+        {
+          "observedAtUTC": "2026-09-30T06:25:12.134Z",
+          "evidence": {
+            "providerLabel": "code-review",
+            "matchingAssets": ["A", "B"],
+            "attributeFields": ["skill", "status"],
+            "resourceFields": [],
+            "scopeFields": ["name"],
+            "value": 2
+          }
+        }
+      ],
+      "events": [
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        }
+      ]
+    },
+    {
+      "repetition": 2,
+      "layout": "one-plugin",
+      "version": "codex-cli 0.159.2",
+      "discovery": [
+        {
+          "asset": "A",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        },
+        {
+          "asset": "B",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        }
+      ],
+      "turns": [
+        {
+          "requestedAsset": "A",
+          "selection": "explicit-name-and-path",
+          "status": "completed",
+          "eventStart": 0,
+          "eventEnd": 4
+        },
+        {
+          "requestedAsset": "B",
+          "selection": "explicit-name-and-path",
+          "status": "completed",
+          "eventStart": 4,
+          "eventEnd": 8
+        }
+      ],
+      "samples": [
+        {
+          "observedAtUTC": "2026-09-30T06:25:33.366Z",
+          "evidence": {
+            "providerLabel": "identity-shared_code-review",
+            "matchingAssets": ["A", "B"],
+            "attributeFields": ["skill", "status"],
+            "resourceFields": [],
+            "scopeFields": ["name"],
+            "value": 2
+          }
+        }
+      ],
+      "events": [
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        }
+      ]
+    },
+    {
+      "repetition": 2,
+      "layout": "two-plugins",
+      "version": "codex-cli 0.159.2",
+      "discovery": [
+        {
+          "asset": "A",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        },
+        {
+          "asset": "B",
+          "matches": 1,
+          "fields": ["name", "path", "pluginId", "scope", "description"],
+          "nameMatches": true,
+          "descriptionMatches": true,
+          "enabled": true,
+          "pluginIdMatches": true
+        }
+      ],
+      "turns": [
+        {
+          "requestedAsset": "A",
+          "selection": "explicit-name-and-path",
+          "status": "completed",
+          "eventStart": 0,
+          "eventEnd": 4
+        },
+        {
+          "requestedAsset": "B",
+          "selection": "explicit-name-and-path",
+          "status": "completed",
+          "eventStart": 4,
+          "eventEnd": 8
+        }
+      ],
+      "samples": [
+        {
+          "observedAtUTC": "2026-09-30T06:25:55.439Z",
+          "evidence": {
+            "providerLabel": "identity-a_code-review",
+            "matchingAssets": ["A"],
+            "attributeFields": ["skill", "status"],
+            "resourceFields": [],
+            "scopeFields": ["name"],
+            "value": 1
+          }
+        },
+        {
+          "observedAtUTC": "2026-09-30T06:25:55.439Z",
+          "evidence": {
+            "providerLabel": "identity-b_code-review",
+            "matchingAssets": ["B"],
+            "attributeFields": ["skill", "status"],
+            "resourceFields": [],
+            "scopeFields": ["name"],
+            "value": 1
+          }
+        }
+      ],
+      "events": [
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "userMessage",
+          "fields": ["content", "id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/started",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        },
+        {
+          "method": "item/completed",
+          "type": "agentMessage",
+          "fields": ["id"],
+          "knownPathAssets": []
+        }
+      ]
+    }
+  ]
+}
